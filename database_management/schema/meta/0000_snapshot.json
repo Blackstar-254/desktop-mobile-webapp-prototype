@@ -1,0 +1,716 @@
+{
+  "id": "293b5a11-da86-4de1-a2e2-c96ff52ba743",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "6",
+  "dialect": "postgresql",
+  "tables": {
+    "public.organisations": {
+      "name": "organisations",
+      "schema": "",
+      "columns": {
+        "organisations_id": {
+          "name": "organisations_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "organisations_created_at": {
+          "name": "organisations_created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "organisations_updated_at": {
+          "name": "organisations_updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "address": {
+          "name": "address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'P O Box 1862 80100'"
+        },
+        "domain_name": {
+          "name": "domain_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "organisations_name_unique": {
+          "name": "organisations_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        },
+        "organisations_domain_name_unique": {
+          "name": "organisations_domain_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "domain_name"
+          ]
+        }
+      }
+    },
+    "public.payment_methods": {
+      "name": "payment_methods",
+      "schema": "",
+      "columns": {
+        "payment_methods_id": {
+          "name": "payment_methods_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "payment_methods_created_at": {
+          "name": "payment_methods_created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "payment_methods_updated_at": {
+          "name": "payment_methods_updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "org": {
+          "name": "org",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "payment_methods_org_organisations_organisations_id_fk": {
+          "name": "payment_methods_org_organisations_organisations_id_fk",
+          "tableFrom": "payment_methods",
+          "tableTo": "organisations",
+          "columnsFrom": [
+            "org"
+          ],
+          "columnsTo": [
+            "organisations_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "payment_methods_name_unique": {
+          "name": "payment_methods_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      }
+    },
+    "public.pricelist": {
+      "name": "pricelist",
+      "schema": "",
+      "columns": {
+        "pricelist_id": {
+          "name": "pricelist_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "pricelist_created_at": {
+          "name": "pricelist_created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "pricelist_updated_at": {
+          "name": "pricelist_updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "payment_method": {
+          "name": "payment_method",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "price": {
+          "name": "price",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "units": {
+          "name": "units",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "uniq_pricelist_item": {
+          "name": "uniq_pricelist_item",
+          "columns": [
+            "name",
+            "payment_method"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "pricelist_payment_method_payment_methods_payment_methods_id_fk": {
+          "name": "pricelist_payment_method_payment_methods_payment_methods_id_fk",
+          "tableFrom": "pricelist",
+          "tableTo": "payment_methods",
+          "columnsFrom": [
+            "payment_method"
+          ],
+          "columnsTo": [
+            "payment_methods_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.appt_cal": {
+      "name": "appt_cal",
+      "schema": "",
+      "columns": {
+        "appt_cal_id": {
+          "name": "appt_cal_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "appt_cal_created_at": {
+          "name": "appt_cal_created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "appt_cal_updated_at": {
+          "name": "appt_cal_updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "appt_date": {
+          "name": "appt_date",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "patient_uuid": {
+          "name": "patient_uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "appt_state": {
+          "name": "appt_state",
+          "type": "appt_state_t",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'blank'"
+        }
+      },
+      "indexes": {
+        "uniq_appt_idx": {
+          "name": "uniq_appt_idx",
+          "columns": [
+            "appt_date",
+            "patient_uuid"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "appt_cal_patient_uuid_patients_file_uuid_fk": {
+          "name": "appt_cal_patient_uuid_patients_file_uuid_fk",
+          "tableFrom": "appt_cal",
+          "tableTo": "patients_file",
+          "columnsFrom": [
+            "patient_uuid"
+          ],
+          "columnsTo": [
+            "uuid"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "appt_cal_appt_date_unique": {
+          "name": "appt_cal_appt_date_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "appt_date"
+          ]
+        }
+      }
+    },
+    "public.patients_file": {
+      "name": "patients_file",
+      "schema": "",
+      "columns": {
+        "patients_file_id": {
+          "name": "patients_file_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "patients_file_created_at": {
+          "name": "patients_file_created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "patients_file_updated_at": {
+          "name": "patients_file_updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "uuid": {
+          "name": "uuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "patient_name": {
+          "name": "patient_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "patient_no": {
+          "name": "patient_no",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "file_no": {
+          "name": "file_no",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "occupation": {
+          "name": "occupation",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contact_info": {
+          "name": "contact_info",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{\"PhoneNumbers\":[],\"EmailAddress\":[],\"Locale\":{\"City\":\"\",\"Province\":\"\",\"State\":\"\",\"Nationality\":\"Ke\"}}'"
+        },
+        "next_of_kin": {
+          "name": "next_of_kin",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{\"NA\":{\"Phone\":\"\",\"Email\":\"\",\"Relationship\":\"\"}}'"
+        },
+        "date_of_birth": {
+          "name": "date_of_birth",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "patients_file_uuid_unique": {
+          "name": "patients_file_uuid_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "uuid"
+          ]
+        },
+        "patients_file_patient_name_unique": {
+          "name": "patients_file_patient_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "patient_name"
+          ]
+        },
+        "patients_file_patient_no_unique": {
+          "name": "patients_file_patient_no_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "patient_no"
+          ]
+        },
+        "patients_file_file_no_unique": {
+          "name": "patients_file_file_no_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "file_no"
+          ]
+        }
+      }
+    },
+    "public.services_records": {
+      "name": "services_records",
+      "schema": "",
+      "columns": {
+        "services_records_id": {
+          "name": "services_records_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "services_records_created_at": {
+          "name": "services_records_created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "services_records_updated_at": {
+          "name": "services_records_updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "visit_id": {
+          "name": "visit_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "service_id": {
+          "name": "service_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "comment": {
+          "name": "comment",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "''"
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "price": {
+          "name": "price",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 100
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "services_records_visit_id_visit_records_visit_id_fk": {
+          "name": "services_records_visit_id_visit_records_visit_id_fk",
+          "tableFrom": "services_records",
+          "tableTo": "visit_records",
+          "columnsFrom": [
+            "visit_id"
+          ],
+          "columnsTo": [
+            "visit_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "services_records_service_id_pricelist_pricelist_id_fk": {
+          "name": "services_records_service_id_pricelist_pricelist_id_fk",
+          "tableFrom": "services_records",
+          "tableTo": "pricelist",
+          "columnsFrom": [
+            "service_id"
+          ],
+          "columnsTo": [
+            "pricelist_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.time_sheet": {
+      "name": "time_sheet",
+      "schema": "",
+      "columns": {
+        "time_sheet_id": {
+          "name": "time_sheet_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "time_sheet_created_at": {
+          "name": "time_sheet_created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "time_sheet_updated_at": {
+          "name": "time_sheet_updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "entry_time": {
+          "name": "entry_time",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "triage_time": {
+          "name": "triage_time",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "consult_entry_time": {
+          "name": "consult_entry_time",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "consult_exit_time": {
+          "name": "consult_exit_time",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "admission_time": {
+          "name": "admission_time",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "theatre_entry_time": {
+          "name": "theatre_entry_time",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "theatre_exit_time": {
+          "name": "theatre_exit_time",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "exit_time": {
+          "name": "exit_time",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.visit_records": {
+      "name": "visit_records",
+      "schema": "",
+      "columns": {
+        "visit_id": {
+          "name": "visit_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "visit_created_at": {
+          "name": "visit_created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "visit_updated_at": {
+          "name": "visit_updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "date": {
+          "name": "date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "type": {
+          "name": "type",
+          "type": "visit_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "appt_id": {
+          "name": "appt_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "time_row": {
+          "name": "time_row",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "patient": {
+          "name": "patient",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "current_age": {
+          "name": "current_age",
+          "type": "interval",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "visit_records_appt_id_appt_cal_appt_cal_id_fk": {
+          "name": "visit_records_appt_id_appt_cal_appt_cal_id_fk",
+          "tableFrom": "visit_records",
+          "tableTo": "appt_cal",
+          "columnsFrom": [
+            "appt_id"
+          ],
+          "columnsTo": [
+            "appt_cal_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "visit_records_time_row_time_sheet_time_sheet_id_fk": {
+          "name": "visit_records_time_row_time_sheet_time_sheet_id_fk",
+          "tableFrom": "visit_records",
+          "tableTo": "time_sheet",
+          "columnsFrom": [
+            "time_row"
+          ],
+          "columnsTo": [
+            "time_sheet_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "visit_records_patient_patients_file_patients_file_id_fk": {
+          "name": "visit_records_patient_patients_file_patients_file_id_fk",
+          "tableFrom": "visit_records",
+          "tableTo": "patients_file",
+          "columnsFrom": [
+            "patient"
+          ],
+          "columnsTo": [
+            "patients_file_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {
+    "public.appt_state_t": {
+      "name": "appt_state_t",
+      "schema": "public",
+      "values": [
+        "appointment",
+        "confirmed",
+        "cancelled",
+        "blank"
+      ]
+    },
+    "public.visit_type": {
+      "name": "visit_type",
+      "schema": "public",
+      "values": [
+        "outpatient",
+        "post-op",
+        "review",
+        "inpatient-la",
+        "inpatient-ga",
+        "inpatient-emergency",
+        "diagnostic"
+      ]
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

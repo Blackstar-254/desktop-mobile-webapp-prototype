@@ -1,0 +1,88 @@
+{
+    "$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
+    "organizeImports": {
+        "enabled": true
+    },
+    "linter": {
+        "enabled": true,
+        "rules": {
+            "recommended": false,
+            "complexity": {
+                "noBannedTypes": "warn",
+                "noExtraBooleanCast": "warn",
+                "noMultipleSpacesInRegularExpressionLiterals": "warn",
+                "noUselessCatch": "warn",
+                "noUselessThisAlias": "warn",
+                "noUselessTypeConstraint": "warn",
+                "noWith": "warn",
+                "useLiteralKeys": "info"
+            },
+            "correctness": {
+                "noConstAssign": "warn",
+                "noConstantCondition": "warn",
+                "noEmptyCharacterClassInRegex": "warn",
+                "noEmptyPattern": "warn",
+                "noGlobalObjectCalls": "warn",
+                "noInnerDeclarations": "warn",
+                "noInvalidConstructorSuper": "warn",
+                "noNewSymbol": "warn",
+                "noNonoctalDecimalEscape": "warn",
+                "noPrecisionLoss": "warn",
+                "noSelfAssign": "warn",
+                "noSetterReturn": "warn",
+                "noSwitchDeclarations": "warn",
+                "noUndeclaredVariables": "warn",
+                "noUnreachable": "warn",
+                "noUnreachableSuper": "warn",
+                "noUnsafeFinally": "warn",
+                "noUnsafeOptionalChaining": "warn",
+                "noUnusedLabels": "warn",
+                "noUnusedVariables": "warn",
+                "useArrayLiterals": "off",
+                "useExhaustiveDependencies": "warn",
+                "useHookAtTopLevel": "warn",
+                "useIsNan": "warn",
+                "useValidForDirection": "warn",
+                "useYield": "warn"
+            },
+            "style": {
+                "noNamespace": "warn",
+                "useAsConstAssertion": "warn"
+            },
+            "suspicious": {
+                "noAssignInExpressions": "warn",
+                "noAsyncPromiseExecutor": "warn",
+                "noCatchAssign": "warn",
+                "noClassAssign": "warn",
+                "noCompareNegZero": "warn",
+                "noControlCharactersInRegex": "warn",
+                "noDebugger": "warn",
+                "noDuplicateCase": "warn",
+                "noDuplicateClassMembers": "warn",
+                "noDuplicateObjectKeys": "warn",
+                "noDuplicateParameters": "warn",
+                "noEmptyBlockStatements": "warn",
+                "noExplicitAny": "warn",
+                "noExtraNonNullAssertion": "warn",
+                "noFallthroughSwitchClause": "warn",
+                "noFunctionAssign": "warn",
+                "noGlobalAssign": "warn",
+                "noImportAssign": "warn",
+                "noMisleadingCharacterClass": "warn",
+                "noMisleadingInstantiator": "warn",
+                "noPrototypeBuiltins": "warn",
+                "noRedeclare": "warn",
+                "noShadowRestrictedNames": "warn",
+                "noUnsafeDeclarationMerging": "warn",
+                "noUnsafeNegation": "warn",
+                "useGetterReturn": "warn",
+                "useValidTypeof": "warn"
+            }
+        },
+        "ignore": [
+            "**/dist",
+            "**/.eslintrc.cjs",
+            "node_modules/**"
+        ]
+    }
+}
