@@ -1,5 +1,16 @@
+const fs = require("fs")
 const { z } = require('zod')
 const dotenv = require('dotenv')
+const readline = require('node:readline');
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+
+
+dotenv.config()
+
 
 const workEnvSchema = z
   .enum(['development', 'test', 'production'])
@@ -59,23 +70,42 @@ const envCreateString = () => {
   let envObj = envItemsSchema.parse(envItems)
 
   for (const v of Object.keys(envObj)) {
-    output = `${output}\n${v}="${envItems[v]}"`
+    output = `${output}\n${v}="${envItems[v]}"\n`
   }
   output = `${output}\n`
 
   return output
 }
-
-const read_env = () => {
-  try {
-    const current_env = envItemsSchema.parse(process.env)
-    for (const key of Object.keys(current_env)) {
-      envItems[key] = current_env[key]
+fs.writeFileSync(".env.example",envCreateString(),{flag:'w',encoding:'utf-8'})
+const read_new_var_value = (prompt)=>{
+  return new Promise((res,rej)=>{
+    rl.question(`${prompt}? `, (value) => {
+      const val = value.trim()
+        console.log(`${prompt}="${val}"`);
+        res(val)
+      });
+  })
+}
+const read_env = async() => {
+ 
+    
+    for (const key of Object.keys(envItems)) {
+      if(process.env[key]){
+        envItems[key] = process.env[key]
+      }else{
+        envItems[key] = await read_new_var_value(key)
+      }
+      
     }
-  } catch (error) {
-    console.log(error)
-    process.exit(-1)
-  }
+    
+ 
+    try {
+      envItemsSchema.parse(envItems)
+      rl.close()
+    }catch(e){
+      console.error(e)
+      process.exit(-1)
+    }
 }
 
 read_env()
