@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"shiloheye.com/hmis/lib/db_access"
+	"github.com/Blackstar-254/desktop-mobile-webapp-prototype/tree/main/golang_api/lib/db_access"
 )
 
 var Config = &ConfigStruct{

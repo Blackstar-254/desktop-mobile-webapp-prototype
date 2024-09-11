@@ -9,8 +9,8 @@ import (
 	"syscall"
 	"time"
 
-	"shiloheye.com/hmis/lib/base"
-	"shiloheye.com/hmis/lib/logging/log_item/v2"
+	"github.com/Blackstar-254/desktop-mobile-webapp-prototype/tree/main/golang_api/lib/base"
+	"github.com/Blackstar-254/desktop-mobile-webapp-prototype/tree/main/golang_api/lib/logging/log_item/v2"
 )
 
 type LogFileWriter struct {

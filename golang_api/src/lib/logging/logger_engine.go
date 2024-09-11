@@ -8,8 +8,8 @@ import (
 	"sync"
 	"time"
 
-	cms_context "shiloheye.com/hmis/lib/context"
-	"shiloheye.com/hmis/lib/logging/log_item/v2"
+	cms_context "github.com/Blackstar-254/desktop-mobile-webapp-prototype/tree/main/golang_api/lib/context"
+	"github.com/Blackstar-254/desktop-mobile-webapp-prototype/tree/main/golang_api/lib/logging/log_item/v2"
 )
 
 var lock sync.Mutex

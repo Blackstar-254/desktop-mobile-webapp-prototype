@@ -8,12 +8,12 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5/pgtype"
-	"shiloheye.com/hmis/lib/base"
-	cms_context "shiloheye.com/hmis/lib/context"
-	db "shiloheye.com/hmis/lib/db_access"
-	db_access "shiloheye.com/hmis/lib/db_access/generated"
-	filehandler "shiloheye.com/hmis/lib/file_handler"
-	"shiloheye.com/hmis/lib/logging/log_item/v2"
+	"github.com/Blackstar-254/desktop-mobile-webapp-prototype/tree/main/golang_api/lib/base"
+	cms_context "github.com/Blackstar-254/desktop-mobile-webapp-prototype/tree/main/golang_api/lib/context"
+	db "github.com/Blackstar-254/desktop-mobile-webapp-prototype/tree/main/golang_api/lib/db_access"
+	db_access "github.com/Blackstar-254/desktop-mobile-webapp-prototype/tree/main/golang_api/lib/db_access/generated"
+	filehandler "github.com/Blackstar-254/desktop-mobile-webapp-prototype/tree/main/golang_api/lib/file_handler"
+	"github.com/Blackstar-254/desktop-mobile-webapp-prototype/tree/main/golang_api/lib/logging/log_item/v2"
 )
 
 var db_pool = db.DBPool

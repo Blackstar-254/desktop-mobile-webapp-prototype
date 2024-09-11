@@ -9,11 +9,11 @@ import (
 	"sync/atomic"
 	"time"
 
+	cms_context "github.com/Blackstar-254/desktop-mobile-webapp-prototype/tree/main/golang_api/lib/context"
+	db_access "github.com/Blackstar-254/desktop-mobile-webapp-prototype/tree/main/golang_api/lib/db_access/generated"
 	"github.com/jackc/pgx/v5"
-	cms_context "shiloheye.com/hmis/lib/context"
-	db_access "shiloheye.com/hmis/lib/db_access/generated"
 
-	"shiloheye.com/hmis/lib/logging/log_item/v2"
+	"github.com/Blackstar-254/desktop-mobile-webapp-prototype/tree/main/golang_api/lib/logging/log_item/v2"
 	// "github.com/jackc/pgx/v5/pgtype"
 )
 

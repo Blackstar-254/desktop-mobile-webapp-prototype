@@ -1,0 +1,13 @@
+{
+  "name": "desktop-mobile-webapp-prototype",
+  "version": "1.0.0",
+  "description": "Simple prototype for distinguishing between desktop and mobile modes of a webapp for easy maneuvarability.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": ""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

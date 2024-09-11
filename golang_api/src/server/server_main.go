@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"log"
 
-	"shiloheye.com/hmis/lib/config"
-	cms_context "shiloheye.com/hmis/lib/context"
-	db "shiloheye.com/hmis/lib/db_access"
-	"shiloheye.com/hmis/server/gin_server"
+	"github.com/Blackstar-254/desktop-mobile-webapp-prototype/tree/main/golang_api/lib/config"
+	cms_context "github.com/Blackstar-254/desktop-mobile-webapp-prototype/tree/main/golang_api/lib/context"
+	db "github.com/Blackstar-254/desktop-mobile-webapp-prototype/tree/main/golang_api/lib/db_access"
+	"github.com/Blackstar-254/desktop-mobile-webapp-prototype/tree/main/golang_api/server/gin_server"
 )
 
 var conf = config.Config
