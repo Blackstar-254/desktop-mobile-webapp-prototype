@@ -1,4 +1,4 @@
-module shiloheye.com/hmis
+module github.com/Blackstar-254/desktop-mobile-webapp-prototype/tree/main/golang_api
 
 go 1.22.4
 
