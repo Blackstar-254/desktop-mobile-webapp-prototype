@@ -1,11 +1,11 @@
-import { GeistSans } from "geist/font/sans";
-import { type Session } from "next-auth";
-import { SessionProvider } from "next-auth/react";
-import { type AppType } from "next/app";
+import { GeistSans } from 'geist/font/sans'
+import type { Session } from 'next-auth'
+import { SessionProvider } from 'next-auth/react'
+import type { AppType } from 'next/app'
 
-import { api } from "@blackstar/utils/api";
+import { api } from '@blackstar/utils/api'
 
-import "@blackstar/styles/globals.css";
+import '@blackstar/styles/globals.css'
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -17,7 +17,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <Component {...pageProps} />
       </div>
     </SessionProvider>
-  );
-};
+  )
+}
 
-export default api.withTRPC(MyApp);
+export default api.withTRPC(MyApp)

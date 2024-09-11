@@ -54,16 +54,12 @@
         "organisations_name_unique": {
           "name": "organisations_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         },
         "organisations_domain_name_unique": {
           "name": "organisations_domain_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "domain_name"
-          ]
+          "columns": ["domain_name"]
         }
       }
     },
@@ -115,12 +111,8 @@
           "name": "payment_methods_org_organisations_organisations_id_fk",
           "tableFrom": "payment_methods",
           "tableTo": "organisations",
-          "columnsFrom": [
-            "org"
-          ],
-          "columnsTo": [
-            "organisations_id"
-          ],
+          "columnsFrom": ["org"],
+          "columnsTo": ["organisations_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -130,9 +122,7 @@
         "payment_methods_name_unique": {
           "name": "payment_methods_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       }
     },
@@ -193,10 +183,7 @@
       "indexes": {
         "uniq_pricelist_item": {
           "name": "uniq_pricelist_item",
-          "columns": [
-            "name",
-            "payment_method"
-          ],
+          "columns": ["name", "payment_method"],
           "isUnique": true
         }
       },
@@ -205,12 +192,8 @@
           "name": "pricelist_payment_method_payment_methods_payment_methods_id_fk",
           "tableFrom": "pricelist",
           "tableTo": "payment_methods",
-          "columnsFrom": [
-            "payment_method"
-          ],
-          "columnsTo": [
-            "payment_methods_id"
-          ],
+          "columnsFrom": ["payment_method"],
+          "columnsTo": ["payment_methods_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -265,10 +248,7 @@
       "indexes": {
         "uniq_appt_idx": {
           "name": "uniq_appt_idx",
-          "columns": [
-            "appt_date",
-            "patient_uuid"
-          ],
+          "columns": ["appt_date", "patient_uuid"],
           "isUnique": false
         }
       },
@@ -277,12 +257,8 @@
           "name": "appt_cal_patient_uuid_patients_file_uuid_fk",
           "tableFrom": "appt_cal",
           "tableTo": "patients_file",
-          "columnsFrom": [
-            "patient_uuid"
-          ],
-          "columnsTo": [
-            "uuid"
-          ],
+          "columnsFrom": ["patient_uuid"],
+          "columnsTo": ["uuid"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -292,9 +268,7 @@
         "appt_cal_appt_date_unique": {
           "name": "appt_cal_appt_date_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "appt_date"
-          ]
+          "columns": ["appt_date"]
         }
       }
     },
@@ -380,30 +354,22 @@
         "patients_file_uuid_unique": {
           "name": "patients_file_uuid_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "uuid"
-          ]
+          "columns": ["uuid"]
         },
         "patients_file_patient_name_unique": {
           "name": "patients_file_patient_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "patient_name"
-          ]
+          "columns": ["patient_name"]
         },
         "patients_file_patient_no_unique": {
           "name": "patients_file_patient_no_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "patient_no"
-          ]
+          "columns": ["patient_no"]
         },
         "patients_file_file_no_unique": {
           "name": "patients_file_file_no_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "file_no"
-          ]
+          "columns": ["file_no"]
         }
       }
     },
@@ -470,12 +436,8 @@
           "name": "services_records_visit_id_visit_records_visit_id_fk",
           "tableFrom": "services_records",
           "tableTo": "visit_records",
-          "columnsFrom": [
-            "visit_id"
-          ],
-          "columnsTo": [
-            "visit_id"
-          ],
+          "columnsFrom": ["visit_id"],
+          "columnsTo": ["visit_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -483,12 +445,8 @@
           "name": "services_records_service_id_pricelist_pricelist_id_fk",
           "tableFrom": "services_records",
           "tableTo": "pricelist",
-          "columnsFrom": [
-            "service_id"
-          ],
-          "columnsTo": [
-            "pricelist_id"
-          ],
+          "columnsFrom": ["service_id"],
+          "columnsTo": ["pricelist_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -642,12 +600,8 @@
           "name": "visit_records_appt_id_appt_cal_appt_cal_id_fk",
           "tableFrom": "visit_records",
           "tableTo": "appt_cal",
-          "columnsFrom": [
-            "appt_id"
-          ],
-          "columnsTo": [
-            "appt_cal_id"
-          ],
+          "columnsFrom": ["appt_id"],
+          "columnsTo": ["appt_cal_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -655,12 +609,8 @@
           "name": "visit_records_time_row_time_sheet_time_sheet_id_fk",
           "tableFrom": "visit_records",
           "tableTo": "time_sheet",
-          "columnsFrom": [
-            "time_row"
-          ],
-          "columnsTo": [
-            "time_sheet_id"
-          ],
+          "columnsFrom": ["time_row"],
+          "columnsTo": ["time_sheet_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -668,12 +618,8 @@
           "name": "visit_records_patient_patients_file_patients_file_id_fk",
           "tableFrom": "visit_records",
           "tableTo": "patients_file",
-          "columnsFrom": [
-            "patient"
-          ],
-          "columnsTo": [
-            "patients_file_id"
-          ],
+          "columnsFrom": ["patient"],
+          "columnsTo": ["patients_file_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -686,12 +632,7 @@
     "public.appt_state_t": {
       "name": "appt_state_t",
       "schema": "public",
-      "values": [
-        "appointment",
-        "confirmed",
-        "cancelled",
-        "blank"
-      ]
+      "values": ["appointment", "confirmed", "cancelled", "blank"]
     },
     "public.visit_type": {
       "name": "visit_type",

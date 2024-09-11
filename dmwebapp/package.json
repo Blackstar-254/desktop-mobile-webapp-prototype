@@ -9,8 +9,8 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "dev": "next dev",
-    "lint": "next lint",
+    "dev": "next dev --turbo",
+    "lint": "npx @biomejs/biome check --fix --unsafe --write .",
     "start": "next start"
   },
   "dependencies": {
