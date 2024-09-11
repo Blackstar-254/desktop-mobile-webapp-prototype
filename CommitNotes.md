@@ -1,5 +1,60 @@
 # COMMIT NOTES
 
+### 2024 September 11th, 19:41 PM
+```sh
+1. Adding biomejs
+2. adding .env functionality
+3. setting up codespace
+
+Goal: single template for all blackstar projects
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	deleted:    Biomefile
+#	new file:   biome.json
+#	modified:   database_management/@types/drizzle.config.d.ts
+#	modified:   database_management/@types/schema/main_tables.d.ts
+#	modified:   database_management/biome.json
+#	modified:   database_management/schema/meta/0000_snapshot.json
+#	modified:   database_management/schema/meta/_journal.json
+#	modified:   database_management/src/drizzle.config.ts
+#	modified:   database_management/src/schema/accounts.ts
+#	modified:   database_management/src/schema/main_tables.ts
+#	modified:   database_management/src/schema/table_common.ts
+#	modified:   database_management/tsconfig.json
+#	deleted:    dmwebapp/.eslintrc.cjs
+#	new file:   dmwebapp/biome.json
+#	modified:   dmwebapp/drizzle.config.ts
+#	modified:   dmwebapp/next.config.js
+#	modified:   dmwebapp/package.json
+#	modified:   dmwebapp/postcss.config.cjs
+#	deleted:    dmwebapp/prettier.config.js
+#	modified:   dmwebapp/src/env.js
+#	modified:   dmwebapp/src/pages/_app.tsx
+#	modified:   dmwebapp/src/pages/api/auth/[...nextauth].ts
+#	modified:   dmwebapp/src/pages/api/trpc/[trpc].ts
+#	modified:   dmwebapp/src/pages/index.tsx
+#	modified:   dmwebapp/src/server/api/root.ts
+#	modified:   dmwebapp/src/server/api/routers/post.ts
+#	modified:   dmwebapp/src/server/api/trpc.ts
+#	modified:   dmwebapp/src/server/auth.ts
+#	modified:   dmwebapp/src/server/db/index.ts
+#	modified:   dmwebapp/src/server/db/schema.ts
+#	modified:   dmwebapp/src/utils/api.ts
+#	deleted:    dmwebapp/start-database.sh
+#	modified:   dmwebapp/tailwind.config.ts
+#	modified:   dmwebapp/tsconfig.json
+#	modified:   nodemon.json
+#	modified:   package.json
+#	modified:   setup/index.js
+#	modified:   setup/lib/env_handler.js
+#	modified:   setup/lib/read_directory.js
+#
+```
 
 
 ### 2024 September 10th, 09:31 AM
