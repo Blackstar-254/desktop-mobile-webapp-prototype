@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon",
+    "dev:setup": "nodemon",
     "lint": "npx @biomejs/biome check --fix .",
     "setup:env": "node ./setup/lib/env_handler.js"
   },
