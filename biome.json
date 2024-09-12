@@ -97,7 +97,8 @@
       "node_modules/**",
       "**/node_modules/**",
       "public",
-      "tmp"
+      "tmp",
+      "**/@types"
     ]
   },
   "javascript": {

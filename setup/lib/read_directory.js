@@ -60,7 +60,7 @@ file_structure.files_list = fs
 
 const place_holder = 'place_holder'
 
-file_structure.files_list.map((v) => console.log(v))
+// file_structure.files_list.map((v) => console.log(v))
 
 module.exports = {
   place_holder,
