@@ -1,5 +1,29 @@
 # COMMIT NOTES
 
+### 2024 September 12th, 12:08 PM 
+```sh
+1. Able to create uniform .env files for all 
+subprojects
+2. next step is auth
+3. google auth?
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is ahead of 'origin/main' by 2 commits.
+#   (use "git push" to publish your local commits)
+#
+# Changes to be committed:
+#	new file:   .env.example
+#	modified:   biome.json
+#	modified:   package-lock.json
+#	modified:   package.json
+#	modified:   setup/index.js
+#	modified:   setup/lib/env_handler.js
+#	modified:   setup/lib/read_directory.js
+#
+```
+
 ### 2024 September 11th, 19:41 PM
 ```sh
 1. Adding biomejs
