@@ -1,5 +1,27 @@
 # COMMIT NOTES
 
+### 2024 September 13th, 20:13 PM
+```sh
+1. both golang_api and webapp run dev successfully
+2. connects to blackstar cms database
+3. goal is to run golang api from vps and next 
+    from vercel
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Author:    Blackstar-254 <157632014+Blackstar-254@users.noreply.github.com>
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	new file:   dmwebapp/cache/config.json
+#	modified:   dmwebapp/src/env.js
+#	modified:   package.json
+#	modified:   setup/index.js
+#
+```
+
 ### 2024 September 12th, 12:08 PM 
 ```sh
 1. Able to create uniform .env files for all 
