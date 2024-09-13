@@ -152,7 +152,7 @@ const read_env = async () => {
     envItemsSchema.parse(envItems)
 
     for (const folder of [".",
-      'golang_api/src',
+      'golang_api/src/server',
       'dmwebapp',
       'database_management',
     ]) {

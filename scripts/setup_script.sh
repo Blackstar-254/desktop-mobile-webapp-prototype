@@ -1,15 +1,15 @@
-npm i -d
+npm i &
 
 cd dmwebapp
-npm i -d
+npm i &
 cd ../database_management
-npm i -d
+npm i &
 cd ..
 
-# sudo add-apt-repository ppa:longsleep/golang-backports
+bash "sudo add-apt-repository ppa:longsleep/golang-backports" -d
 
-go install github.com/air-verse/air@latest 
+bash "go install github.com/air-verse/air@latest" -d
 
 cd golang_api/src
-go mod download
+bash "go mod download" -d
 cd ..

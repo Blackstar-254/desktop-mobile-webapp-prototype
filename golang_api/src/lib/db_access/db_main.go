@@ -167,7 +167,7 @@ func (dbp *DBPoolStruct) KillConns(ctx cms_context.Context, i int) {
 }
 
 const (
-	env_db_name     string = "DATABASE_DBNAME"
+	env_db_name     string = "DATABASE_DATABASENAME"
 	env_db_host     string = "DATABASE_HOST"
 	env_db_user     string = "DATABASE_USER"
 	env_db_password string = "DATABASE_PASSWORD"
