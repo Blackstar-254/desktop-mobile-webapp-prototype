@@ -17,8 +17,12 @@ const workEnvSchema = z
 
 const parse_string = z.string().regex(/(?!=[@:;\+\-\.\,\!])/)
 const parse_port = z.coerce.number()
-const parse_nextauth_secret = z.string().length(32).regex(/(?!=[!\-\.])/)
+const parse_nextauth_secret = z
+  .string()
+  .length(32)
+  .regex(/(?!=[!\-\.])/)
 const envItemsSchema = z.object({
+  ORG_NAME: parse_string,
   DATABASE_HOST: parse_string,
   DATABASE_DATABASENAME: parse_string,
   DATABASE_USER: parse_string,
@@ -65,6 +69,7 @@ const generate_secret = () => {
 
 const envItems = {
   DATABASE_HOST: '',
+  ORG_NAME: '',
   DATABASE_DATABASENAME: '',
   DATABASE_USER: '',
   DATABASE_PASSWORD: '',
@@ -124,7 +129,6 @@ const read_new_var_value = (key) => {
   })
 }
 
-// postgresql://postgres.iwaochxhwppfkqmyfkuw:[YOUR-PASSWORD]@aws-0-eu-central-2.pooler.supabase.com:6543/postgres
 const read_env = async () => {
   for (const key of Object.keys(envItems)) {
     switch (key) {
@@ -132,11 +136,16 @@ const read_env = async () => {
         envItems.DATABASE_URL = `postgres://${envItems.DATABASE_USER}:${envItems.DATABASE_PASSWORD}@${envItems.DATABASE_HOST}:${envItems.PORT}/${envItems.DATABASE_DATABASENAME}`
         break
       }
-      case 'NEXTAUTH_SECRET':{
-        envItems[key] = process.env?.[key] && parse_nextauth_secret.safeParse(process.env[key]).success?process.env[key]: generate_secret().slice(0,32)
-        break}
+      case 'NEXTAUTH_SECRET': {
+        envItems[key] =
+          process.env?.[key] &&
+          parse_nextauth_secret.safeParse(process.env[key]).success
+            ? process.env[key]
+            : generate_secret().slice(0, 32)
+        break
+      }
       default:
-        if (process.env?.[key]?.length ) {
+        if (process.env?.[key]?.length) {
           envItems[key] = process.env[key]
         } else {
           envItems[key] = await read_new_var_value(key)
@@ -151,7 +160,8 @@ const read_env = async () => {
   try {
     envItemsSchema.parse(envItems)
 
-    for (const folder of [".",
+    for (const folder of [
+      '.',
       'golang_api/src/server',
       'dmwebapp',
       'database_management',
