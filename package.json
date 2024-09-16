@@ -8,9 +8,8 @@
     "dev:setup": "nodemon",
     "lint": "npx @biomejs/biome check --fix .",
     "setup:env": "node ./setup/lib/env_handler.js",
-
     "dev:golang_api": "cd golang_api/src/server && air",
-    "dev:webapp": "cd dmwebapp && npm run refresh"
+    "dev:webapp": "cd dmwebapp &&  npm run refresh"
   },
   "keywords": [],
   "author": "",
