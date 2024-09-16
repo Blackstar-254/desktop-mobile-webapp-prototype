@@ -1,5 +1,44 @@
 # COMMIT NOTES
 
+### 2024 September 16th, 12:58 PM
+```sh
+1. Setting up pages departments:
+    i. Gallery
+    ii. Blogs
+    iii. Billing
+    iv. Contact Forms
+    v. Email
+
+2. Overall goals:
+    i. CRUD Images for gallery
+    ii. CRUD Blog posts
+    iii. Ease payment systems for clients
+    iv. Read contact form responses
+
+3. Visionary goals:
+    i. Simple copy-paste template for developing
+    Nextjs CMS backends
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	new file:   dmwebapp/src/lib/auth/index.ts
+#	modified:   dmwebapp/src/pages/auth/[auth].tsx
+#	new file:   dmwebapp/src/pages/blogs/[blog-id]/index.tsx
+#	new file:   dmwebapp/src/pages/blogs/index.tsx
+#	new file:   dmwebapp/src/pages/dashboard/billing/[bill-id]/index.tsx
+#	new file:   dmwebapp/src/pages/dashboard/billing/index.tsx
+#	new file:   dmwebapp/src/pages/dashboard/blog/index.tsx
+#	new file:   dmwebapp/src/pages/dashboard/contact-forms/index.tsx
+#	new file:   dmwebapp/src/pages/dashboard/seo.tsx
+#	modified:   package.json
+#
+```
+
 ### 2024 September 13th, 20:13 PM
 ```sh
 1. both golang_api and webapp run dev successfully
