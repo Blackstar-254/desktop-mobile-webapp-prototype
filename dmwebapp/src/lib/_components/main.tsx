@@ -16,6 +16,7 @@ type MainProps = {
         fallBack?: string
         next?: boolean
     },
+
     children?: React.ReactNode
     title?: string
     heading?: string

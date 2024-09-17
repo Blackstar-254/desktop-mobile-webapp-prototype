@@ -30,6 +30,11 @@ const envItemsSchema = z.object({
   DATABASE_PORT: parse_port,
   DATABASE_URL: z.string().url(),
 
+  CLIENT_ID:
+    process.env.NODE_ENV === 'production'
+      ? z.string().uuid()
+      : z.string().uuid().optional(),
+
   NODE_ENV: workEnvSchema,
   GIN_MODE: workEnvSchema,
   NEXTAUTH_SECRET: parse_nextauth_secret,
@@ -84,6 +89,7 @@ const envItems = {
 
   GOLANG_API_PORT: '',
   PORT: '',
+  CLIENT_ID: '',
 
   SUPABASE_REFERENCE_ID: '',
   NEXT_PUBLIC_SUPABASE_API_KEY: '',
@@ -133,7 +139,7 @@ const read_env = async () => {
   for (const key of Object.keys(envItems)) {
     switch (key) {
       case 'DATABASE_URL': {
-        envItems.DATABASE_URL = `postgres://${envItems.DATABASE_USER}:${envItems.DATABASE_PASSWORD}@${envItems.DATABASE_HOST}:${envItems.PORT}/${envItems.DATABASE_DATABASENAME}`
+        envItems.DATABASE_URL = `postgres://${envItems.DATABASE_USER}:${envItems.DATABASE_PASSWORD}@${envItems.DATABASE_HOST}:${envItems.DATABASE_PORT.valueOf()}/${envItems.DATABASE_DATABASENAME}`
         break
       }
       case 'NEXTAUTH_SECRET': {

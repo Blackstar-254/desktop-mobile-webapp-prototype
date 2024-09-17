@@ -1,5 +1,6 @@
 import dotenv from 'dotenv'
 import { defineConfig } from 'drizzle-kit'
+import { valid_schemas } from './schema/index'
 import { z } from 'zod'
 
 dotenv.config()
@@ -20,7 +21,7 @@ export default defineConfig({
     schema: 'public', // used in PostgreSQL only and default to `drizzle`
   },
 
-  schemaFilter: ['public'],
+  schemaFilter: valid_schemas,
   verbose: true,
   strict: true,
 })

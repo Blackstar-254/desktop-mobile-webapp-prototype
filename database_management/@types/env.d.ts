@@ -1,0 +1,20 @@
+export const env: Readonly<{
+    DATABASE_URL: string;
+    ORG_NAME: string;
+    DATABASE_HOST: string;
+    DATABASE_DATABASENAME: string;
+    DATABASE_USER: string;
+    DATABASE_PASSWORD: string;
+    DATABASE_PORT: number;
+    GOLANG_API_PORT: number;
+    PORT: number;
+    SUPABASE_REFERENCE_ID: string;
+    NODE_ENV: "development" | "test" | "production";
+    NEXTAUTH_URL: string;
+    SUPABASE_SERVICE_ROLE_SECRET: string;
+    SUPABASE_JWT_SECRET: string;
+    NEXTAUTH_SECRET?: string | undefined;
+    CLIENT_ID?: string | undefined;
+    NEXT_PUBLIC_SUPABASE_API_KEY: string;
+    NEXT_PUBLIC_SUPABASE_PROJECT_URL: string;
+}>;

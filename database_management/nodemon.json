@@ -1,14 +1,19 @@
 {
   "restartable": "rs",
-  "ignore": [".git", "node_modules/*"],
+  "ignore": [
+    ".git",
+    "node_modules/*"
+  ],
   "verbose": true,
   "execMap": {
-    "js": "node --harmony setup/index.js"
+    "js": "node --harmony scripts/repeat_introspect.js"
   },
   "events": {
     "restart": "osascript -e 'display notification \"App restarted due to:\n'$FILENAME'\" with title \"nodemon\"'"
   },
-  "watch": ["setup"],
+  "watch": [
+    "scripts"
+  ],
   "env": {
     "NODE_ENV": "development"
   },
