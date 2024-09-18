@@ -12,8 +12,7 @@
     "dev": "next dev --turbo",
     "lint": "npx @biomejs/biome check --fix --unsafe --write .",
     "start": "next start",
-    "setup": "npm i && npm run setupdb",
-    "setupdb": "npm run db:generate&&npm run db:migrate",
+    "setup": "npm i && npm",
     "refresh": "rm -r .next&&npx next telemetry disable&&npm run dev"
   },
   "dependencies": {

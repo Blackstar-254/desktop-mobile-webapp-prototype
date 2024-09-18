@@ -142,6 +142,15 @@ const read_env = async () => {
         envItems.DATABASE_URL = `postgres://${envItems.DATABASE_USER}:${envItems.DATABASE_PASSWORD}@${envItems.DATABASE_HOST}:${envItems.DATABASE_PORT.valueOf()}/${envItems.DATABASE_DATABASENAME}`;
         break;
       }
+      case 'CLIENT_ID': {
+        envItems.CLIENT_ID = z
+          .string()
+          .uuid('client_id')
+          .safeParse(process.env[key]).success
+          ? process.env[key]
+          : crypto.randomUUID();
+        break;
+      }
       case 'NEXTAUTH_SECRET': {
         envItems[key] =
           process.env?.[key] &&
