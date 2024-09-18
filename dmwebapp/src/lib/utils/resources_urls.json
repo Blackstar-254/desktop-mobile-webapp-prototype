@@ -1,0 +1,46 @@
+{
+    "favicon": "/favicon.ico",
+    "logo": "/logo.png",
+    "error-message-images": {
+        "404-Colorlib-Error-Page-Template-v9": "/error-message-images/404-Colorlib-Error-Page-Template-v9.webp",
+        "404-dialog-box-triangle": "/error-message-images/404-dialog-box-triangle.webp",
+        "404-error-page-isometric-scene": "/error-message-images/404-error-page-isometric-scene.webp",
+        "404-error-page-or-file-not-found-icon": "/error-message-images/404-error-page-or-file-not-found-icon.png",
+        "404-error-page-vector-design": "/error-message-images/404-error-page-vector-design.webp",
+        "404-message-boxes": "/error-message-images/404-message-boxes.webp",
+        "500-error-page-001": "/error-message-images/500-error-page-001.webp",
+        "500-error-page-002": "/error-message-images/500-error-page-002.png",
+        "500-error-page-003": "/error-message-images/500-error-page-003.png",
+        "Animated-500-Error": "/error-message-images/Animated-500-Error.webp"
+    },
+    "test": {
+        "Home": "/test/Home.css",
+        "jquery": "/test/jquery.js",
+        "nicepage": "/test/nicepage.js",
+        "images": {
+            "10486568": "/test/images/10486568.png",
+            "116449445_3148661418504399_49363013400333769_n": "/test/images/116449445_3148661418504399_49363013400333769_n.png",
+            "121352197_3369841003053105_51205684272514932_n": "/test/images/121352197_3369841003053105_51205684272514932_n.png",
+            "130285072_3525514494152421_1544287742367305442_n": "/test/images/130285072_3525514494152421_1544287742367305442_n.png",
+            "186543141_153732450098724_5169552202587625704_n": "/test/images/186543141_153732450098724_5169552202587625704_n.png",
+            "191047715_160386636099972_3067390665334471319_n": "/test/images/191047715_160386636099972_3067390665334471319_n.png",
+            "284294744_410474884424478_3955126763285761820_n": "/test/images/284294744_410474884424478_3955126763285761820_n.png",
+            "287295230_424870179651615_8639128166918859655_n": "/test/images/287295230_424870179651615_8639128166918859655_n.png",
+            "293229472_440831021388864_4550485181881416156_n": "/test/images/293229472_440831021388864_4550485181881416156_n.png",
+            "309477480_499565025515463_8751996586965130244_n": "/test/images/309477480_499565025515463_8751996586965130244_n.png",
+            "78997724_2591073760929837_2536989060933615616_n": "/test/images/78997724_2591073760929837_2536989060933615616_n.png",
+            "81358662_2629018217135391_4360776004680024064_n": "/test/images/81358662_2629018217135391_4360776004680024064_n.png",
+            "81668032_2655253744511838_6107655069295968256_n": "/test/images/81668032_2655253744511838_6107655069295968256_n.png",
+            "82220007_2655299367840609_4743437215428771840_n": "/test/images/82220007_2655299367840609_4743437215428771840_n.png",
+            "83930275_2709691425734736_48241966021869568_n": "/test/images/83930275_2709691425734736_48241966021869568_n.png",
+            "88108975_2756600341043844_8218669132078383104_n": "/test/images/88108975_2756600341043844_8218669132078383104_n.png",
+            "brimage_fotos_logo_Fotor": "/test/images/brimage_fotos_logo_Fotor.png",
+            "business-team-5": "/test/images/business-team-5.jpg",
+            "default-image": "/test/images/default-image.jpg"
+        },
+        "intlTelInput": {
+            "intlTelInput": "/test/intlTelInput/intlTelInput.min.js",
+            "utils": "/test/intlTelInput/utils.js"
+        }
+    }
+}

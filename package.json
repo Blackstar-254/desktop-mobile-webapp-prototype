@@ -10,7 +10,8 @@
     "setup:db_schema": "node ./setup/lib/create_clean_db_schema.js",
     "dev:golang_api": "cd golang_api/src/server && air",
     "dev:webapp": "cd dmwebapp &&  npm run refresh",
-    "dev:setup:db_schema": "nodemon --config ./setup/nodemon_config/uniform_db_schema.json"
+    "dev:setup:db_schema": "nodemon --config ./setup/nodemon_config/uniform_db_schema.json",
+    "dev:make_routes": "nodemon --config ./setup/nodemon_config/make_routes.json"
   },
   "keywords": [],
   "author": "",
