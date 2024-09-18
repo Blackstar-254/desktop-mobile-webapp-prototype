@@ -1,5 +1,121 @@
 # COMMIT NOTES
 
+### 2024 September 18th, 09:22 AM
+```sh
+1. Creating database schema:
+    - billing 
+    - content 
+    - user_accounts 
+the goal is to uniform all database management 
+2. Creating create_uniform_db_schema as a 
+    simple code_gen to simplify db access 
+3. next is to create:
+    - visitor_info middleware in nextjs
+    - auth middleware server_side 
+    - content resource management nextjs side
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   biome.json
+#	modified:   database_management/@types/schema/index.d.ts
+#	modified:   database_management/@types/schema/main_tables.d.ts
+#	modified:   database_management/@types/schema/tables.billing.d.ts
+#	modified:   database_management/@types/schema/tables.public.d.ts
+#	modified:   database_management/@types/schema/tables.user_accounts.d.ts
+#	new file:   database_management/@types/schema/utils/contact_info.d.ts
+#	modified:   database_management/@types/schema/utils/contacts_type.d.ts
+#	modified:   database_management/@types/schema/utils/custom_json_type.d.ts
+#	modified:   database_management/@types/schema/utils/visitor_identification_type.d.ts
+#	new file:   database_management/@types/schema/utils/visitor_info.d.ts
+#	modified:   database_management/biome.json
+#	modified:   database_management/nodemon.json
+#	renamed:    database_management/schema/0000_striped_gateway.sql -> database_management/schema/0000_talented_reptil.sql
+#	modified:   database_management/schema/meta/0000_snapshot.json
+#	modified:   database_management/schema/meta/_journal.json
+#	modified:   database_management/scripts/repeat_introspect.js
+#	modified:   database_management/src/drizzle.config.ts
+#	modified:   database_management/src/env.js
+#	modified:   database_management/src/schema/index.ts
+#	modified:   database_management/src/schema/table_common.ts
+#	modified:   database_management/src/schema/tables.billing.ts
+#	modified:   database_management/src/schema/tables.content.ts
+#	modified:   database_management/src/schema/tables.public.ts
+#	modified:   database_management/src/schema/tables.user_accounts.ts
+#	modified:   database_management/src/schema/utils/contact_info.ts
+#	modified:   database_management/src/schema/utils/custom_json_type.ts
+#	modified:   database_management/src/schema/utils/valid_schemas.ts
+#	new file:   database_management/src/schema/utils/visitor_info.ts
+#	modified:   dmwebapp/biome.json
+#	modified:   dmwebapp/cache/config.json
+#	modified:   dmwebapp/drizzle.config.ts
+#	modified:   dmwebapp/next.config.js
+#	modified:   dmwebapp/package.json
+#	modified:   dmwebapp/postcss.config.cjs
+#	modified:   dmwebapp/src/env.js
+#	modified:   dmwebapp/src/lib/_components/main.tsx
+#	modified:   dmwebapp/src/lib/db_accessories/client.ts
+#	modified:   dmwebapp/src/lib/utils/cache_global.ts
+#	modified:   dmwebapp/src/pages/404.tsx
+#	modified:   dmwebapp/src/pages/_app.tsx
+#	modified:   dmwebapp/src/pages/api/auth/[...nextauth].ts
+#	modified:   dmwebapp/src/pages/api/forms/contact-us.ts
+#	modified:   dmwebapp/src/pages/api/trpc/[trpc].ts
+#	modified:   dmwebapp/src/pages/auth/[auth].tsx
+#	modified:   dmwebapp/src/pages/blogs/[blog-id]/index.tsx
+#	modified:   dmwebapp/src/pages/blogs/index.tsx
+#	modified:   dmwebapp/src/pages/dashboard/billing/[bill-id]/index.tsx
+#	modified:   dmwebapp/src/pages/dashboard/billing/index.tsx
+#	modified:   dmwebapp/src/pages/dashboard/blog/[blog-id]/index.tsx
+#	modified:   dmwebapp/src/pages/dashboard/blog/index.tsx
+#	modified:   dmwebapp/src/pages/dashboard/contact-forms/index.tsx
+#	modified:   dmwebapp/src/pages/dashboard/email/index.tsx
+#	modified:   dmwebapp/src/pages/dashboard/gallery/[photo-id].tsx
+#	modified:   dmwebapp/src/pages/dashboard/gallery/index.tsx
+#	modified:   dmwebapp/src/pages/dashboard/index.tsx
+#	modified:   dmwebapp/src/pages/dashboard/seo.tsx
+#	modified:   dmwebapp/src/pages/gallery/[photo-id].tsx
+#	modified:   dmwebapp/src/pages/gallery/index.tsx
+#	modified:   dmwebapp/src/pages/index.tsx
+#	modified:   dmwebapp/src/server/api/root.ts
+#	modified:   dmwebapp/src/server/api/routers/post.ts
+#	modified:   dmwebapp/src/server/api/trpc.ts
+#	modified:   dmwebapp/src/server/auth.ts
+#	modified:   dmwebapp/src/server/db/index.ts
+#	new file:   dmwebapp/src/server/db/schema/index.ts
+#	new file:   dmwebapp/src/server/db/schema/table_common.ts
+#	new file:   dmwebapp/src/server/db/schema/tables.billing.ts
+#	new file:   dmwebapp/src/server/db/schema/tables.content.ts
+#	new file:   dmwebapp/src/server/db/schema/tables.public.ts
+#	renamed:    dmwebapp/src/server/db/schema.ts -> dmwebapp/src/server/db/schema/tables.user_accounts.ts
+#	renamed:    golang_api/src/lib/db_access/sql/schema/0000_dashing_ultron.sql -> dmwebapp/src/server/db/schema/utils/common_types.ts
+#	new file:   dmwebapp/src/server/db/schema/utils/contact_info.ts
+#	new file:   dmwebapp/src/server/db/schema/utils/custom_json_type.ts
+#	new file:   dmwebapp/src/server/db/schema/utils/index.ts
+#	new file:   dmwebapp/src/server/db/schema/utils/valid_schemas.ts
+#	new file:   dmwebapp/src/server/db/schema/utils/visitor_info.ts
+#	modified:   dmwebapp/src/utils/api.ts
+#	modified:   dmwebapp/tailwind.config.ts
+#	modified:   golang_api/src/lib/db_access/generated/common_queries.sql.go
+#	modified:   golang_api/src/lib/db_access/generated/models.go
+#	modified:   golang_api/src/lib/db_access/sql/queries/common_queries.sql
+#	new file:   golang_api/src/lib/db_access/sql/schema/0000_talented_reptil.sql
+#	new file:   golang_api/src/lib/db_access/sql/schema/constraints_schema.sql
+#	deleted:    golang_api/src/lib/db_access/sql/schema/patient_records.sql
+#	modified:   golang_api/src/sqlc.yaml
+#	modified:   package.json
+#	modified:   setup/index.js
+#	modified:   setup/lib/create_uniform_db_schema.js
+#	modified:   setup/lib/env_handler.js
+#	modified:   setup/lib/read_directory.js
+#	modified:   setup/nodemon_config/env_handler.json
+#	modified:   setup/nodemon_config/uniform_db_schema.json
+#
+```
+
 ### 2024 September 16th, 12:58 PM
 ```sh
 1. Setting up pages departments:
