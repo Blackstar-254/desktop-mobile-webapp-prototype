@@ -1,8 +1,7 @@
 export default function AuthPage() {
-  return <main></main>
+  return <main></main>;
 }
 
-
 function LoginPage() {
-  return <div></div>
+  return <div></div>;
 }

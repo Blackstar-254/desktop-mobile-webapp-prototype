@@ -1,3 +1,3 @@
-const cp = require('child_process')
+const cp = require('child_process');
 
-console.log('hi')
+console.log('hi');

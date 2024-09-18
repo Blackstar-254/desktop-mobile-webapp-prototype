@@ -1,3 +1,3 @@
-require('./lib/env_handler')
+require('./lib/env_handler');
 
-console.log('hello world')
+console.log('hello world');

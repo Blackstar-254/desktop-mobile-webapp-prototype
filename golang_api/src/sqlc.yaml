@@ -2,7 +2,7 @@ version: "2"
 sql:
   - engine: "postgresql"
     queries: "lib/db_access/sql/queries"
-    schema: "./../drizzle_handler/schema"
+    schema: "lib/db_access/sql/schema"
     gen:
       go:
         package: "db_access"

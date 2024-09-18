@@ -1,15 +1,15 @@
-import { createEnv } from '@t3-oss/env-nextjs'
-import { z } from 'zod'
+import { createEnv } from '@t3-oss/env-nextjs';
+import { z } from 'zod';
 const workEnvSchema = z
   .enum(['development', 'test', 'production', 'debug'])
-  .default('development')
+  .default('development');
 
-const parse_string = z.string().regex(/(?!=[@:;\+\-\.\,\!])/)
-const parse_port = z.coerce.number()
+const parse_string = z.string().regex(/(?!=[@:;\+\-\.\,\!])/);
+const parse_port = z.coerce.number();
 const parse_nextauth_secret = z
   .string()
   .length(32)
-  .regex(/(?!=[!\-\.])/)
+  .regex(/(?!=[!\-\.])/);
 export const env = createEnv({
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app
@@ -104,4 +104,4 @@ export const env = createEnv({
    * `SOME_VAR=''` will throw an error.
    */
   emptyStringAsUndefined: true,
-})
+});

@@ -1,13 +1,13 @@
-import dotenv from 'dotenv'
-import { defineConfig } from 'drizzle-kit'
-import { valid_schemas } from './schema/index'
-import { z } from 'zod'
+import dotenv from 'dotenv';
+import { defineConfig } from 'drizzle-kit';
+import { z } from 'zod';
+import { valid_schemas } from './schema/index';
 
-dotenv.config()
+dotenv.config();
 const envSchema = z.object({
   DATABASE_URL: z.string().url().min(3),
-})
-const env = envSchema.parse(process.env)
+});
+const env = envSchema.parse(process.env);
 
 export default defineConfig({
   schema: './src/schema',
@@ -24,4 +24,4 @@ export default defineConfig({
   schemaFilter: valid_schemas,
   verbose: true,
   strict: true,
-})
+});

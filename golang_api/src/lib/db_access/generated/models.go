@@ -8,186 +8,186 @@ import (
 	"database/sql/driver"
 	"fmt"
 
-	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type ApptStateT string
+type PaymentMethodT string
 
 const (
-	ApptStateTAppointment ApptStateT = "appointment"
-	ApptStateTConfirmed   ApptStateT = "confirmed"
-	ApptStateTCancelled   ApptStateT = "cancelled"
-	ApptStateTBlank       ApptStateT = "blank"
+	PaymentMethodTCash         PaymentMethodT = "cash"
+	PaymentMethodTMpesa        PaymentMethodT = "mpesa"
+	PaymentMethodTBankTransfer PaymentMethodT = "bank_transfer"
+	PaymentMethodTCheque       PaymentMethodT = "cheque"
+	PaymentMethodTVisa         PaymentMethodT = "visa"
 )
 
-func (e *ApptStateT) Scan(src interface{}) error {
+func (e *PaymentMethodT) Scan(src interface{}) error {
 	switch s := src.(type) {
 	case []byte:
-		*e = ApptStateT(s)
+		*e = PaymentMethodT(s)
 	case string:
-		*e = ApptStateT(s)
+		*e = PaymentMethodT(s)
 	default:
-		return fmt.Errorf("unsupported scan type for ApptStateT: %T", src)
+		return fmt.Errorf("unsupported scan type for PaymentMethodT: %T", src)
 	}
 	return nil
 }
 
-type NullApptStateT struct {
-	ApptStateT ApptStateT `json:"appt_state_t"`
-	Valid      bool       `json:"valid"` // Valid is true if ApptStateT is not NULL
+type NullPaymentMethodT struct {
+	PaymentMethodT PaymentMethodT `json:"payment_method_t"`
+	Valid          bool           `json:"valid"` // Valid is true if PaymentMethodT is not NULL
 }
 
 // Scan implements the Scanner interface.
-func (ns *NullApptStateT) Scan(value interface{}) error {
+func (ns *NullPaymentMethodT) Scan(value interface{}) error {
 	if value == nil {
-		ns.ApptStateT, ns.Valid = "", false
+		ns.PaymentMethodT, ns.Valid = "", false
 		return nil
 	}
 	ns.Valid = true
-	return ns.ApptStateT.Scan(value)
+	return ns.PaymentMethodT.Scan(value)
 }
 
 // Value implements the driver Valuer interface.
-func (ns NullApptStateT) Value() (driver.Value, error) {
+func (ns NullPaymentMethodT) Value() (driver.Value, error) {
 	if !ns.Valid {
 		return nil, nil
 	}
-	return string(ns.ApptStateT), nil
+	return string(ns.PaymentMethodT), nil
 }
 
-type VisitType string
+type PaymentPeriodT string
 
 const (
-	VisitTypeOutpatient         VisitType = "outpatient"
-	VisitTypePostOp             VisitType = "post-op"
-	VisitTypeReview             VisitType = "review"
-	VisitTypeInpatientLa        VisitType = "inpatient-la"
-	VisitTypeInpatientGa        VisitType = "inpatient-ga"
-	VisitTypeInpatientEmergency VisitType = "inpatient-emergency"
-	VisitTypeDiagnostic         VisitType = "diagnostic"
+	PaymentPeriodTMonthly  PaymentPeriodT = "monthly"
+	PaymentPeriodTWeekly   PaymentPeriodT = "weekly"
+	PaymentPeriodTAnnually PaymentPeriodT = "annually"
+	PaymentPeriodT3months  PaymentPeriodT = "3 months"
+	PaymentPeriodT2years   PaymentPeriodT = "2 years"
+	PaymentPeriodT5years   PaymentPeriodT = "5 years"
 )
 
-func (e *VisitType) Scan(src interface{}) error {
+func (e *PaymentPeriodT) Scan(src interface{}) error {
 	switch s := src.(type) {
 	case []byte:
-		*e = VisitType(s)
+		*e = PaymentPeriodT(s)
 	case string:
-		*e = VisitType(s)
+		*e = PaymentPeriodT(s)
 	default:
-		return fmt.Errorf("unsupported scan type for VisitType: %T", src)
+		return fmt.Errorf("unsupported scan type for PaymentPeriodT: %T", src)
 	}
 	return nil
 }
 
-type NullVisitType struct {
-	VisitType VisitType `json:"visit_type"`
-	Valid     bool      `json:"valid"` // Valid is true if VisitType is not NULL
+type NullPaymentPeriodT struct {
+	PaymentPeriodT PaymentPeriodT `json:"payment_period_t"`
+	Valid          bool           `json:"valid"` // Valid is true if PaymentPeriodT is not NULL
 }
 
 // Scan implements the Scanner interface.
-func (ns *NullVisitType) Scan(value interface{}) error {
+func (ns *NullPaymentPeriodT) Scan(value interface{}) error {
 	if value == nil {
-		ns.VisitType, ns.Valid = "", false
+		ns.PaymentPeriodT, ns.Valid = "", false
 		return nil
 	}
 	ns.Valid = true
-	return ns.VisitType.Scan(value)
+	return ns.PaymentPeriodT.Scan(value)
 }
 
 // Value implements the driver Valuer interface.
-func (ns NullVisitType) Value() (driver.Value, error) {
+func (ns NullPaymentPeriodT) Value() (driver.Value, error) {
 	if !ns.Valid {
 		return nil, nil
 	}
-	return string(ns.VisitType), nil
+	return string(ns.PaymentPeriodT), nil
 }
 
-type ApptCal struct {
-	ApptCalID        int32              `json:"appt_cal_id"`
-	ApptCalCreatedAt pgtype.Timestamp   `json:"appt_cal_created_at"`
-	ApptCalUpdatedAt pgtype.Timestamp   `json:"appt_cal_updated_at"`
-	ApptDate         pgtype.Timestamptz `json:"appt_date"`
-	PatientUuid      pgtype.UUID        `json:"patient_uuid"`
-	ApptState        ApptStateT         `json:"appt_state"`
-}
-
-type Organisation struct {
+type BillingOrganisation struct {
 	OrganisationsID        int32            `json:"organisations_id"`
 	OrganisationsCreatedAt pgtype.Timestamp `json:"organisations_created_at"`
 	OrganisationsUpdatedAt pgtype.Timestamp `json:"organisations_updated_at"`
 	Name                   string           `json:"name"`
 	Address                string           `json:"address"`
 	DomainName             *string          `json:"domain_name"`
+	ClientID               string           `json:"client_id"`
+	ContactInformation     []byte           `json:"contact_information"`
+	SocialMediaIntegration []byte           `json:"social_media_integration"`
 }
 
-type PatientsFile struct {
-	PatientsFileID        int32            `json:"patients_file_id"`
-	PatientsFileCreatedAt pgtype.Timestamp `json:"patients_file_created_at"`
-	PatientsFileUpdatedAt pgtype.Timestamp `json:"patients_file_updated_at"`
-	Uuid                  uuid.UUID        `json:"uuid"`
-	PatientName           string           `json:"patient_name"`
-	PatientNo             string           `json:"patient_no"`
-	FileNo                string           `json:"file_no"`
-	Occupation            *string          `json:"occupation"`
-	ContactInfo           []byte           `json:"contact_info"`
-	NextOfKin             []byte           `json:"next_of_kin"`
-	DateOfBirth           pgtype.Date      `json:"date_of_birth"`
-}
-
-type PaymentMethod struct {
-	PaymentMethodsID        int32            `json:"payment_methods_id"`
-	PaymentMethodsCreatedAt pgtype.Timestamp `json:"payment_methods_created_at"`
-	PaymentMethodsUpdatedAt pgtype.Timestamp `json:"payment_methods_updated_at"`
-	Name                    string           `json:"name"`
-	Description             *string          `json:"description"`
-	Org                     int32            `json:"org"`
-}
-
-type Pricelist struct {
+type BillingPricelist struct {
 	PricelistID        int32            `json:"pricelist_id"`
 	PricelistCreatedAt pgtype.Timestamp `json:"pricelist_created_at"`
 	PricelistUpdatedAt pgtype.Timestamp `json:"pricelist_updated_at"`
 	Name               string           `json:"name"`
-	PaymentMethod      int32            `json:"payment_method"`
 	Description        *string          `json:"description"`
-	Price              int32            `json:"price"`
-	Units              string           `json:"units"`
+	SalesPriceInCents  int32            `json:"sales_price_in_cents"`
+	PaymentPeriod      PaymentPeriodT   `json:"payment_period"`
+	CostInCents        int32            `json:"cost_in_cents"`
+	CostPeriod         PaymentPeriodT   `json:"cost_period"`
 }
 
-type ServicesRecord struct {
-	ServicesRecordsID        int32            `json:"services_records_id"`
-	ServicesRecordsCreatedAt pgtype.Timestamp `json:"services_records_created_at"`
-	ServicesRecordsUpdatedAt pgtype.Timestamp `json:"services_records_updated_at"`
-	VisitID                  int32            `json:"visit_id"`
-	ServiceID                int32            `json:"service_id"`
-	Comment                  *string          `json:"comment"`
-	Quantity                 int32            `json:"quantity"`
-	Price                    int32            `json:"price"`
+type BillingTransactionsRecord struct {
+	TransactionsID        int32              `json:"transactions_id"`
+	TransactionsCreatedAt pgtype.Timestamp   `json:"transactions_created_at"`
+	TransactionsUpdatedAt pgtype.Timestamp   `json:"transactions_updated_at"`
+	Description           string             `json:"description"`
+	ClientID              string             `json:"client_id"`
+	CreditInCents         int32              `json:"credit_in_cents"`
+	DebitInCents          int32              `json:"debit_in_cents"`
+	PaymentMethod         PaymentMethodT     `json:"payment_method"`
+	DiscountInCents       int32              `json:"discount_in_cents"`
+	PendingPaymentInCents int32              `json:"pending_payment_in_cents"`
+	NextPaymentDate       pgtype.Timestamptz `json:"next_payment_date"`
 }
 
-type TimeSheet struct {
-	TimeSheetID        int32            `json:"time_sheet_id"`
-	TimeSheetCreatedAt pgtype.Timestamp `json:"time_sheet_created_at"`
-	TimeSheetUpdatedAt pgtype.Timestamp `json:"time_sheet_updated_at"`
-	EntryTime          pgtype.Timestamp `json:"entry_time"`
-	TriageTime         pgtype.Timestamp `json:"triage_time"`
-	ConsultEntryTime   pgtype.Timestamp `json:"consult_entry_time"`
-	ConsultExitTime    pgtype.Timestamp `json:"consult_exit_time"`
-	AdmissionTime      pgtype.Timestamp `json:"admission_time"`
-	TheatreEntryTime   pgtype.Timestamp `json:"theatre_entry_time"`
-	TheatreExitTime    pgtype.Timestamp `json:"theatre_exit_time"`
-	ExitTime           pgtype.Timestamp `json:"exit_time"`
+type ContentPost struct {
+	PostsID        int32            `json:"posts_id"`
+	PostsCreatedAt pgtype.Timestamp `json:"posts_created_at"`
+	PostsUpdatedAt pgtype.Timestamp `json:"posts_updated_at"`
+	Name           *string          `json:"name"`
+	CreatedBy      string           `json:"created_by"`
 }
 
-type VisitRecord struct {
-	VisitID        int32            `json:"visit_id"`
-	VisitCreatedAt pgtype.Timestamp `json:"visit_created_at"`
-	VisitUpdatedAt pgtype.Timestamp `json:"visit_updated_at"`
-	Date           pgtype.Date      `json:"date"`
-	Type           VisitType        `json:"type"`
-	ApptID         *int32           `json:"appt_id"`
-	TimeRow        int32            `json:"time_row"`
-	Patient        *int32           `json:"patient"`
-	CurrentAge     pgtype.Interval  `json:"current_age"`
+type UserAccountsAccount struct {
+	UserID            string  `json:"user_id"`
+	Type              string  `json:"type"`
+	Provider          string  `json:"provider"`
+	ProviderAccountID string  `json:"provider_account_id"`
+	RefreshToken      *string `json:"refresh_token"`
+	AccessToken       *string `json:"access_token"`
+	ExpiresAt         *int32  `json:"expires_at"`
+	TokenType         *string `json:"token_type"`
+	Scope             *string `json:"scope"`
+	IDToken           *string `json:"id_token"`
+	SessionState      *string `json:"session_state"`
+}
+
+type UserAccountsSession struct {
+	SessionToken string             `json:"session_token"`
+	UserID       string             `json:"user_id"`
+	Expires      pgtype.Timestamptz `json:"expires"`
+}
+
+type UserAccountsUser struct {
+	ID            string             `json:"id"`
+	Name          *string            `json:"name"`
+	Email         string             `json:"email"`
+	EmailVerified pgtype.Timestamptz `json:"email_verified"`
+	Image         *string            `json:"image"`
+	ClientOrg     *string            `json:"client_org"`
+	ContactInfo   []byte             `json:"contact_info"`
+}
+
+type UserAccountsVerificationToken struct {
+	Identifier string             `json:"identifier"`
+	Token      string             `json:"token"`
+	Expires    pgtype.Timestamptz `json:"expires"`
+}
+
+type Visitor struct {
+	VisitorID        int32            `json:"visitor_id"`
+	VisitorCreatedAt pgtype.Timestamp `json:"visitor_created_at"`
+	VisitorUpdatedAt pgtype.Timestamp `json:"visitor_updated_at"`
+	ClientID         string           `json:"client_id"`
+	VisitorInfo      []byte           `json:"visitor_info"`
 }

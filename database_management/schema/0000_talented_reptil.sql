@@ -57,6 +57,14 @@ CREATE TABLE IF NOT EXISTS "billing"."transactions_records" (
 	CONSTRAINT "transactions_records_description_unique" UNIQUE("description")
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "content"."post" (
+	"posts_id" serial PRIMARY KEY NOT NULL,
+	"posts_created_at" timestamp DEFAULT now() NOT NULL,
+	"posts_updated_at" timestamp NOT NULL,
+	"name" varchar(256),
+	"created_by" varchar(255) NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user_accounts"."account" (
 	"user_id" varchar(255) NOT NULL,
 	"type" varchar(255) NOT NULL,
@@ -72,14 +80,6 @@ CREATE TABLE IF NOT EXISTS "user_accounts"."account" (
 	CONSTRAINT "account_provider_provider_account_id_pk" PRIMARY KEY("provider","provider_account_id")
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "user_accounts"."post" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"name" varchar(256),
-	"created_by" varchar(255) NOT NULL,
-	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"updated_at" timestamp with time zone
-);
---> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user_accounts"."session" (
 	"session_token" varchar(255) PRIMARY KEY NOT NULL,
 	"user_id" varchar(255) NOT NULL,
@@ -92,7 +92,8 @@ CREATE TABLE IF NOT EXISTS "user_accounts"."user" (
 	"email" varchar(255) NOT NULL,
 	"email_verified" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
 	"image" varchar(255),
-	"client_org" text
+	"client_org" text,
+	"contact_info" jsonb
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user_accounts"."verification_token" (
@@ -102,6 +103,14 @@ CREATE TABLE IF NOT EXISTS "user_accounts"."verification_token" (
 	CONSTRAINT "verification_token_identifier_token_pk" PRIMARY KEY("identifier","token")
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "visitors" (
+	"visitor_id" serial PRIMARY KEY NOT NULL,
+	"visitor_created_at" timestamp DEFAULT now() NOT NULL,
+	"visitor_updated_at" timestamp NOT NULL,
+	"client_id" text NOT NULL,
+	"visitor_info" jsonb
+);
+--> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "billing"."transactions_records" ADD CONSTRAINT "transactions_records_client_id_organisations_client_id_fk" FOREIGN KEY ("client_id") REFERENCES "billing"."organisations"("client_id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
@@ -109,13 +118,13 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "user_accounts"."account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "user_accounts"."user"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "content"."post" ADD CONSTRAINT "post_created_by_user_id_fk" FOREIGN KEY ("created_by") REFERENCES "user_accounts"."user"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "user_accounts"."post" ADD CONSTRAINT "post_created_by_user_id_fk" FOREIGN KEY ("created_by") REFERENCES "user_accounts"."user"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "user_accounts"."account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "user_accounts"."user"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -132,8 +141,14 @@ EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "visitors" ADD CONSTRAINT "visitors_client_id_organisations_client_id_fk" FOREIGN KEY ("client_id") REFERENCES "billing"."organisations"("client_id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "uniq_pricelist_item" ON "billing"."pricelist" USING btree ("name","payment_period");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "created_by_idx" ON "content"."post" USING btree ("created_by");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "name_idx" ON "content"."post" USING btree ("name");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "account_user_id_idx" ON "user_accounts"."account" USING btree ("user_id");--> statement-breakpoint
-CREATE INDEX IF NOT EXISTS "created_by_idx" ON "user_accounts"."post" USING btree ("created_by");--> statement-breakpoint
-CREATE INDEX IF NOT EXISTS "name_idx" ON "user_accounts"."post" USING btree ("name");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "session_user_id_idx" ON "user_accounts"."session" USING btree ("user_id");

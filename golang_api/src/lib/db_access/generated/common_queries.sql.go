@@ -7,304 +7,34 @@ package db_access
 
 import (
 	"context"
-
-	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
-const createAppointment = `-- name: CreateAppointment :one
-INSERT INTO appt_cal(
-	appt_cal_updated_at,
-	appt_date,
-	appt_state
-)
-VALUES (
-    NOW(),
-    $1,
-    default
-)
-RETURNING appt_cal_id, appt_cal_created_at, appt_cal_updated_at, appt_date, patient_uuid, appt_state
+const getAllOrganisations = `-- name: GetAllOrganisations :many
+select organisations_id, organisations_created_at, organisations_updated_at, name, address, domain_name, client_id, contact_information, social_media_integration from billing.organisations
 `
 
-// CreateAppointment
+// GetAllOrganisations
 //
-//	INSERT INTO appt_cal(
-//		appt_cal_updated_at,
-//		appt_date,
-//		appt_state
-//	)
-//	VALUES (
-//	    NOW(),
-//	    $1,
-//	    default
-//	)
-//	RETURNING appt_cal_id, appt_cal_created_at, appt_cal_updated_at, appt_date, patient_uuid, appt_state
-func (q *Queries) CreateAppointment(ctx context.Context, db DBTX, apptDate pgtype.Timestamptz) (*ApptCal, error) {
-	row := db.QueryRow(ctx, createAppointment, apptDate)
-	var i ApptCal
-	err := row.Scan(
-		&i.ApptCalID,
-		&i.ApptCalCreatedAt,
-		&i.ApptCalUpdatedAt,
-		&i.ApptDate,
-		&i.PatientUuid,
-		&i.ApptState,
-	)
-	return &i, err
-}
-
-const getAllAppointmentsWithinRange = `-- name: GetAllAppointmentsWithinRange :many
-SELECT appt_cal_id, appt_cal_created_at, appt_cal_updated_at, appt_date, patient_uuid, appt_state FROM appt_cal
-where 
-    appt_cal.appt_date >= $1
-    and 
-    appt_cal.appt_date <= $2
-order by appt_cal.appt_date asc
-`
-
-type GetAllAppointmentsWithinRangeParams struct {
-	ApptDate   pgtype.Timestamptz `json:"appt_date"`
-	ApptDate_2 pgtype.Timestamptz `json:"appt_date_2"`
-}
-
-// GetAllAppointmentsWithinRange
-//
-//	SELECT appt_cal_id, appt_cal_created_at, appt_cal_updated_at, appt_date, patient_uuid, appt_state FROM appt_cal
-//	where
-//	    appt_cal.appt_date >= $1
-//	    and
-//	    appt_cal.appt_date <= $2
-//	order by appt_cal.appt_date asc
-func (q *Queries) GetAllAppointmentsWithinRange(ctx context.Context, db DBTX, arg *GetAllAppointmentsWithinRangeParams) ([]*ApptCal, error) {
-	rows, err := db.Query(ctx, getAllAppointmentsWithinRange, arg.ApptDate, arg.ApptDate_2)
+//	select organisations_id, organisations_created_at, organisations_updated_at, name, address, domain_name, client_id, contact_information, social_media_integration from billing.organisations
+func (q *Queries) GetAllOrganisations(ctx context.Context, db DBTX) ([]*BillingOrganisation, error) {
+	rows, err := db.Query(ctx, getAllOrganisations)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []*ApptCal{}
+	items := []*BillingOrganisation{}
 	for rows.Next() {
-		var i ApptCal
+		var i BillingOrganisation
 		if err := rows.Scan(
-			&i.ApptCalID,
-			&i.ApptCalCreatedAt,
-			&i.ApptCalUpdatedAt,
-			&i.ApptDate,
-			&i.PatientUuid,
-			&i.ApptState,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, &i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getAllAppointmentsWithinRangeToCSV = `-- name: GetAllAppointmentsWithinRangeToCSV :many
-SELECT appt_cal_id, 
-appt_date::date as "day",
-appt_date::time as "time", 
-patient_uuid, 
-appt_state,
-patients_file_id,  
-patient_name, 
-patient_no, 
-file_no, 
-occupation, 
-contact_info, 
-next_of_kin, 
-date_of_birth
-from appt_cal join patients_file on patients_file.uuid = appt_cal.patient_uuid
-where 
-    appt_cal.appt_date >= $1
-    and 
-    appt_cal.appt_date <= $2
-    and appt_cal.patient_uuid is not null
-order by appt_cal.appt_date asc
-`
-
-type GetAllAppointmentsWithinRangeToCSVParams struct {
-	ApptDate   pgtype.Timestamptz `json:"appt_date"`
-	ApptDate_2 pgtype.Timestamptz `json:"appt_date_2"`
-}
-
-type GetAllAppointmentsWithinRangeToCSVRow struct {
-	ApptCalID      int32       `json:"appt_cal_id"`
-	Day            pgtype.Date `json:"day"`
-	Time           pgtype.Time `json:"time"`
-	PatientUuid    pgtype.UUID `json:"patient_uuid"`
-	ApptState      ApptStateT  `json:"appt_state"`
-	PatientsFileID int32       `json:"patients_file_id"`
-	PatientName    string      `json:"patient_name"`
-	PatientNo      string      `json:"patient_no"`
-	FileNo         string      `json:"file_no"`
-	Occupation     *string     `json:"occupation"`
-	ContactInfo    []byte      `json:"contact_info"`
-	NextOfKin      []byte      `json:"next_of_kin"`
-	DateOfBirth    pgtype.Date `json:"date_of_birth"`
-}
-
-// GetAllAppointmentsWithinRangeToCSV
-//
-//	SELECT appt_cal_id,
-//	appt_date::date as "day",
-//	appt_date::time as "time",
-//	patient_uuid,
-//	appt_state,
-//	patients_file_id,
-//	patient_name,
-//	patient_no,
-//	file_no,
-//	occupation,
-//	contact_info,
-//	next_of_kin,
-//	date_of_birth
-//	from appt_cal join patients_file on patients_file.uuid = appt_cal.patient_uuid
-//	where
-//	    appt_cal.appt_date >= $1
-//	    and
-//	    appt_cal.appt_date <= $2
-//	    and appt_cal.patient_uuid is not null
-//	order by appt_cal.appt_date asc
-func (q *Queries) GetAllAppointmentsWithinRangeToCSV(ctx context.Context, db DBTX, arg *GetAllAppointmentsWithinRangeToCSVParams) ([]*GetAllAppointmentsWithinRangeToCSVRow, error) {
-	rows, err := db.Query(ctx, getAllAppointmentsWithinRangeToCSV, arg.ApptDate, arg.ApptDate_2)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	items := []*GetAllAppointmentsWithinRangeToCSVRow{}
-	for rows.Next() {
-		var i GetAllAppointmentsWithinRangeToCSVRow
-		if err := rows.Scan(
-			&i.ApptCalID,
-			&i.Day,
-			&i.Time,
-			&i.PatientUuid,
-			&i.ApptState,
-			&i.PatientsFileID,
-			&i.PatientName,
-			&i.PatientNo,
-			&i.FileNo,
-			&i.Occupation,
-			&i.ContactInfo,
-			&i.NextOfKin,
-			&i.DateOfBirth,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, &i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getAllPatientFiles = `-- name: GetAllPatientFiles :many
-select patients_file_id, patients_file_created_at, patients_file_updated_at, uuid, patient_name, patient_no, file_no, occupation, contact_info, next_of_kin, date_of_birth from patients_file
-order by patients_file.patient_name
-`
-
-// GetAllPatientFiles
-//
-//	select patients_file_id, patients_file_created_at, patients_file_updated_at, uuid, patient_name, patient_no, file_no, occupation, contact_info, next_of_kin, date_of_birth from patients_file
-//	order by patients_file.patient_name
-func (q *Queries) GetAllPatientFiles(ctx context.Context, db DBTX) ([]*PatientsFile, error) {
-	rows, err := db.Query(ctx, getAllPatientFiles)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	items := []*PatientsFile{}
-	for rows.Next() {
-		var i PatientsFile
-		if err := rows.Scan(
-			&i.PatientsFileID,
-			&i.PatientsFileCreatedAt,
-			&i.PatientsFileUpdatedAt,
-			&i.Uuid,
-			&i.PatientName,
-			&i.PatientNo,
-			&i.FileNo,
-			&i.Occupation,
-			&i.ContactInfo,
-			&i.NextOfKin,
-			&i.DateOfBirth,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, &i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getAllVisitRecords = `-- name: GetAllVisitRecords :many
-select visit_id, visit_created_at, visit_updated_at, date, type, appt_id, time_row, patient, current_age, patients_file_id, patients_file_created_at, patients_file_updated_at, uuid, patient_name, patient_no, file_no, occupation, contact_info, next_of_kin, date_of_birth from visit_records
-join patients_file on patients_file.patients_file_id  = visit_records.patient
-`
-
-type GetAllVisitRecordsRow struct {
-	VisitID               int32            `json:"visit_id"`
-	VisitCreatedAt        pgtype.Timestamp `json:"visit_created_at"`
-	VisitUpdatedAt        pgtype.Timestamp `json:"visit_updated_at"`
-	Date                  pgtype.Date      `json:"date"`
-	Type                  VisitType        `json:"type"`
-	ApptID                *int32           `json:"appt_id"`
-	TimeRow               int32            `json:"time_row"`
-	Patient               *int32           `json:"patient"`
-	CurrentAge            pgtype.Interval  `json:"current_age"`
-	PatientsFileID        int32            `json:"patients_file_id"`
-	PatientsFileCreatedAt pgtype.Timestamp `json:"patients_file_created_at"`
-	PatientsFileUpdatedAt pgtype.Timestamp `json:"patients_file_updated_at"`
-	Uuid                  uuid.UUID        `json:"uuid"`
-	PatientName           string           `json:"patient_name"`
-	PatientNo             string           `json:"patient_no"`
-	FileNo                string           `json:"file_no"`
-	Occupation            *string          `json:"occupation"`
-	ContactInfo           []byte           `json:"contact_info"`
-	NextOfKin             []byte           `json:"next_of_kin"`
-	DateOfBirth           pgtype.Date      `json:"date_of_birth"`
-}
-
-// GetAllVisitRecords
-//
-//	select visit_id, visit_created_at, visit_updated_at, date, type, appt_id, time_row, patient, current_age, patients_file_id, patients_file_created_at, patients_file_updated_at, uuid, patient_name, patient_no, file_no, occupation, contact_info, next_of_kin, date_of_birth from visit_records
-//	join patients_file on patients_file.patients_file_id  = visit_records.patient
-func (q *Queries) GetAllVisitRecords(ctx context.Context, db DBTX) ([]*GetAllVisitRecordsRow, error) {
-	rows, err := db.Query(ctx, getAllVisitRecords)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	items := []*GetAllVisitRecordsRow{}
-	for rows.Next() {
-		var i GetAllVisitRecordsRow
-		if err := rows.Scan(
-			&i.VisitID,
-			&i.VisitCreatedAt,
-			&i.VisitUpdatedAt,
-			&i.Date,
-			&i.Type,
-			&i.ApptID,
-			&i.TimeRow,
-			&i.Patient,
-			&i.CurrentAge,
-			&i.PatientsFileID,
-			&i.PatientsFileCreatedAt,
-			&i.PatientsFileUpdatedAt,
-			&i.Uuid,
-			&i.PatientName,
-			&i.PatientNo,
-			&i.FileNo,
-			&i.Occupation,
-			&i.ContactInfo,
-			&i.NextOfKin,
-			&i.DateOfBirth,
+			&i.OrganisationsID,
+			&i.OrganisationsCreatedAt,
+			&i.OrganisationsUpdatedAt,
+			&i.Name,
+			&i.Address,
+			&i.DomainName,
+			&i.ClientID,
+			&i.ContactInformation,
+			&i.SocialMediaIntegration,
 		); err != nil {
 			return nil, err
 		}

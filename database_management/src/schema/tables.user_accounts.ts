@@ -1,4 +1,4 @@
-import { relations, sql } from 'drizzle-orm'
+import { relations, sql } from 'drizzle-orm';
 import {
   index,
   integer,
@@ -8,31 +8,11 @@ import {
   text,
   timestamp,
   varchar,
-} from 'drizzle-orm/pg-core'
-import type { AdapterAccount } from 'next-auth/adapters'
-import { user_accounts_schema } from './utils/valid_schemas'
-import { organisations } from './tables.billing'
-
-export const posts = user_accounts_schema.table(
-  'post',
-  {
-    id: serial('id').primaryKey(),
-    name: varchar('name', { length: 256 }),
-    createdById: varchar('created_by', { length: 255 })
-      .notNull()
-      .references(() => users.id),
-    createdAt: timestamp('created_at', { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true }).$onUpdate(
-      () => new Date(),
-    ),
-  },
-  (example) => ({
-    createdByIdIdx: index('created_by_idx').on(example.createdById),
-    nameIndex: index('name_idx').on(example.name),
-  }),
-)
+} from 'drizzle-orm/pg-core';
+import type { AdapterAccount } from 'next-auth/adapters';
+import { organisations } from './tables.billing';
+import { user_accounts_schema } from './utils/valid_schemas';
+import { user_contacts } from './utils/contact_info';
 
 export const users = user_accounts_schema.table('user', {
   id: varchar('id', { length: 255 })
@@ -47,11 +27,12 @@ export const users = user_accounts_schema.table('user', {
   }).default(sql`CURRENT_TIMESTAMP`),
   image: varchar('image', { length: 255 }),
   client_org: text('client_org').references(() => organisations.client_id),
-})
+  contact_info: user_contacts('contact_info'),
+});
 
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
-}))
+}));
 
 export const accounts = user_accounts_schema.table(
   'account',
@@ -80,11 +61,11 @@ export const accounts = user_accounts_schema.table(
     }),
     userIdIdx: index('account_user_id_idx').on(account.userId),
   }),
-)
+);
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
   user: one(users, { fields: [accounts.userId], references: [users.id] }),
-}))
+}));
 
 export const sessions = user_accounts_schema.table(
   'session',
@@ -103,11 +84,11 @@ export const sessions = user_accounts_schema.table(
   (session) => ({
     userIdIdx: index('session_user_id_idx').on(session.userId),
   }),
-)
+);
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
   user: one(users, { fields: [sessions.userId], references: [users.id] }),
-}))
+}));
 
 export const verificationTokens = user_accounts_schema.table(
   'verification_token',
@@ -122,4 +103,4 @@ export const verificationTokens = user_accounts_schema.table(
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
   }),
-)
+);

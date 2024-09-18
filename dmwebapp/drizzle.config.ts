@@ -1,12 +1,21 @@
-import type { Config } from 'drizzle-kit'
+import { defineConfig } from 'drizzle-kit';
 
-import { env } from '@blackstar/env'
+import { env } from '@blackstar/env';
+import { valid_schemas } from '@blackstar/server/db/schema';
 
-export default {
-  schema: './src/server/db/schema.ts',
+export default defineConfig({
+  schema: './src/schema',
   dialect: 'postgresql',
+  out: './schema',
   dbCredentials: {
     url: env.DATABASE_URL,
   },
-  schemaFilter: [],
-} satisfies Config
+  migrations: {
+    table: 'migrations_custom', // default `__drizzle_migrations`,
+    schema: 'public', // used in PostgreSQL only and default to `drizzle`
+  },
+
+  schemaFilter: valid_schemas,
+  verbose: true,
+  strict: true,
+});
