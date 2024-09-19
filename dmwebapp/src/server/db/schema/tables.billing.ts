@@ -22,7 +22,7 @@ export const organisations = billing_schema.table('organisations', {
   contact_information: user_contacts('contact_information'),
   social_media_integration: social_media_integrations(
     'social_media_integration',
-  ),
+  ).default([]),
 });
 
 export const client_id_ref = () =>

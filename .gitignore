@@ -8,7 +8,7 @@ lerna-debug.log*
 .pnpm-debug.log*
 nvim-linux64.tar.gz
 
-dmwebapp/public/test
+*/test
 
 **/*routes.json 
 

@@ -1,5 +1,5 @@
 {
-  "id": "f0b95c1d-1091-4f6a-be4d-10211d08de6c",
+  "id": "d7a9aae3-678d-4492-9fa1-67a46420609e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -62,7 +62,8 @@
           "name": "social_media_integration",
           "type": "jsonb",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "'[]'::jsonb"
         }
       },
       "indexes": {},
@@ -72,12 +73,16 @@
         "organisations_name_unique": {
           "name": "organisations_name_unique",
           "nullsNotDistinct": false,
-          "columns": ["name"]
+          "columns": [
+            "name"
+          ]
         },
         "organisations_domain_name_unique": {
           "name": "organisations_domain_name_unique",
           "nullsNotDistinct": false,
-          "columns": ["domain_name"]
+          "columns": [
+            "domain_name"
+          ]
         }
       }
     },
@@ -256,8 +261,12 @@
           "tableFrom": "transactions_records",
           "tableTo": "organisations",
           "schemaTo": "billing",
-          "columnsFrom": ["client_id"],
-          "columnsTo": ["client_id"],
+          "columnsFrom": [
+            "client_id"
+          ],
+          "columnsTo": [
+            "client_id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -267,7 +276,9 @@
         "transactions_records_description_unique": {
           "name": "transactions_records_description_unique",
           "nullsNotDistinct": false,
-          "columns": ["description"]
+          "columns": [
+            "description"
+          ]
         }
       }
     },
@@ -345,8 +356,12 @@
           "tableFrom": "post",
           "tableTo": "user",
           "schemaTo": "user_accounts",
-          "columnsFrom": ["created_by"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "created_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -448,8 +463,12 @@
           "tableFrom": "account",
           "tableTo": "user",
           "schemaTo": "user_accounts",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -457,7 +476,10 @@
       "compositePrimaryKeys": {
         "account_provider_provider_account_id_pk": {
           "name": "account_provider_provider_account_id_pk",
-          "columns": ["provider", "provider_account_id"]
+          "columns": [
+            "provider",
+            "provider_account_id"
+          ]
         }
       },
       "uniqueConstraints": {}
@@ -508,8 +530,12 @@
           "tableFrom": "session",
           "tableTo": "user",
           "schemaTo": "user_accounts",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -572,8 +598,12 @@
           "tableFrom": "user",
           "tableTo": "organisations",
           "schemaTo": "billing",
-          "columnsFrom": ["client_org"],
-          "columnsTo": ["client_id"],
+          "columnsFrom": [
+            "client_org"
+          ],
+          "columnsTo": [
+            "client_id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -609,33 +639,43 @@
       "compositePrimaryKeys": {
         "verification_token_identifier_token_pk": {
           "name": "verification_token_identifier_token_pk",
-          "columns": ["identifier", "token"]
+          "columns": [
+            "identifier",
+            "token"
+          ]
         }
       },
       "uniqueConstraints": {}
     },
-    "public.visitors": {
-      "name": "visitors",
-      "schema": "",
+    "user_accounts.visits": {
+      "name": "visits",
+      "schema": "user_accounts",
       "columns": {
-        "visitor_id": {
-          "name": "visitor_id",
+        "visits_id": {
+          "name": "visits_id",
           "type": "serial",
           "primaryKey": true,
           "notNull": true
         },
-        "visitor_created_at": {
-          "name": "visitor_created_at",
+        "visits_created_at": {
+          "name": "visits_created_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
         },
-        "visitor_updated_at": {
-          "name": "visitor_updated_at",
+        "visits_updated_at": {
+          "name": "visits_updated_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true
+        },
+        "metadata": {
+          "name": "metadata",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'{\"ua\":{\"ua\":\"\",\"browser\":{\"name\":\"\",\"version\":\"\"},\"engine\":{\"name\":\"\",\"version\":\"\"},\"os\":{\"name\":\"\",\"version\":\"\"},\"device\":{},\"cpu\":{\"architecture\":\"\"},\"isBot\":false},\"headers\":{\"accept\":\"\",\"accept-encoding\":\"\",\"accept-language\":\"\",\"cache-control\":\"\",\"connection\":\"\",\"cookie\":\"\",\"host\":\"\",\"pragma\":\"\",\"referer\":\"\",\"sec-ch-ua\":\"\",\"sec-ch-ua-mobile\":\"\",\"sec-ch-ua-platform\":\"\",\"sec-fetch-dest\":\"\",\"sec-fetch-mode\":\"\",\"sec-fetch-site\":\"\",\"sec-gpc\":\"\",\"user-agent\":\"\",\"x-forwarded-for\":\"\",\"x-forwarded-host\":\"\",\"x-forwarded-port\":\"\",\"x-forwarded-proto\":\"\"},\"cookies\":{\"sessionId\":\"\",\"userId\":\"\"},\"geo\":{\"city\":\"\",\"country\":\"\",\"region\":\"\",\"latitude\":\"\",\"longitude\":\"\"},\"ip\":\"\",\"banned\":{\"isBanned\":false,\"time\":\"2024-09-19T20:54:21.884Z\",\"duration\":0}}'::jsonb"
         },
         "client_id": {
           "name": "client_id",
@@ -643,22 +683,52 @@
           "primaryKey": false,
           "notNull": true
         },
-        "visitor_info": {
-          "name": "visitor_info",
-          "type": "jsonb",
+        "visitor_id": {
+          "name": "visitor_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "count": {
+          "name": "count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "visitors_client_id_organisations_client_id_fk": {
-          "name": "visitors_client_id_organisations_client_id_fk",
-          "tableFrom": "visitors",
+        "visits_client_id_organisations_client_id_fk": {
+          "name": "visits_client_id_organisations_client_id_fk",
+          "tableFrom": "visits",
           "tableTo": "organisations",
           "schemaTo": "billing",
-          "columnsFrom": ["client_id"],
-          "columnsTo": ["client_id"],
+          "columnsFrom": [
+            "client_id"
+          ],
+          "columnsTo": [
+            "client_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "visits_user_id_user_id_fk": {
+          "name": "visits_user_id_user_id_fk",
+          "tableFrom": "visits",
+          "tableTo": "user",
+          "schemaTo": "user_accounts",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -671,7 +741,13 @@
     "public.payment_method_t": {
       "name": "payment_method_t",
       "schema": "public",
-      "values": ["cash", "mpesa", "bank_transfer", "cheque", "visa"]
+      "values": [
+        "cash",
+        "mpesa",
+        "bank_transfer",
+        "cheque",
+        "visa"
+      ]
     },
     "public.payment_period_t": {
       "name": "payment_period_t",

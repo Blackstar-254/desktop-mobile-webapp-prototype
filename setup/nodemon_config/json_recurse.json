@@ -1,0 +1,21 @@
+{
+    "restartable": "rs",
+    "ignore": [
+        ".git",
+        "node_modules/*"
+    ],
+    "verbose": true,
+    "execMap": {
+        "js": "node --harmony scripts/test/json_recurse.js"
+    },
+    "events": {
+        "restart": "osascript -e 'display notification \"App restarted due to:\n'$FILENAME'\" with title \"nodemon\"'"
+    },
+    "watch": [
+        "scripts/test"
+    ],
+    "env": {
+        "NODE_ENV": "development"
+    },
+    "ext": "js,json"
+}

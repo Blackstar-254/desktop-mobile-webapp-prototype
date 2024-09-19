@@ -24,7 +24,8 @@
         "noUselessThisAlias": "warn",
         "noUselessTypeConstraint": "warn",
         "noWith": "warn",
-        "useLiteralKeys": "info"
+        "useLiteralKeys": "info",
+        "useOptionalChain": "info"
       },
       "correctness": {
         "noUnusedVariables": "warn",
@@ -52,14 +53,15 @@
         "useHookAtTopLevel": "warn",
         "useIsNan": "warn",
         "useValidForDirection": "warn",
-        "useYield": "warn"
+        "useYield": "warn",
       },
       "style": {
         "useConsistentArrayType": "off",
         "useImportType": "warn",
         "noNamespace": "warn",
         "useAsConstAssertion": "warn",
-        "useConst": "info"
+        "useConst": "info",
+        "useNodejsImportProtocol": "info"
       },
       "suspicious": {
         "useAwait": "off",

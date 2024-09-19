@@ -10,9 +10,12 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core';
 import type { AdapterAccount } from 'next-auth/adapters';
-import { organisations } from './tables.billing';
+import { client_id_ref, organisations } from './tables.billing';
 import { user_contacts } from './utils/contact_info';
 import { user_accounts_schema } from './utils/valid_schemas';
+import { common } from './table_common';
+import { exampleVisitorInfo, visitor_metadata_t } from './utils/visitor_info';
+import { uuid } from 'drizzle-orm/pg-core';
 
 export const users = user_accounts_schema.table('user', {
   id: varchar('id', { length: 255 })
@@ -104,3 +107,12 @@ export const verificationTokens = user_accounts_schema.table(
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
   }),
 );
+
+export const visits_table = user_accounts_schema.table('visits', {
+  ...common('visits'),
+  metadata: visitor_metadata_t('metadata').default(exampleVisitorInfo),
+  client: client_id_ref(),
+  visitor_id: uuid('visitor_id'),
+  count: integer('count'),
+  user_id: varchar('user_id').references(() => users.id),
+});

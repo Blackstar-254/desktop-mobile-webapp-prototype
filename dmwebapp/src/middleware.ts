@@ -45,69 +45,66 @@ export async function middleware(request: NextRequest) {
   }
 
   let res = NextResponse.next();
-  res = await HandleVisitorCookies(relative_url, request, res);
+  HandleVisitorCookies(request, res);
 
+  console.log(res.cookies.get('test'));
   return res;
 }
 
-type visitor_t = {
-  ip: string | undefined;
-  geo:
-    | {
-        city?: string | undefined;
-        country?: string | undefined;
-        region?: string | undefined;
-        latitude?: string | undefined;
-        longitude?: string | undefined;
-      }
-    | undefined;
-  cookies: RequestCookies;
-  headers: Record<string, string>;
+type visit_info_t = {
   ua: ReturnType<typeof userAgent>;
+  headers: Record<string, string>;
+  cookies: Record<string, string>;
+  geo: Record<string, string> & {
+    city: string;
+    country: string;
+    region: string;
+    latitude: string;
+    longitude: string;
+  };
+  ip: string;
 };
 
-type CookieResInputT = {
-  visitor: visitor_t;
-  state?: 'update' | 'new';
-  visitor_id?: string;
-};
-
-const get_cookie_res = ({ visitor, state, visitor_id }: CookieResInputT) => {
-  const headers = new Headers();
-  headers.append('client-id', env.CLIENT_ID ?? crypto.randomUUID());
-  headers.append('visitor-id', visitor_id ?? '');
-
-  return fetch(`${env.NEXT_PUBLIC_BLACKSTARTECH_CMS_URL}/visitors`, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({
-      state,
-      visitor,
-      visitor_id,
-    }),
-  }).then(async (v) => {
-    const d = await v.json();
-
-    return d as unknown as { new_cookie?: ResponseCookie; success: boolean };
-  });
-};
-async function HandleVisitorCookies(
-  relative_url: string,
-  req: NextRequest,
-  res: NextResponse,
-): Promise<NextResponse> {
-  if (relative_url.endsWith('/Home')) {
-    return res;
-  }
-  console.log('here');
-
+async function HandleVisitorCookies(req: NextRequest, res: NextResponse) {
   const { ip, geo, cookies, headers } = req;
-
   const ua = userAgent(req);
-  const sj = new SuperJSON({ dedupe: false });
-  const data = sj.serialize({ ua, headers, cookies, geo });
-  const dara_2 = data.json?.toString();
-  console.log(data);
-  console.log(JSON.stringify(data, null, 2));
-  return res;
+  if (!ua?.browser?.name) {
+    return;
+  }
+
+  const target: visit_info_t = {
+    ua,
+    headers: {},
+    cookies: {},
+    geo: {
+      city: geo?.city ?? '',
+      country: geo?.country ?? '',
+      region: geo?.region ?? '',
+      latitude: geo?.latitude ?? '',
+      longitude: geo?.longitude ?? '',
+    },
+    ip: ip ?? '',
+  };
+
+  if (!cookies.has('visitor-id')) {
+    const test_val = crypto.randomUUID();
+    res.cookies.set('visitor-id', test_val);
+    target.cookies['visitor-id'] = test_val;
+  }
+  headers.forEach((val, key, parent) => {
+    // console.log({ key, val });
+    target.headers[key] = val;
+  });
+  cookies.getAll().map(({ name, value }) => {
+    target.cookies[name] = value;
+  });
+
+  const data = JSON.stringify(target);
+  fetch(`${env.NEXT_PUBLIC_BLACKSTARTECH_CMS_URL}/visitors`, {
+    method: 'POST',
+    body: data,
+  });
+  // console.log(data);
+
+  return;
 }

@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS "billing"."organisations" (
 	"domain_name" text,
 	"client_id" text NOT NULL,
 	"contact_information" jsonb,
-	"social_media_integration" jsonb,
+	"social_media_integration" jsonb DEFAULT '[]'::jsonb,
 	CONSTRAINT "organisations_name_unique" UNIQUE("name"),
 	CONSTRAINT "organisations_domain_name_unique" UNIQUE("domain_name")
 );
@@ -103,12 +103,15 @@ CREATE TABLE IF NOT EXISTS "user_accounts"."verification_token" (
 	CONSTRAINT "verification_token_identifier_token_pk" PRIMARY KEY("identifier","token")
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "visitors" (
-	"visitor_id" serial PRIMARY KEY NOT NULL,
-	"visitor_created_at" timestamp DEFAULT now() NOT NULL,
-	"visitor_updated_at" timestamp NOT NULL,
+CREATE TABLE IF NOT EXISTS "user_accounts"."visits" (
+	"visits_id" serial PRIMARY KEY NOT NULL,
+	"visits_created_at" timestamp DEFAULT now() NOT NULL,
+	"visits_updated_at" timestamp NOT NULL,
+	"metadata" jsonb DEFAULT '{"ua":{"ua":"","browser":{"name":"","version":""},"engine":{"name":"","version":""},"os":{"name":"","version":""},"device":{},"cpu":{"architecture":""},"isBot":false},"headers":{"accept":"","accept-encoding":"","accept-language":"","cache-control":"","connection":"","cookie":"","host":"","pragma":"","referer":"","sec-ch-ua":"","sec-ch-ua-mobile":"","sec-ch-ua-platform":"","sec-fetch-dest":"","sec-fetch-mode":"","sec-fetch-site":"","sec-gpc":"","user-agent":"","x-forwarded-for":"","x-forwarded-host":"","x-forwarded-port":"","x-forwarded-proto":""},"cookies":{"sessionId":"","userId":""},"geo":{"city":"","country":"","region":"","latitude":"","longitude":""},"ip":"","banned":{"isBanned":false,"time":"2024-09-19T20:54:21.884Z","duration":0}}'::jsonb,
 	"client_id" text NOT NULL,
-	"visitor_info" jsonb
+	"visitor_id" uuid,
+	"count" integer,
+	"user_id" varchar
 );
 --> statement-breakpoint
 DO $$ BEGIN
@@ -142,7 +145,13 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "visitors" ADD CONSTRAINT "visitors_client_id_organisations_client_id_fk" FOREIGN KEY ("client_id") REFERENCES "billing"."organisations"("client_id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "user_accounts"."visits" ADD CONSTRAINT "visits_client_id_organisations_client_id_fk" FOREIGN KEY ("client_id") REFERENCES "billing"."organisations"("client_id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "user_accounts"."visits" ADD CONSTRAINT "visits_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "user_accounts"."user"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

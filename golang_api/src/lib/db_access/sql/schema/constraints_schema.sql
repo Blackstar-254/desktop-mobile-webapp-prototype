@@ -11,6 +11,8 @@ ALTER TABLE "user_accounts"."session" ADD CONSTRAINT "session_user_id_user_id_fk
 --> statement-breakpoint
 ALTER TABLE "user_accounts"."user" ADD CONSTRAINT "user_client_org_organisations_client_id_fk" FOREIGN KEY ("client_org") REFERENCES "billing"."organisations"("client_id") ON DELETE no action ON UPDATE no action;
 --> statement-breakpoint
-ALTER TABLE "visitors" ADD CONSTRAINT "visitors_client_id_organisations_client_id_fk" FOREIGN KEY ("client_id") REFERENCES "billing"."organisations"("client_id") ON DELETE no action ON UPDATE no action;
+ALTER TABLE "user_accounts"."visits" ADD CONSTRAINT "visits_client_id_organisations_client_id_fk" FOREIGN KEY ("client_id") REFERENCES "billing"."organisations"("client_id") ON DELETE no action ON UPDATE no action;
+--> statement-breakpoint
+ALTER TABLE "user_accounts"."visits" ADD CONSTRAINT "visits_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "user_accounts"."user"("id") ON DELETE no action ON UPDATE no action;
 --> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "session_user_id_idx" ON "user_accounts"."session" USING btree ("user_id");

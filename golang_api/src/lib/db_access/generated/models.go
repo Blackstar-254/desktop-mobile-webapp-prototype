@@ -184,10 +184,13 @@ type UserAccountsVerificationToken struct {
 	Expires    pgtype.Timestamptz `json:"expires"`
 }
 
-type Visitor struct {
-	VisitorID        int32            `json:"visitor_id"`
-	VisitorCreatedAt pgtype.Timestamp `json:"visitor_created_at"`
-	VisitorUpdatedAt pgtype.Timestamp `json:"visitor_updated_at"`
-	ClientID         string           `json:"client_id"`
-	VisitorInfo      []byte           `json:"visitor_info"`
+type UserAccountsVisit struct {
+	VisitsID        int32            `json:"visits_id"`
+	VisitsCreatedAt pgtype.Timestamp `json:"visits_created_at"`
+	VisitsUpdatedAt pgtype.Timestamp `json:"visits_updated_at"`
+	Metadata        []byte           `json:"metadata"`
+	ClientID        string           `json:"client_id"`
+	VisitorID       pgtype.UUID      `json:"visitor_id"`
+	Count           *int32           `json:"count"`
+	UserID          *string          `json:"user_id"`
 }
