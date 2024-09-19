@@ -5,7 +5,7 @@ export default function BlogsBlogIdIndex() {
   return (
     <MainSection
       title={`dashboard/blogs/${blog_id}`}
-      heading={`Dashboard Blogs`}>
+      heading={'Dashboard Blogs'}>
       {/* Dashboard */}
     </MainSection>
   );

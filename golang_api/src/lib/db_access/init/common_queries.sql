@@ -1,47 +1,33 @@
--- truncate tables
-TRUNCATE TABLE public.diagnoses_table  RESTART IDENTITY CASCADE;
-TRUNCATE TABLE  public.doctor_register  RESTART IDENTITY CASCADE;
-TRUNCATE TABLE  public.hospital_stations  RESTART IDENTITY CASCADE;
-TRUNCATE TABLE  public.patient_data  RESTART IDENTITY CASCADE;
-TRUNCATE TABLE  public.payment_methods  RESTART IDENTITY CASCADE;
-TRUNCATE TABLE  public.prescription  RESTART IDENTITY CASCADE;
-TRUNCATE TABLE  public.price_list_history  RESTART IDENTITY CASCADE;
-TRUNCATE TABLE  public.sales_register  RESTART IDENTITY CASCADE;
-TRUNCATE TABLE  public.services_pricelist  RESTART IDENTITY CASCADE;
-TRUNCATE TABLE  public.staff_register  RESTART IDENTITY CASCADE;
-TRUNCATE TABLE  public.transactions_register  RESTART IDENTITY CASCADE;
-TRUNCATE TABLE  public.usage_instructions  RESTART IDENTITY CASCADE;
-TRUNCATE TABLE  public.user_data  RESTART IDENTITY CASCADE;
-TRUNCATE TABLE  public.user_roles  RESTART IDENTITY CASCADE;
-TRUNCATE TABLE  public.visit_notes  RESTART IDENTITY CASCADE;
-TRUNCATE TABLE  public.visit_records RESTART IDENTITY CASCADE;
-
-
-
--- drop tables
-DROP TABLE public.appointment_diary ,
- public.diagnoses_table ,
- public.doctor_register ,
- public.edit_history ,
- public.hospital_stations ,
- public.patient_data ,
- public.payment_methods ,
- public.prescription ,
- public.price_list_history ,
- public.resource_table ,
- public.sales_register ,
- public.services_pricelist ,
- public.staff_register ,
- public.tables_list ,
- public.transactions_register ,
- public.usage_instructions ,
- public.user_data ,
- public.user_roles ,
- public.visit_notes ,
- public.visit_records CASCADE;
-drop type sex_t,
-    insurance_state_t,
-    visit_type_t,
-    discharge_type_t,
-    exit_comment_t,
-    crude_t CASCADE;
+DROP SCHEMA "billing" CASCADE;
+--> statement-breakpoint
+DROP SCHEMA "content" CASCADE;
+--> statement-breakpoint
+DROP SCHEMA "user_accounts" cascade;
+--> statement-breakpoint
+DROP TYPE "public"."payment_method_t" cascade;
+--> statement-breakpoint
+DROP TYPE "public"."payment_period_t" cascade;
+--> statement-breakpoint
+DROP TABLE  "billing"."organisations";
+--> statement-breakpoint
+DROP TABLE  "billing"."pricelist" ;
+--> statement-breakpoint
+DROP TABLE  "billing"."transactions_records" ;
+--> statement-breakpoint
+DROP TABLE  "content"."post" ;
+--> statement-breakpoint
+DROP TABLE  "user_accounts"."account" ;
+--> statement-breakpoint
+DROP TABLE  "user_accounts"."session" ;
+--> statement-breakpoint
+DROP TABLE  "user_accounts"."user" ;
+--> statement-breakpoint
+DROP TABLE  "user_accounts"."verification_token" ;
+--> statement-breakpoint
+DROP TABLE  "visitors" ;
+--> statement-breakpoint
+DROP UNIQUE INDEX  "uniq_pricelist_item" cascade;
+DROP INDEX  "created_by_idx" cascade;
+DROP INDEX  "name_idx" cascade;
+DROP INDEX  "account_user_id_idx" cascade;
+DROP INDEX  "session_user_id_idx" cascade;

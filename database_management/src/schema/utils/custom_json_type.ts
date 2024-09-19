@@ -30,11 +30,11 @@ export const customArrayJsonb = <TData>(example: TData) =>
         value = [example];
         return JSON.stringify(value);
       }
-      let res = value.map((v) => ({ ...example, ...v }));
+      const res = value.map((v) => ({ ...example, ...v }));
       return JSON.stringify(res);
     },
     fromDriver(value: string): TData[] {
-      let val = JSON.parse(value);
+      const val = JSON.parse(value);
       return val.map((v: any) => ({ ...example, ...v }));
     },
   });

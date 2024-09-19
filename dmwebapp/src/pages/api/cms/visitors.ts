@@ -2,10 +2,6 @@ import fs from 'node:fs';
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { z } from 'zod';
-import {
-  contactUsFormSchema,
-  ReadFormData,
-} from '@blackstar/lib/api/contact_us_forms';
 
 type Data = {
   name: string;
@@ -21,14 +17,14 @@ export default function handler(
     res.status(400).json({});
     return;
   }
+  let data: Record<string, any> = {};
   try {
-    const form_data = contactUsFormSchema.parse(ReadFormData(body));
-    if (form_data.valid) {
-      res.status(200).json({ success: true });
-      return;
-    }
-    res.status(400).json({ success: false });
+    data = JSON.parse(body);
+    console.log(JSON.stringify({ data }, null, 2));
   } catch (e) {
-    res.status(403).json({ success: false });
+    res.status(400).json({ success: false });
+    return;
   }
+  console.log(JSON.stringify({ data }, null, 4));
+  res.status(200).json({ success: true });
 }

@@ -1,12 +1,12 @@
 import { createEnv } from '@t3-oss/env-nextjs';
 import { z } from 'zod';
-const workEnvSchema = z
+const _workEnvSchema = z
   .enum(['development', 'test', 'production', 'debug'])
   .default('development');
 
 const parse_string = z.string().regex(/(?!=[@:;\+\-\.\,\!])/);
 const parse_port = z.coerce.number();
-const parse_nextauth_secret = z
+const _parse_nextauth_secret = z
   .string()
   .length(32)
   .regex(/(?!=[!\-\.])/);
@@ -59,6 +59,7 @@ export const env = createEnv({
    */
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
+    NEXT_PUBLIC_BLACKSTARTECH_CMS_URL: z.string().url(),
     NEXT_PUBLIC_SUPABASE_API_KEY: z.string(),
     NEXT_PUBLIC_SUPABASE_PROJECT_URL: z.string().url(),
   },
@@ -85,7 +86,8 @@ export const env = createEnv({
     GOLANG_API_PORT: process.env.GOLANG_API_PORT,
     PORT: process.env.PORT,
     CLIENT_ID: process.env.CLIENT_ID,
-
+    NEXT_PUBLIC_BLACKSTARTECH_CMS_URL:
+      process.env.NEXT_PUBLIC_BLACKSTARTECH_CMS_URL,
     SUPABASE_REFERENCE_ID: process.env.SUPABASE_REFERENCE_ID,
     NEXT_PUBLIC_SUPABASE_API_KEY: process.env.NEXT_PUBLIC_SUPABASE_API_KEY,
     NEXT_PUBLIC_SUPABASE_PROJECT_URL:

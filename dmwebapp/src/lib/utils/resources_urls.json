@@ -14,7 +14,8 @@
         "Animated-500-Error": "/error-message-images/Animated-500-Error.webp"
     },
     "test": {
-        "Home": "/test/Home.css",
+        "Gallery": "/test/Gallery.css",
+        "index": "/test/index.css",
         "jquery": "/test/jquery.js",
         "nicepage": "/test/nicepage.js",
         "images": {
@@ -39,7 +40,8 @@
             "default-image": "/test/images/default-image.jpg"
         },
         "intlTelInput": {
-            "intlTelInput": "/test/intlTelInput/intlTelInput.min.js",
+            "intlTelInput": "/test/intlTelInput/intlTelInput.css",
+            "intlTelInput.min": "/test/intlTelInput/intlTelInput.min.js",
             "utils": "/test/intlTelInput/utils.js"
         }
     }

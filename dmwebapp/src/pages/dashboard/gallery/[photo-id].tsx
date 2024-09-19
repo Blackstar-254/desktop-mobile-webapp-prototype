@@ -5,7 +5,7 @@ export default function PhotoIdPage() {
   return (
     <MainSection
       title={`dashboard/gallery/${photo_id}`}
-      heading={`Dashboard Gallery`}>
+      heading={'Dashboard Gallery'}>
       {/* Dashboard */}
     </MainSection>
   );

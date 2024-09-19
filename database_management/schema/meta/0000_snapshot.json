@@ -72,16 +72,12 @@
         "organisations_name_unique": {
           "name": "organisations_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         },
         "organisations_domain_name_unique": {
           "name": "organisations_domain_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "domain_name"
-          ]
+          "columns": ["domain_name"]
         }
       }
     },
@@ -260,12 +256,8 @@
           "tableFrom": "transactions_records",
           "tableTo": "organisations",
           "schemaTo": "billing",
-          "columnsFrom": [
-            "client_id"
-          ],
-          "columnsTo": [
-            "client_id"
-          ],
+          "columnsFrom": ["client_id"],
+          "columnsTo": ["client_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -275,9 +267,7 @@
         "transactions_records_description_unique": {
           "name": "transactions_records_description_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "description"
-          ]
+          "columns": ["description"]
         }
       }
     },
@@ -355,12 +345,8 @@
           "tableFrom": "post",
           "tableTo": "user",
           "schemaTo": "user_accounts",
-          "columnsFrom": [
-            "created_by"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["created_by"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -462,12 +448,8 @@
           "tableFrom": "account",
           "tableTo": "user",
           "schemaTo": "user_accounts",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -475,10 +457,7 @@
       "compositePrimaryKeys": {
         "account_provider_provider_account_id_pk": {
           "name": "account_provider_provider_account_id_pk",
-          "columns": [
-            "provider",
-            "provider_account_id"
-          ]
+          "columns": ["provider", "provider_account_id"]
         }
       },
       "uniqueConstraints": {}
@@ -529,12 +508,8 @@
           "tableFrom": "session",
           "tableTo": "user",
           "schemaTo": "user_accounts",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -597,12 +572,8 @@
           "tableFrom": "user",
           "tableTo": "organisations",
           "schemaTo": "billing",
-          "columnsFrom": [
-            "client_org"
-          ],
-          "columnsTo": [
-            "client_id"
-          ],
+          "columnsFrom": ["client_org"],
+          "columnsTo": ["client_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -638,10 +609,7 @@
       "compositePrimaryKeys": {
         "verification_token_identifier_token_pk": {
           "name": "verification_token_identifier_token_pk",
-          "columns": [
-            "identifier",
-            "token"
-          ]
+          "columns": ["identifier", "token"]
         }
       },
       "uniqueConstraints": {}
@@ -689,12 +657,8 @@
           "tableFrom": "visitors",
           "tableTo": "organisations",
           "schemaTo": "billing",
-          "columnsFrom": [
-            "client_id"
-          ],
-          "columnsTo": [
-            "client_id"
-          ],
+          "columnsFrom": ["client_id"],
+          "columnsTo": ["client_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -707,13 +671,7 @@
     "public.payment_method_t": {
       "name": "payment_method_t",
       "schema": "public",
-      "values": [
-        "cash",
-        "mpesa",
-        "bank_transfer",
-        "cheque",
-        "visa"
-      ]
+      "values": ["cash", "mpesa", "bank_transfer", "cheque", "visa"]
     },
     "public.payment_period_t": {
       "name": "payment_period_t",

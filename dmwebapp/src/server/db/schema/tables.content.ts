@@ -1,13 +1,13 @@
 import { sql } from 'drizzle-orm';
 import {
+  index,
   pgTable,
   serial,
-  varchar,
   timestamp,
-  index,
+  varchar,
 } from 'drizzle-orm/pg-core';
-import { users } from './tables.user_accounts';
 import { common } from './table_common';
+import { users } from './tables.user_accounts';
 import { content_schema } from './utils/valid_schemas';
 
 export const posts = content_schema.table(

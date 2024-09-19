@@ -1,5 +1,5 @@
-const cp = require('child_process');
-const fs = require('fs');
+const cp = require('node:child_process');
+const fs = require('node:fs');
 
 try {
   if (fs.existsSync('golang_api/src/lib/db_access/sql/schema')) {
@@ -58,7 +58,7 @@ const schemas = fs
     /**
      * @type {path_item}
      */
-    let curr = v;
+    const curr = v;
 
     if (v.name.endsWith('.ts')) {
       curr.new_path = curr.full_path.replace(
@@ -84,7 +84,7 @@ const schemas = fs
 
 let data = '';
 
-schemas.map((v, i) => {
+schemas.map((v, _i) => {
   // if (i > 0) {
   //   return
   // }
@@ -118,7 +118,7 @@ console.log('completed creating schema files in webapp and golang api');
   let break_point = false;
   const d = b
     .map((v) => {
-      let a = v.trim();
+      const a = v.trim();
       if (
         (a.toLowerCase().includes('table') &&
           a.toLowerCase().includes('create')) ||

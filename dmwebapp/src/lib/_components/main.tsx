@@ -24,19 +24,19 @@ type MainProps = {
 };
 
 export type ScreenWidthType = 'mobile' | 'tablet' | 'laptop' | 'desktop' | '';
-function setCookie(name: string, value: string, days: number = 365) {
-  var expires = '';
+function setCookie(name: string, value: string, days = 365) {
+  let expires = '';
   if (days) {
-    var date = new Date();
+    const date = new Date();
     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-    expires = '; expires=' + date.toUTCString();
+    expires = `; expires=${date.toUTCString()}`;
   }
-  document.cookie = name + '=' + (value || '') + expires + '; path=/';
+  document.cookie = `${name}=${value || ''}${expires}; path=/`;
 }
 const getScreenWidth = () => {
   const [screenWidth, sScreenWidth] = React.useState<ScreenWidthType>('');
   const setScreenWidth = (newScreenWidth: ScreenWidthType) =>
-    sScreenWidth((curr) => {
+    sScreenWidth((_curr) => {
       console.log(`new screenwidth: ${newScreenWidth}`);
       setCookie('device-type', newScreenWidth);
       return newScreenWidth;
@@ -162,10 +162,10 @@ type DesktopMainProps = {
 };
 
 const CommonCss = {
-  MainSection: `w-screen min-h-screen overflow-x-clip`,
-  MainDiv: `w-full h-full p-2`,
-  Header: ``,
-  Nav: `min-h-[3rem] text-black flex items-center h-full w-full`,
+  MainSection: 'w-screen min-h-screen overflow-x-clip',
+  MainDiv: 'w-full h-full p-2',
+  Header: '',
+  Nav: 'h-[3rem] text-black flex items-center h-full w-full',
 };
 
 export function DesktopMainSection({ children, heading }: DesktopMainProps) {

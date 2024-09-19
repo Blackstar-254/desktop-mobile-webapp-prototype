@@ -11,8 +11,8 @@ import {
 } from 'drizzle-orm/pg-core';
 import type { AdapterAccount } from 'next-auth/adapters';
 import { organisations } from './tables.billing';
-import { user_accounts_schema } from './utils/valid_schemas';
 import { user_contacts } from './utils/contact_info';
+import { user_accounts_schema } from './utils/valid_schemas';
 
 export const users = user_accounts_schema.table('user', {
   id: varchar('id', { length: 255 })

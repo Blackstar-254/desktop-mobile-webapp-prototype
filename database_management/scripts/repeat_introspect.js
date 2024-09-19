@@ -1,3 +1,3 @@
-const cp = require('child_process');
+const _cp = require('node:child_process');
 
 console.log('hi');

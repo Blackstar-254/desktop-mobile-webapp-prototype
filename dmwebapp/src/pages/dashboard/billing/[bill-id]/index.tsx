@@ -5,7 +5,7 @@ export default function DashboardBillingIdIndex() {
   return (
     <MainSection
       title={`dashboard/billing/${billing_id}`}
-      heading={`Dashboard Billing`}>
+      heading={'Dashboard Billing'}>
       {/* Dashboard */}
     </MainSection>
   );

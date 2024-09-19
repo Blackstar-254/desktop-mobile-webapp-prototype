@@ -1,12 +1,12 @@
 import { createEnv } from '@t3-oss/env-nextjs';
 import { z } from 'zod';
-const workEnvSchema = z
+const _workEnvSchema = z
   .enum(['development', 'test', 'production', 'debug'])
   .default('development');
 
 const parse_string = z.string().regex(/(?!=[@:;\+\-\.\,\!])/);
 const parse_port = z.coerce.number();
-const parse_nextauth_secret = z
+const _parse_nextauth_secret = z
   .string()
   .length(32)
   .regex(/(?!=[!\-\.])/);

@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('node:fs');
 const crypto = require('node:crypto');
 
 const { z } = require('zod');
@@ -42,6 +42,7 @@ const envItemsSchema = z.object({
 
   GOLANG_API_PORT: parse_port,
   PORT: parse_port,
+  NEXT_PUBLIC_BLACKSTARTECH_CMS_URL: z.string().url(),
 
   SUPABASE_REFERENCE_ID: parse_string,
   NEXT_PUBLIC_SUPABASE_API_KEY: z.string(),
@@ -58,14 +59,17 @@ const generate_secret = () => {
     res += uuid();
   }
   res = res.replaceAll(/\-/g, '');
-  let rand = crypto.randomInt(365);
+  const rand = crypto.randomInt(365);
   if (rand % 19) {
     return res.slice(-34);
-  } else if (rand % 13) {
+  }
+  if (rand % 13) {
     return res.slice(12);
-  } else if (rand % 9) {
+  }
+  if (rand % 9) {
     return res.slice(19);
-  } else if (rand % 5) {
+  }
+  if (rand % 5) {
     return res.slice(9);
   }
 
@@ -90,6 +94,7 @@ const envItems = {
   GOLANG_API_PORT: '',
   PORT: '',
   CLIENT_ID: '',
+  NEXT_PUBLIC_BLACKSTARTECH_CMS_URL: '',
 
   SUPABASE_REFERENCE_ID: '',
   NEXT_PUBLIC_SUPABASE_API_KEY: '',
@@ -100,7 +105,7 @@ const envItems = {
 const envCreateString = (new_env = false) => {
   let output = '';
 
-  let envObj = new_env ? envItemsSchema.parse(envItems) : envItems;
+  const envObj = new_env ? envItemsSchema.parse(envItems) : envItems;
 
   for (const v of Object.keys(envObj)) {
     output = `${output}\n${v}="${envItems[v]}"\n`;

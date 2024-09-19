@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "npx @biomejs/biome check --fix .",
+    "lint": "npx @biomejs/biome check --fix --unsafe .",
     "setup:env": "node ./setup/lib/env_handler.js",
     "setup:db_schema": "node ./setup/lib/create_clean_db_schema.js",
     "dev:golang_api": "cd golang_api/src/server && air",

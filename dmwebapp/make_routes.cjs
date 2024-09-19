@@ -9,7 +9,7 @@ const envSchema = z.object({
 });
 const env = envSchema.parse(process.env);
 
-const fs = require('fs') /** @type {import("fs")} */;
+const fs = require('node:fs') /** @type {import("fs")} */;
 const in_development = false;
 const print_routes = true;
 
@@ -94,7 +94,7 @@ const path_after = (p_, slice_prefix) => {
     }
   }
 
-  let b = p_
+  const b = p_
     .slice(slice_prefix.length + 1)
     .split('/')
     .map((v) => v.trim())
@@ -105,16 +105,41 @@ const path_after = (p_, slice_prefix) => {
 /**
  * @type {Record<string,string|object>}
  */
-let routes = {};
+const routes = {};
 
 /**
  * @type {Record<string,string|object>}
  */
-let resource_urls = {};
+const resource_urls = {};
+
+/** @typedef {{
+ * source:string
+ * destination:string
+ * permanent:boolean
+ * }} redirect_instruction */
+/** @typedef {{
+ * source:string
+ * destination:string
+ * }} rewrite_instruction */
+
+/**
+ * @type {{
+ * redirects:redirect_instruction[],
+ * rewrites:rewrite_instruction[]}}
+ */
+const reroutes = {
+  redirects: [],
+  rewrites: [],
+};
 
 if (env.NODE_ENV === 'development') {
   all_files_list
-    .filter(({ dir_ent: v }) => v.isFile() && v.name.endsWith('.tsx'))
+    .filter(
+      ({ dir_ent: v }) =>
+        v.isFile() &&
+        (v.name.endsWith('.tsx') ||
+          (v.parentPath.includes('api') && v.name.endsWith('.ts'))),
+    )
     .map((v) => {
       const j = path_after(v.linux_path, 'src/pages');
       if (in_development) console.log({ v, j });
@@ -153,7 +178,7 @@ if (env.NODE_ENV === 'development') {
         return false;
       }
       for (const f of valid_resources_list) {
-        if (v.name.endsWith('.' + f)) {
+        if (v.name.endsWith(`.${f}`)) {
           return true;
         }
       }
@@ -182,12 +207,75 @@ if (env.NODE_ENV === 'development') {
       },
     );
   }
+
+  all_files_list
+    .filter((v) => {
+      if (v.dir_ent.name.includes('.htm')) {
+        return true;
+      }
+      return false;
+    })
+    .map((v) => {
+      const subpath = v.linux_path.slice('public'.length);
+      const f_name = v.dir_ent.name;
+      let route_path = f_name.includes('index')
+        ? subpath
+        : `${subpath}/${f_name.split('.')?.shift() ?? ''}`;
+      reroutes.rewrites.push({
+        source: route_path,
+        destination: `${subpath}/${f_name}`,
+      });
+    });
+
+  all_files_list
+    .filter(({ dir_ent: v }) => {
+      if (!v.isFile()) {
+        return false;
+      }
+      for (const f of valid_resources_list) {
+        if (v.name.endsWith(`.${f}`)) {
+          return true;
+        }
+      }
+      return false;
+    })
+    .map((v) => {
+      const subpath = v.linux_path.slice('public'.length);
+      const f_name = v.dir_ent.name;
+      let route_path = f_name.includes('index.htm')
+        ? subpath
+        : `${subpath}/${f_name}`;
+      reroutes.redirects.push({
+        source: route_path,
+        destination: `${subpath}/${f_name}`,
+        permanent: true,
+      });
+      if (v.linux_path.includes('test')) {
+        reroutes.redirects.push({
+          source: route_path.slice('/test'.length),
+          destination: `${subpath}/${f_name}`,
+          permanent: true,
+        });
+      }
+    });
+  {
+    const reroutes_json_path = './src/lib/utils/reroutes.json';
+
+    if (fs.existsSync(reroutes_json_path)) {
+      fs.rmSync(reroutes_json_path);
+    }
+    fs.writeFileSync(reroutes_json_path, JSON.stringify(reroutes, null, 4), {
+      encoding: 'utf-8',
+      flag: 'w',
+    });
+  }
 }
 if (in_development || print_routes)
-  console.log(JSON.stringify({ routes, resource_urls }, null, 4));
+  console.log(JSON.stringify({ routes, resource_urls, reroutes }, null, 4));
 module.exports = {
   routes,
   resource_urls,
+  reroutes,
   ping() {
     if (in_development) console.log('ping');
   },
@@ -208,7 +296,8 @@ function executor(paths, path_after_s, dirent, grimace) {
   const first_item_in_paths = paths.shift();
   // console.log({grimace, paths, name, n})
   if (!first_item_in_paths && !paths.length) {
-    const file_name = dirent.dir_ent.name.split('.')?.shift();
+    const f_name = dirent.dir_ent.name;
+    const file_name = f_name.slice(0, f_name.lastIndexOf('.'));
     if (!file_name) {
       throw new Error('invalid name');
     }
@@ -260,7 +349,8 @@ function executor_resource_urls(paths, path_after_s, dirent, grimace) {
   const first_item_in_paths = paths.shift();
   console.log(JSON.stringify({ paths, first_item_in_paths, dirent }, null, 4));
   if (!first_item_in_paths && !paths.length) {
-    const file_name = dirent.dir_ent.name.split('.')?.shift();
+    const f_name = dirent.dir_ent.name;
+    const file_name = f_name.slice(0, f_name.lastIndexOf('.'));
     if (!file_name) {
       throw new Error('invalid name');
     }

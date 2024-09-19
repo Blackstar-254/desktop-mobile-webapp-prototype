@@ -10,7 +10,7 @@
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "dev": "next dev --turbo",
-    "lint": "npx @biomejs/biome check --fix --unsafe --write .",
+    "lint": "npx @biomejs/biome check --fix --unsafe .",
     "start": "next start",
     "setup": "npm i && npm",
     "refresh": "rm -r .next&&npx next telemetry disable&&npm run dev"

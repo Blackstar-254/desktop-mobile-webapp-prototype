@@ -15,7 +15,7 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": false,
+      "recommended": true,
       "complexity": {
         "noBannedTypes": "warn",
         "noExtraBooleanCast": "warn",
@@ -58,7 +58,8 @@
         "useConsistentArrayType": "off",
         "useImportType": "warn",
         "noNamespace": "warn",
-        "useAsConstAssertion": "warn"
+        "useAsConstAssertion": "warn",
+        "useConst": "info"
       },
       "suspicious": {
         "useAwait": "off",

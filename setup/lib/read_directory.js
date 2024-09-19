@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('node:fs');
 const invalid_files_folders = ['.git', 'node_modules', 'tmp'];
 
 /**
@@ -45,14 +45,14 @@ file_structure.files_list = fs
     return {
       index: i,
       ...file_folder,
-      path: `${file_folder.parentPath.length ? `${file_folder.parentPath}/` : ``}${file_folder.name}`,
+      path: `${file_folder.parentPath.length ? `${file_folder.parentPath}/` : ''}${file_folder.name}`,
     };
   })
   .map((v) => {
     const split_p = v.path.split('/');
-    let item;
+    let _item;
     for (let i = split_p.length - 1, j = 0; j < i; j++) {
-      item = file_structure.directory_structure[split_p[j]];
+      _item = file_structure.directory_structure[split_p[j]];
     }
 
     return v;
