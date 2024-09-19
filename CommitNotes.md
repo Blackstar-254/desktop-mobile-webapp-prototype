@@ -1,5 +1,89 @@
 # COMMIT NOTES
 
+### 2024 September 20th, 00:06 AM
+```sh
+1. created visitors table in db 
+2. created /api/cms/visitors 
+3. added visitor-id to cookie
+4. next is to update contact us form to db 
+5. allow client to:
+    - upload images 
+    - auth/login 
+    - upload blog
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   .gitignore
+#	modified:   biome.json
+#	modified:   database_management/@types/drizzle.config.d.ts
+#	modified:   database_management/@types/env.d.ts
+#	modified:   database_management/@types/schema/tables.billing.d.ts
+#	modified:   database_management/@types/schema/tables.content.d.ts
+#	modified:   database_management/@types/schema/tables.public.d.ts
+#	modified:   database_management/@types/schema/tables.user_accounts.d.ts
+#	modified:   database_management/@types/schema/utils/contact_info.d.ts
+#	modified:   database_management/@types/schema/utils/custom_json_type.d.ts
+#	modified:   database_management/@types/schema/utils/valid_schemas.d.ts
+#	modified:   database_management/@types/schema/utils/visitor_info.d.ts
+#	modified:   database_management/package-lock.json
+#	modified:   database_management/package.json
+#	renamed:    database_management/schema/0000_talented_reptil.sql -> database_management/schema/0000_medical_komodo.sql
+#	modified:   database_management/schema/meta/0000_snapshot.json
+#	modified:   database_management/schema/meta/_journal.json
+#	modified:   database_management/src/schema/tables.billing.ts
+#	modified:   database_management/src/schema/tables.public.ts
+#	modified:   database_management/src/schema/tables.user_accounts.ts
+#	modified:   database_management/src/schema/utils/common_types.ts
+#	modified:   database_management/src/schema/utils/visitor_info.ts
+#	new file:   dmwebapp/public/test/Gallery.css
+#	new file:   dmwebapp/public/test/Gallery.html
+#	new file:   dmwebapp/public/test/Home.html
+#	new file:   dmwebapp/public/test/images/10486568.png
+#	new file:   dmwebapp/public/test/images/116449445_3148661418504399_49363013400333769_n.png
+#	new file:   dmwebapp/public/test/images/121352197_3369841003053105_51205684272514932_n.png
+#	new file:   dmwebapp/public/test/images/130285072_3525514494152421_1544287742367305442_n.png
+#	new file:   dmwebapp/public/test/images/186543141_153732450098724_5169552202587625704_n.png
+#	new file:   dmwebapp/public/test/images/191047715_160386636099972_3067390665334471319_n.png
+#	new file:   dmwebapp/public/test/images/284294744_410474884424478_3955126763285761820_n.png
+#	new file:   dmwebapp/public/test/images/287295230_424870179651615_8639128166918859655_n.png
+#	new file:   dmwebapp/public/test/images/293229472_440831021388864_4550485181881416156_n.png
+#	new file:   dmwebapp/public/test/images/309477480_499565025515463_8751996586965130244_n.png
+#	new file:   dmwebapp/public/test/images/78997724_2591073760929837_2536989060933615616_n.png
+#	new file:   dmwebapp/public/test/images/81358662_2629018217135391_4360776004680024064_n.png
+#	new file:   dmwebapp/public/test/images/81668032_2655253744511838_6107655069295968256_n.png
+#	new file:   dmwebapp/public/test/images/82220007_2655299367840609_4743437215428771840_n.png
+#	new file:   dmwebapp/public/test/images/83930275_2709691425734736_48241966021869568_n.png
+#	new file:   dmwebapp/public/test/images/88108975_2756600341043844_8218669132078383104_n.png
+#	new file:   dmwebapp/public/test/images/brimage_fotos_logo_Fotor.png
+#	new file:   dmwebapp/public/test/images/business-team-5.jpg
+#	new file:   dmwebapp/public/test/images/default-image.jpg
+#	new file:   dmwebapp/public/test/index.css
+#	new file:   dmwebapp/public/test/index.html
+#	new file:   dmwebapp/public/test/intlTelInput/intlTelInput.css
+#	new file:   dmwebapp/public/test/intlTelInput/intlTelInput.min.js
+#	new file:   dmwebapp/public/test/intlTelInput/utils.js
+#	new file:   dmwebapp/public/test/jquery.js
+#	new file:   dmwebapp/public/test/nicepage.css
+#	new file:   dmwebapp/public/test/nicepage.js
+#	modified:   dmwebapp/src/middleware.ts
+#	modified:   dmwebapp/src/pages/api/cms/visitors.ts
+#	modified:   dmwebapp/src/server/db/schema/tables.billing.ts
+#	modified:   dmwebapp/src/server/db/schema/tables.public.ts
+#	modified:   dmwebapp/src/server/db/schema/tables.user_accounts.ts
+#	modified:   dmwebapp/src/server/db/schema/utils/common_types.ts
+#	modified:   dmwebapp/src/server/db/schema/utils/visitor_info.ts
+#	modified:   golang_api/src/lib/db_access/generated/models.go
+#	renamed:    golang_api/src/lib/db_access/sql/schema/0000_talented_reptil.sql -> golang_api/src/lib/db_access/sql/schema/0000_medical_komodo.sql
+#	modified:   golang_api/src/lib/db_access/sql/schema/constraints_schema.sql
+#	modified:   package.json
+#	new file:   setup/nodemon_config/json_recurse.json
+#
+```
+
 ### 2024 September 18th, 09:22 AM
 ```sh
 1. Creating database schema:
