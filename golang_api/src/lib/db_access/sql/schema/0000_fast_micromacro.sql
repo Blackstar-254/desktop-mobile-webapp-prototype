@@ -57,6 +57,15 @@ CREATE TABLE IF NOT EXISTS "billing"."transactions_records" (
 	CONSTRAINT "transactions_records_description_unique" UNIQUE("description")
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "content"."contact_us" (
+	"contct_us_id" serial PRIMARY KEY NOT NULL,
+	"contct_us_created_at" timestamp DEFAULT now() NOT NULL,
+	"contct_us_updated_at" timestamp NOT NULL,
+	"client_id" text NOT NULL,
+	"form_data" jsonb NOT NULL,
+	"visitor_id" uuid
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "content"."post" (
 	"posts_id" serial PRIMARY KEY NOT NULL,
 	"posts_created_at" timestamp DEFAULT now() NOT NULL,
@@ -107,15 +116,28 @@ CREATE TABLE IF NOT EXISTS "user_accounts"."visits" (
 	"visits_id" serial PRIMARY KEY NOT NULL,
 	"visits_created_at" timestamp DEFAULT now() NOT NULL,
 	"visits_updated_at" timestamp NOT NULL,
-	"metadata" jsonb DEFAULT '{"ua":{"ua":"","browser":{"name":"","version":""},"engine":{"name":"","version":""},"os":{"name":"","version":""},"device":{},"cpu":{"architecture":""},"isBot":false},"headers":{"accept":"","accept-encoding":"","accept-language":"","cache-control":"","connection":"","cookie":"","host":"","pragma":"","referer":"","sec-ch-ua":"","sec-ch-ua-mobile":"","sec-ch-ua-platform":"","sec-fetch-dest":"","sec-fetch-mode":"","sec-fetch-site":"","sec-gpc":"","user-agent":"","x-forwarded-for":"","x-forwarded-host":"","x-forwarded-port":"","x-forwarded-proto":""},"cookies":{"sessionId":"","userId":""},"geo":{"city":"","country":"","region":"","latitude":"","longitude":""},"ip":"","banned":{"isBanned":false,"time":"2024-09-19T20:54:21.884Z","duration":0}}'::jsonb,
+	"metadata" jsonb DEFAULT '{"ua":{"ua":"","browser":{"name":"","version":""},"engine":{"name":"","version":""},"os":{"name":"","version":""},"device":{},"cpu":{"architecture":""},"isBot":false},"headers":{"accept":"","accept-encoding":"","accept-language":"","cache-control":"","connection":"","cookie":"","host":"","pragma":"","referer":"","sec-ch-ua":"","sec-ch-ua-mobile":"","sec-ch-ua-platform":"","sec-fetch-dest":"","sec-fetch-mode":"","sec-fetch-site":"","sec-gpc":"","user-agent":"","x-forwarded-for":"","x-forwarded-host":"","x-forwarded-port":"","x-forwarded-proto":""},"cookies":{"sessionId":"","userId":""},"geo":{"city":"","country":"","region":"","latitude":"","longitude":""},"ip":"","banned":{"isBanned":false,"time":"2024-09-19T21:50:22.407Z","duration":0}}'::jsonb,
 	"client_id" text NOT NULL,
 	"visitor_id" uuid,
 	"count" integer,
-	"user_id" varchar
+	"user_id" varchar,
+	CONSTRAINT "visits_visitor_id_unique" UNIQUE("visitor_id")
 );
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "billing"."transactions_records" ADD CONSTRAINT "transactions_records_client_id_organisations_client_id_fk" FOREIGN KEY ("client_id") REFERENCES "billing"."organisations"("client_id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "content"."contact_us" ADD CONSTRAINT "contact_us_client_id_organisations_client_id_fk" FOREIGN KEY ("client_id") REFERENCES "billing"."organisations"("client_id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "content"."contact_us" ADD CONSTRAINT "contact_us_visitor_id_visits_visitor_id_fk" FOREIGN KEY ("visitor_id") REFERENCES "user_accounts"."visits"("visitor_id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

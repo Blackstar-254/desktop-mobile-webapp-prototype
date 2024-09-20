@@ -112,7 +112,7 @@ export const visits_table = user_accounts_schema.table('visits', {
   ...common('visits'),
   metadata: visitor_metadata_t('metadata').default(exampleVisitorInfo),
   client: client_id_ref(),
-  visitor_id: uuid('visitor_id'),
+  visitor_id: uuid('visitor_id').unique(),
   count: integer('count'),
   user_id: varchar('user_id').references(() => users.id),
 });

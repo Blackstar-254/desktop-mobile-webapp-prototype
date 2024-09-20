@@ -1,4 +1,3 @@
-import { z } from 'zod';
 import { customJsonb } from './custom_json_type';
 import { userAgent } from 'next/server';
 
@@ -84,66 +83,4 @@ export const exampleVisitorInfo: visitor_info_t = {
   },
 };
 
-export const visitorInfoSchema = z.object({
-  ua: z.object({
-    ua: z.string().optional(),
-    browser: z.object({
-      name: z.string().optional(),
-      version: z.string().optional(),
-    }),
-    engine: z.object({
-      name: z.string().optional(),
-      version: z.string().optional(),
-    }),
-    os: z.object({
-      name: z.string().optional(),
-      version: z.string().optional(),
-    }),
-    device: z.object({}),
-    cpu: z.object({
-      architecture: z.string().optional(),
-    }),
-    isBot: z.boolean(),
-  }),
-  headers: z.object({
-    accept: z.string().optional(),
-    'accept-encoding': z.string().optional(),
-    'accept-language': z.string().optional(),
-    'cache-control': z.string().optional(),
-    connection: z.string().optional(),
-    cookie: z.string().optional(),
-    host: z.string().optional(),
-    pragma: z.string().optional(),
-    referer: z.string().optional(),
-    'sec-ch-ua': z.string().optional(),
-    'sec-ch-ua-mobile': z.string().optional(),
-    'sec-ch-ua-platform': z.string().optional(),
-    'sec-fetch-dest': z.string().optional(),
-    'sec-fetch-mode': z.string().optional(),
-    'sec-fetch-site': z.string().optional(),
-    'sec-gpc': z.string().optional(),
-    'user-agent': z.string().optional(),
-    'x-forwarded-for': z.string().optional(),
-    'x-forwarded-host': z.string().optional(),
-    'x-forwarded-port': z.string().optional(),
-    'x-forwarded-proto': z.string().optional(),
-  }),
-  cookies: z.object({
-    sessionId: z.string().optional(),
-    userId: z.string().optional(),
-  }),
-  geo: z.object({
-    city: z.string().optional(),
-    country: z.string().optional(),
-    region: z.string().optional(),
-    latitude: z.string().optional(),
-    longitude: z.string().optional(),
-  }),
-  ip: z.string().optional(),
-  banned: z.object({
-    isBanned: z.boolean().optional(),
-    time: z.date(),
-    duration: z.number(),
-  }),
-});
 export const visitor_metadata_t = customJsonb(exampleVisitorInfo);

@@ -140,6 +140,15 @@ type BillingTransactionsRecord struct {
 	NextPaymentDate       pgtype.Timestamptz `json:"next_payment_date"`
 }
 
+type ContentContactU struct {
+	ContctUsID        int32            `json:"contct_us_id"`
+	ContctUsCreatedAt pgtype.Timestamp `json:"contct_us_created_at"`
+	ContctUsUpdatedAt pgtype.Timestamp `json:"contct_us_updated_at"`
+	ClientID          string           `json:"client_id"`
+	FormData          []byte           `json:"form_data"`
+	VisitorID         pgtype.UUID      `json:"visitor_id"`
+}
+
 type ContentPost struct {
 	PostsID        int32            `json:"posts_id"`
 	PostsCreatedAt pgtype.Timestamp `json:"posts_created_at"`

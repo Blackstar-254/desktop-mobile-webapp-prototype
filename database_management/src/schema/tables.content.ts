@@ -7,8 +7,12 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core';
 import { common } from './table_common';
-import { users } from './tables.user_accounts';
+import { users, visits_table } from './tables.user_accounts';
 import { content_schema } from './utils/valid_schemas';
+import { z } from 'zod';
+import { client_id_ref } from './tables.billing';
+import { contact_us_form_t } from './utils/contact_info';
+import { uuid } from 'drizzle-orm/pg-core';
 
 export const posts = content_schema.table(
   'post',
@@ -24,3 +28,10 @@ export const posts = content_schema.table(
     nameIndex: index('name_idx').on(example.name),
   }),
 );
+
+export const contact_us_form_table = content_schema.table('contact_us', {
+  ...common('contct_us'),
+  client: client_id_ref(),
+  form_data: contact_us_form_t('form_data').notNull(),
+  visitor_id: uuid('visitor_id').references(() => visits_table.visitor_id),
+});

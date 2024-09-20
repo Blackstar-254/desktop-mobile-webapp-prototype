@@ -1,5 +1,5 @@
 {
-  "id": "d7a9aae3-678d-4492-9fa1-67a46420609e",
+  "id": "e0157c2f-5afd-44ce-a7d3-784c6c9a47d6",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -281,6 +281,82 @@
           ]
         }
       }
+    },
+    "content.contact_us": {
+      "name": "contact_us",
+      "schema": "content",
+      "columns": {
+        "contct_us_id": {
+          "name": "contct_us_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "contct_us_created_at": {
+          "name": "contct_us_created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "contct_us_updated_at": {
+          "name": "contct_us_updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "client_id": {
+          "name": "client_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "form_data": {
+          "name": "form_data",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "visitor_id": {
+          "name": "visitor_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "contact_us_client_id_organisations_client_id_fk": {
+          "name": "contact_us_client_id_organisations_client_id_fk",
+          "tableFrom": "contact_us",
+          "tableTo": "organisations",
+          "schemaTo": "billing",
+          "columnsFrom": [
+            "client_id"
+          ],
+          "columnsTo": [
+            "client_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "contact_us_visitor_id_visits_visitor_id_fk": {
+          "name": "contact_us_visitor_id_visits_visitor_id_fk",
+          "tableFrom": "contact_us",
+          "tableTo": "visits",
+          "schemaTo": "user_accounts",
+          "columnsFrom": [
+            "visitor_id"
+          ],
+          "columnsTo": [
+            "visitor_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
     },
     "content.post": {
       "name": "post",
@@ -675,7 +751,7 @@
           "type": "jsonb",
           "primaryKey": false,
           "notNull": false,
-          "default": "'{\"ua\":{\"ua\":\"\",\"browser\":{\"name\":\"\",\"version\":\"\"},\"engine\":{\"name\":\"\",\"version\":\"\"},\"os\":{\"name\":\"\",\"version\":\"\"},\"device\":{},\"cpu\":{\"architecture\":\"\"},\"isBot\":false},\"headers\":{\"accept\":\"\",\"accept-encoding\":\"\",\"accept-language\":\"\",\"cache-control\":\"\",\"connection\":\"\",\"cookie\":\"\",\"host\":\"\",\"pragma\":\"\",\"referer\":\"\",\"sec-ch-ua\":\"\",\"sec-ch-ua-mobile\":\"\",\"sec-ch-ua-platform\":\"\",\"sec-fetch-dest\":\"\",\"sec-fetch-mode\":\"\",\"sec-fetch-site\":\"\",\"sec-gpc\":\"\",\"user-agent\":\"\",\"x-forwarded-for\":\"\",\"x-forwarded-host\":\"\",\"x-forwarded-port\":\"\",\"x-forwarded-proto\":\"\"},\"cookies\":{\"sessionId\":\"\",\"userId\":\"\"},\"geo\":{\"city\":\"\",\"country\":\"\",\"region\":\"\",\"latitude\":\"\",\"longitude\":\"\"},\"ip\":\"\",\"banned\":{\"isBanned\":false,\"time\":\"2024-09-19T20:54:21.884Z\",\"duration\":0}}'::jsonb"
+          "default": "'{\"ua\":{\"ua\":\"\",\"browser\":{\"name\":\"\",\"version\":\"\"},\"engine\":{\"name\":\"\",\"version\":\"\"},\"os\":{\"name\":\"\",\"version\":\"\"},\"device\":{},\"cpu\":{\"architecture\":\"\"},\"isBot\":false},\"headers\":{\"accept\":\"\",\"accept-encoding\":\"\",\"accept-language\":\"\",\"cache-control\":\"\",\"connection\":\"\",\"cookie\":\"\",\"host\":\"\",\"pragma\":\"\",\"referer\":\"\",\"sec-ch-ua\":\"\",\"sec-ch-ua-mobile\":\"\",\"sec-ch-ua-platform\":\"\",\"sec-fetch-dest\":\"\",\"sec-fetch-mode\":\"\",\"sec-fetch-site\":\"\",\"sec-gpc\":\"\",\"user-agent\":\"\",\"x-forwarded-for\":\"\",\"x-forwarded-host\":\"\",\"x-forwarded-port\":\"\",\"x-forwarded-proto\":\"\"},\"cookies\":{\"sessionId\":\"\",\"userId\":\"\"},\"geo\":{\"city\":\"\",\"country\":\"\",\"region\":\"\",\"latitude\":\"\",\"longitude\":\"\"},\"ip\":\"\",\"banned\":{\"isBanned\":false,\"time\":\"2024-09-19T21:50:22.407Z\",\"duration\":0}}'::jsonb"
         },
         "client_id": {
           "name": "client_id",
@@ -734,7 +810,15 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "visits_visitor_id_unique": {
+          "name": "visits_visitor_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "visitor_id"
+          ]
+        }
+      }
     }
   },
   "enums": {

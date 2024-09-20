@@ -5,6 +5,10 @@ CREATE TYPE "public"."payment_period_t" AS ENUM('monthly', 'weekly', 'annually',
 --> statement-breakpoint
 ALTER TABLE "billing"."transactions_records" ADD CONSTRAINT "transactions_records_client_id_organisations_client_id_fk" FOREIGN KEY ("client_id") REFERENCES "billing"."organisations"("client_id") ON DELETE no action ON UPDATE no action;
 --> statement-breakpoint
+ALTER TABLE "content"."contact_us" ADD CONSTRAINT "contact_us_client_id_organisations_client_id_fk" FOREIGN KEY ("client_id") REFERENCES "billing"."organisations"("client_id") ON DELETE no action ON UPDATE no action;
+--> statement-breakpoint
+ALTER TABLE "content"."contact_us" ADD CONSTRAINT "contact_us_visitor_id_visits_visitor_id_fk" FOREIGN KEY ("visitor_id") REFERENCES "user_accounts"."visits"("visitor_id") ON DELETE no action ON UPDATE no action;
+--> statement-breakpoint
 ALTER TABLE "user_accounts"."account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "user_accounts"."user"("id") ON DELETE no action ON UPDATE no action;
 --> statement-breakpoint
 ALTER TABLE "user_accounts"."session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "user_accounts"."user"("id") ON DELETE no action ON UPDATE no action;

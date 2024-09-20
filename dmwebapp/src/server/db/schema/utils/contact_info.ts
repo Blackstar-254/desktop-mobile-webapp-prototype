@@ -1,21 +1,5 @@
+import z from 'zod';
 import { customArrayJsonb, customJsonb } from './custom_json_type';
-
-export type ContactUsFormType = {
-  FullName: string;
-  Email: string;
-  Message: string;
-  Webkit: string;
-};
-
-export const examplContactUsForm: ContactUsFormType = {
-  FullName: '',
-  Email: '',
-  Message: '',
-  Webkit: '',
-};
-
-export const contact_us_form =
-  customJsonb<ContactUsFormType>(examplContactUsForm);
 
 export type UserContactsType = {
   names: {
@@ -110,3 +94,21 @@ export const social_media_lists: social_media_type[] = [
 ];
 export const social_media_integrations =
   customArrayJsonb<SocialMediaIntegrationType>(exampleSocialMediaIntegration);
+
+export const contactUsFormSchema = z.object({
+  name: z.string(),
+  email: z.string().email(),
+  message: z.string(),
+  boundaryId: z.string().regex(/[0-9a-zA-Z]+/),
+  valid: z.boolean(),
+});
+
+export const exampleContactUsForm = {
+  name: '',
+  email: 'test@email.us',
+  message: '',
+  boundaryId: '',
+  valid: false,
+};
+
+export const contact_us_form_t = customJsonb(exampleContactUsForm);

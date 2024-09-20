@@ -1,16 +1,5 @@
 import { z } from 'zod';
 
-export const contactUsFormSchema = z.object({
-  name: z.string().optional(),
-  email: z.string().email().optional(),
-  message: z.string().optional(),
-  boundaryId: z
-    .string()
-    .regex(/[0-9a-zA-Z]+/)
-    .optional(),
-  valid: z.boolean(),
-});
-
 export function ReadFormData(
   raw_data: string,
 ): Record<string, string | boolean> & { valid: boolean } {

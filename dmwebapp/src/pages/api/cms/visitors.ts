@@ -5,7 +5,6 @@ import { db } from '@blackstar/server/db';
 import { visits_table } from '@blackstar/server/db/schema';
 import { env } from '@blackstar/env';
 import { eq, sql } from 'drizzle-orm';
-import { visit_info_t } from '@blackstar/server/db/schema/utils/common_types';
 import { visitor_info_t } from '@blackstar/server/db/schema/utils/visitor_info';
 
 export default async function handler(

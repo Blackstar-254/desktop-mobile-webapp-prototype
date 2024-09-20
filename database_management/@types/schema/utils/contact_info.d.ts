@@ -1,15 +1,4 @@
-export type ContactUsFormType = {
-    FullName: string;
-    Email: string;
-    Message: string;
-    Webkit: string;
-};
-export declare const examplContactUsForm: ContactUsFormType;
-export declare const contact_us_form: <TName extends string>(dbName: TName, fieldConfig?: unknown) => import("drizzle-orm/pg-core").PgCustomColumnBuilder<import("drizzle-orm/pg-core").ConvertCustomConfig<TName, {
-    data: ContactUsFormType;
-    driverData: string;
-    default: true;
-}>>;
+import z from 'zod';
 export type UserContactsType = {
     names: {
         first_name: string;
@@ -54,6 +43,43 @@ export declare const exampleSocialMediaIntegration: SocialMediaIntegrationType;
 export declare const social_media_lists: social_media_type[];
 export declare const social_media_integrations: <TName extends string>(dbName: TName, fieldConfig?: unknown) => import("drizzle-orm/pg-core").PgCustomColumnBuilder<import("drizzle-orm/pg-core").ConvertCustomConfig<TName, {
     data: SocialMediaIntegrationType[];
+    driverData: string;
+    default: true;
+}>>;
+export declare const contactUsFormSchema: z.ZodObject<{
+    name: z.ZodString;
+    email: z.ZodString;
+    message: z.ZodString;
+    boundaryId: z.ZodString;
+    valid: z.ZodBoolean;
+}, "strip", z.ZodTypeAny, {
+    name: string;
+    email: string;
+    message: string;
+    boundaryId: string;
+    valid: boolean;
+}, {
+    name: string;
+    email: string;
+    message: string;
+    boundaryId: string;
+    valid: boolean;
+}>;
+export declare const exampleContactUsForm: {
+    name: string;
+    email: string;
+    message: string;
+    boundaryId: string;
+    valid: boolean;
+};
+export declare const contact_us_form_t: <TName extends string>(dbName: TName, fieldConfig?: unknown) => import("drizzle-orm/pg-core").PgCustomColumnBuilder<import("drizzle-orm/pg-core").ConvertCustomConfig<TName, {
+    data: {
+        name: string;
+        email: string;
+        message: string;
+        boundaryId: string;
+        valid: boolean;
+    };
     driverData: string;
     default: true;
 }>>;
