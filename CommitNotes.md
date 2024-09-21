@@ -1,6 +1,55 @@
 # COMMIT NOTES
 
-### 2024 September 20th, 00:06 AM
+### 2024 September 21st, 20:27 PM GMT+3
+```sh
+1. using nextauth for authentication
+2. using email as login provider
+3. next:
+    - gallery
+    - upload images
+    - blog
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   .env.example
+#	modified:   database_management/@types/schema/tables.user_accounts.d.ts
+#	modified:   database_management/package.json
+#	renamed:    database_management/schema/0000_fast_micromacro.sql -> database_management/schema/0000_shiny_dreadnoughts.sql
+#	modified:   database_management/schema/meta/0000_snapshot.json
+#	modified:   database_management/schema/meta/_journal.json
+#	new file:   database_management/scripts/test/billing.organisation.sql
+#	new file:   database_management/scripts/test/user_accounts.user.sql
+#	modified:   database_management/src/schema/tables.billing.ts
+#	modified:   database_management/src/schema/tables.user_accounts.ts
+#	modified:   dmwebapp/package-lock.json
+#	modified:   dmwebapp/package.json
+#	modified:   dmwebapp/src/env.js
+#	new file:   dmwebapp/src/lib/_components/form_components.tsx
+#	new file:   dmwebapp/src/lib/_components/html_templates/user_verification_email.html
+#	modified:   dmwebapp/src/lib/_components/main.tsx
+#	modified:   dmwebapp/src/lib/api/auth.ts
+#	new file:   dmwebapp/src/pages/_auth/[...auth].tsx
+#	new file:   dmwebapp/src/pages/_auth/index.tsx
+#	modified:   dmwebapp/src/pages/api/auth/[...nextauth].ts
+#	deleted:    dmwebapp/src/pages/auth/[auth].tsx
+#	modified:   dmwebapp/src/server/api/root.ts
+#	new file:   dmwebapp/src/server/api/routers/contact_forms.ts
+#	modified:   dmwebapp/src/server/auth.ts
+#	modified:   dmwebapp/src/server/db/schema/tables.billing.ts
+#	modified:   dmwebapp/src/server/db/schema/tables.user_accounts.ts
+#	modified:   golang_api/src/lib/db_access/generated/models.go
+#	renamed:    golang_api/src/lib/db_access/sql/schema/0000_fast_micromacro.sql -> golang_api/src/lib/db_access/sql/schema/0000_shiny_dreadnoughts.sql
+#	modified:   package.json
+#	modified:   setup/lib/create_uniform_db_schema.js
+#	modified:   setup/lib/env_handler.js
+#
+```
+
+### 2024 September 20th, 00:06 AM GMT+3
 ```sh
 1. created visitors table in db 
 2. created /api/cms/visitors 
@@ -84,7 +133,7 @@
 #
 ```
 
-### 2024 September 18th, 09:22 AM
+### 2024 September 18th, 09:22 AM GMT+3
 ```sh
 1. Creating database schema:
     - billing 
@@ -200,7 +249,7 @@ the goal is to uniform all database management
 #
 ```
 
-### 2024 September 16th, 12:58 PM
+### 2024 September 16th, 12:58 PM GMT+3
 ```sh
 1. Setting up pages departments:
     i. Gallery
@@ -239,7 +288,7 @@ the goal is to uniform all database management
 #
 ```
 
-### 2024 September 13th, 20:13 PM
+### 2024 September 13th, 20:13 PM GMT+3
 ```sh
 1. both golang_api and webapp run dev successfully
 2. connects to blackstar cms database
@@ -261,7 +310,7 @@ the goal is to uniform all database management
 #
 ```
 
-### 2024 September 12th, 12:08 PM 
+### 2024 September 12th, 12:08 PM GMT+3
 ```sh
 1. Able to create uniform .env files for all 
 subprojects
@@ -285,7 +334,7 @@ subprojects
 #
 ```
 
-### 2024 September 11th, 19:41 PM
+### 2024 September 11th, 19:41 PM GMT+3
 ```sh
 1. Adding biomejs
 2. adding .env functionality
@@ -342,7 +391,7 @@ Goal: single template for all blackstar projects
 ```
 
 
-### 2024 September 10th, 09:31 AM
+### 2024 September 10th, 09:31 AM GMT+3
 ```sh
 1. added preliminary golang_api
 2. added preliminary database_management code
