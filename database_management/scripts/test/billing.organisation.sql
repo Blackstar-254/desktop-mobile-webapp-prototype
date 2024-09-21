@@ -1,0 +1,2 @@
+INSERT INTO "billing"."organisations" ("organisations_id", "organisations_created_at", "organisations_updated_at", "name", "address", "domain_name", "client_id", "contact_information", "social_media_integration") VALUES
+(2, '2024-09-21 13:43:28', '2024-09-21 13:46:06', 'Blackstartech', 'P O Box 1862 80100', 'https://blackstartech.vercel.app', '91ff7cee-bb4e-4551-a9c7-5b7f4a5326dc', NULL, '[]');

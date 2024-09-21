@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "db:introspect": "echo \"can't\"",
-    "db:generate": "rm -r schema &&npx tsc && drizzle-kit generate --config=./dist/drizzle.config.js",
+    "db:generate": "npx tsc && drizzle-kit generate --config=./dist/drizzle.config.js",
     "db:migrate": "npx tsc && drizzle-kit migrate --config=./dist/drizzle.config.js"
   },
   "keywords": [],

@@ -1,5 +1,5 @@
 {
-  "id": "e0157c2f-5afd-44ce-a7d3-784c6c9a47d6",
+  "id": "6a89203c-5570-4086-b23f-9cc3590987bc",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -82,6 +82,13 @@
           "nullsNotDistinct": false,
           "columns": [
             "domain_name"
+          ]
+        },
+        "organisations_client_id_unique": {
+          "name": "organisations_client_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "client_id"
           ]
         }
       }
@@ -560,6 +567,55 @@
       },
       "uniqueConstraints": {}
     },
+    "user_accounts.passwords_table": {
+      "name": "passwords_table",
+      "schema": "user_accounts",
+      "columns": {
+        "pass_id": {
+          "name": "pass_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "pass_created_at": {
+          "name": "pass_created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "pass_updated_at": {
+          "name": "pass_updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user": {
+          "name": "user",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "password": {
+          "name": "password",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "passwords_table_user_unique": {
+          "name": "passwords_table_user_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "user"
+          ]
+        }
+      }
+    },
     "user_accounts.session": {
       "name": "session",
       "schema": "user_accounts",
@@ -751,7 +807,7 @@
           "type": "jsonb",
           "primaryKey": false,
           "notNull": false,
-          "default": "'{\"ua\":{\"ua\":\"\",\"browser\":{\"name\":\"\",\"version\":\"\"},\"engine\":{\"name\":\"\",\"version\":\"\"},\"os\":{\"name\":\"\",\"version\":\"\"},\"device\":{},\"cpu\":{\"architecture\":\"\"},\"isBot\":false},\"headers\":{\"accept\":\"\",\"accept-encoding\":\"\",\"accept-language\":\"\",\"cache-control\":\"\",\"connection\":\"\",\"cookie\":\"\",\"host\":\"\",\"pragma\":\"\",\"referer\":\"\",\"sec-ch-ua\":\"\",\"sec-ch-ua-mobile\":\"\",\"sec-ch-ua-platform\":\"\",\"sec-fetch-dest\":\"\",\"sec-fetch-mode\":\"\",\"sec-fetch-site\":\"\",\"sec-gpc\":\"\",\"user-agent\":\"\",\"x-forwarded-for\":\"\",\"x-forwarded-host\":\"\",\"x-forwarded-port\":\"\",\"x-forwarded-proto\":\"\"},\"cookies\":{\"sessionId\":\"\",\"userId\":\"\"},\"geo\":{\"city\":\"\",\"country\":\"\",\"region\":\"\",\"latitude\":\"\",\"longitude\":\"\"},\"ip\":\"\",\"banned\":{\"isBanned\":false,\"time\":\"2024-09-19T21:50:22.407Z\",\"duration\":0}}'::jsonb"
+          "default": "'{\"ua\":{\"ua\":\"\",\"browser\":{\"name\":\"\",\"version\":\"\"},\"engine\":{\"name\":\"\",\"version\":\"\"},\"os\":{\"name\":\"\",\"version\":\"\"},\"device\":{},\"cpu\":{\"architecture\":\"\"},\"isBot\":false},\"headers\":{\"accept\":\"\",\"accept-encoding\":\"\",\"accept-language\":\"\",\"cache-control\":\"\",\"connection\":\"\",\"cookie\":\"\",\"host\":\"\",\"pragma\":\"\",\"referer\":\"\",\"sec-ch-ua\":\"\",\"sec-ch-ua-mobile\":\"\",\"sec-ch-ua-platform\":\"\",\"sec-fetch-dest\":\"\",\"sec-fetch-mode\":\"\",\"sec-fetch-site\":\"\",\"sec-gpc\":\"\",\"user-agent\":\"\",\"x-forwarded-for\":\"\",\"x-forwarded-host\":\"\",\"x-forwarded-port\":\"\",\"x-forwarded-proto\":\"\"},\"cookies\":{\"sessionId\":\"\",\"userId\":\"\"},\"geo\":{\"city\":\"\",\"country\":\"\",\"region\":\"\",\"latitude\":\"\",\"longitude\":\"\"},\"ip\":\"\",\"banned\":{\"isBanned\":false,\"time\":\"2024-09-21T12:07:01.370Z\",\"duration\":0}}'::jsonb"
         },
         "client_id": {
           "name": "client_id",

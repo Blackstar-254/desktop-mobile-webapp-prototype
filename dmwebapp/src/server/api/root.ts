@@ -1,8 +1,9 @@
-import { postRouter } from '@blackstar/server/api/routers/post';
+import { postRouter } from "@blackstar/server/api/routers/post";
 import {
-  createCallerFactory,
-  createTRPCRouter,
-} from '@blackstar/server/api/trpc';
+	createCallerFactory,
+	createTRPCRouter,
+} from "@blackstar/server/api/trpc";
+import { contactFormsRouter } from "./routers/contact_forms";
 
 /**
  * This is the primary router for your server.
@@ -10,7 +11,8 @@ import {
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  post: postRouter,
+	post: postRouter,
+	contactForms: contactFormsRouter,
 });
 
 // export type definition of API

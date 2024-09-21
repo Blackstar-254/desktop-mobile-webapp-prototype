@@ -1,4 +1,4 @@
-import { useSession } from 'next-auth/react';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -140,6 +140,16 @@ export default function MainSection({
 
     case 'laptop':
     case 'desktop':
+      if (session.status !== 'authenticated') {
+        return (
+          <>
+            <HtmlHead />
+            <DesktopMainNoSessionSection {...{ session, heading }}>
+              {children}
+            </DesktopMainNoSessionSection>
+          </>
+        )
+      }
       return (
         <>
           <HtmlHead />
@@ -170,10 +180,11 @@ type DesktopMainProps = {
 } & CommonMainProps;
 
 const CommonCss = {
-  MainSection: 'w-screen min-h-screen overflow-x-clip',
-  MainDiv: 'w-full h-full flex min-h-screen',
+  MainSection: 'min-h-screen overflow-x-clip',
+  MainDiv: ' flex min-h-screen',
   Header: '',
   Nav: 'h-[3rem] text-black flex items-center h-full w-full',
+  auth_button: "bg-blue-400 hover:bg-black text-white text-bold capitalize px-2 rounded-md"
 };
 
 
@@ -190,11 +201,11 @@ const side_bar_links: SideBarLinkType[] = [
   { href: "/dashboard/billing", label: "billing" },
 ]
 
-export function DesktopMainSection({ children, heading, }: DesktopMainProps) {
+export function DesktopMainSection({ children, heading, session }: DesktopMainProps) {
 
   return (
     <main className={`${CommonCss.MainSection}`}>
-      <DesktopNavbarSection {...{ heading: heading ?? '' }} />
+      <DesktopNavbarSection {...{ heading: heading ?? '', session }} />
       <div className={`${CommonCss.MainDiv}`}>
         <div className='w-[250px] bg-slate-200'>
           {
@@ -211,6 +222,21 @@ export function DesktopMainSection({ children, heading, }: DesktopMainProps) {
         </div>
         <div className='w-full p-2'><h1 className="text-bold text-[3rem]">{heading}</h1>
           {children}</div>
+      </div>
+    </main>
+  );
+}
+
+export function DesktopMainNoSessionSection({ children, heading, }: DesktopMainProps) {
+
+  return (
+    <main className={`${CommonCss.MainSection}`}>
+      <DesktopNavbarSection {...{ heading: heading ?? '' }} />
+      <div className={`${CommonCss.MainDiv}`}>
+
+        <div className='w-full p-2'><h1 className="text-bold text-[3rem]">{heading}</h1>
+          {children}</div>
+
       </div>
     </main>
   );
@@ -235,7 +261,7 @@ export function MobileMainSection({ children, heading }: MobileMainProps) {
 export function LoadingSection({ children }: { children?: React.ReactNode }) {
   return (
     <>
-      <div className="min-width-[100%] min-h-[80vh] flex items-center">
+      <div className="w-screen min-h-[80vh] flex items-center">
         <div>Loading</div>
       </div>
     </>
@@ -250,7 +276,8 @@ type CommonNavbarProps = {
 
 type DesktopNavbarSectionProps = {} & CommonNavbarProps;
 
-export function DesktopNavbarSection({ children, }: DesktopNavbarSectionProps) {
+export function DesktopNavbarSection({ children, session }: DesktopNavbarSectionProps) {
+
   return (
     <header className={`${CommonCss.Header}`}>
       <nav className={`${CommonCss.Nav}`}>
@@ -258,6 +285,12 @@ export function DesktopNavbarSection({ children, }: DesktopNavbarSectionProps) {
           <img src={logo.src} alt={logo.alt} className='h-[3rem]' />
         </div>
         {children}
+        <div className='flex flex-reverse ml-auto px-2'>
+          {session?.status == 'authenticated' ?
+            <button className={CommonCss.auth_button} type="button" onClick={() => signOut()}>Sign Out</button> :
+            <button className={CommonCss.auth_button} type="button" onClick={() => signIn("email")}>Sign In</button>
+          }
+        </div>
       </nav>
     </header>
   );
@@ -265,14 +298,22 @@ export function DesktopNavbarSection({ children, }: DesktopNavbarSectionProps) {
 
 type MobileNavbarSectionProps = {} & CommonNavbarProps;
 
-export function MobileNavbarSection({ children, }: MobileNavbarSectionProps) {
+export function MobileNavbarSection({ children, session }: MobileNavbarSectionProps) {
+
   return (
     <header className={`${CommonCss.Header}`}>
       <nav className={`${CommonCss.Nav}`}>
         <div className='flex px-2'>
           <img src={logo.src} alt={logo.alt} className='h-[3rem]' />
         </div>
-        {children}</nav>
+        {children}
+        <div className='flex flex-reverse ml-auto px-2'>
+          {session?.status == 'authenticated' ?
+            <button className={CommonCss.auth_button} type="button" onClick={() => signOut()}>Sign Out</button> :
+            <button className={CommonCss.auth_button} type="button" onClick={() => signIn("email")}>Sign In</button>
+          }
+        </div>
+      </nav>
     </header>
   );
 }

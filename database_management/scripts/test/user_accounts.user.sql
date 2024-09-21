@@ -1,0 +1,2 @@
+INSERT INTO "user_accounts"."user" ("id", "name", "email", "email_verified", "image", "client_org", "contact_info") VALUES
+('0047eb83-5dc0-42f9-9abc-7d6470352cbe', 'Judah Matende', 'judahmatende@gmail.com', '2024-09-21 10:48:06.516527+00', NULL, '91ff7cee-bb4e-4551-a9c7-5b7f4a5326dc', NULL);

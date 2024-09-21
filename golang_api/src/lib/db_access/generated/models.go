@@ -171,6 +171,14 @@ type UserAccountsAccount struct {
 	SessionState      *string `json:"session_state"`
 }
 
+type UserAccountsPasswordsTable struct {
+	PassID        int32            `json:"pass_id"`
+	PassCreatedAt pgtype.Timestamp `json:"pass_created_at"`
+	PassUpdatedAt pgtype.Timestamp `json:"pass_updated_at"`
+	User          *string          `json:"user"`
+	Password      string           `json:"password"`
+}
+
 type UserAccountsSession struct {
 	SessionToken string             `json:"session_token"`
 	UserID       string             `json:"user_id"`

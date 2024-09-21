@@ -27,7 +27,8 @@ CREATE TABLE IF NOT EXISTS "billing"."organisations" (
 	"contact_information" jsonb,
 	"social_media_integration" jsonb DEFAULT '[]'::jsonb,
 	CONSTRAINT "organisations_name_unique" UNIQUE("name"),
-	CONSTRAINT "organisations_domain_name_unique" UNIQUE("domain_name")
+	CONSTRAINT "organisations_domain_name_unique" UNIQUE("domain_name"),
+	CONSTRAINT "organisations_client_id_unique" UNIQUE("client_id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "billing"."pricelist" (
@@ -89,6 +90,15 @@ CREATE TABLE IF NOT EXISTS "user_accounts"."account" (
 	CONSTRAINT "account_provider_provider_account_id_pk" PRIMARY KEY("provider","provider_account_id")
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "user_accounts"."passwords_table" (
+	"pass_id" serial PRIMARY KEY NOT NULL,
+	"pass_created_at" timestamp DEFAULT now() NOT NULL,
+	"pass_updated_at" timestamp NOT NULL,
+	"user" text,
+	"password" text NOT NULL,
+	CONSTRAINT "passwords_table_user_unique" UNIQUE("user")
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user_accounts"."session" (
 	"session_token" varchar(255) PRIMARY KEY NOT NULL,
 	"user_id" varchar(255) NOT NULL,
@@ -116,7 +126,7 @@ CREATE TABLE IF NOT EXISTS "user_accounts"."visits" (
 	"visits_id" serial PRIMARY KEY NOT NULL,
 	"visits_created_at" timestamp DEFAULT now() NOT NULL,
 	"visits_updated_at" timestamp NOT NULL,
-	"metadata" jsonb DEFAULT '{"ua":{"ua":"","browser":{"name":"","version":""},"engine":{"name":"","version":""},"os":{"name":"","version":""},"device":{},"cpu":{"architecture":""},"isBot":false},"headers":{"accept":"","accept-encoding":"","accept-language":"","cache-control":"","connection":"","cookie":"","host":"","pragma":"","referer":"","sec-ch-ua":"","sec-ch-ua-mobile":"","sec-ch-ua-platform":"","sec-fetch-dest":"","sec-fetch-mode":"","sec-fetch-site":"","sec-gpc":"","user-agent":"","x-forwarded-for":"","x-forwarded-host":"","x-forwarded-port":"","x-forwarded-proto":""},"cookies":{"sessionId":"","userId":""},"geo":{"city":"","country":"","region":"","latitude":"","longitude":""},"ip":"","banned":{"isBanned":false,"time":"2024-09-19T21:50:22.407Z","duration":0}}'::jsonb,
+	"metadata" jsonb DEFAULT '{"ua":{"ua":"","browser":{"name":"","version":""},"engine":{"name":"","version":""},"os":{"name":"","version":""},"device":{},"cpu":{"architecture":""},"isBot":false},"headers":{"accept":"","accept-encoding":"","accept-language":"","cache-control":"","connection":"","cookie":"","host":"","pragma":"","referer":"","sec-ch-ua":"","sec-ch-ua-mobile":"","sec-ch-ua-platform":"","sec-fetch-dest":"","sec-fetch-mode":"","sec-fetch-site":"","sec-gpc":"","user-agent":"","x-forwarded-for":"","x-forwarded-host":"","x-forwarded-port":"","x-forwarded-proto":""},"cookies":{"sessionId":"","userId":""},"geo":{"city":"","country":"","region":"","latitude":"","longitude":""},"ip":"","banned":{"isBanned":false,"time":"2024-09-21T12:07:01.370Z","duration":0}}'::jsonb,
 	"client_id" text NOT NULL,
 	"visitor_id" uuid,
 	"count" integer,
