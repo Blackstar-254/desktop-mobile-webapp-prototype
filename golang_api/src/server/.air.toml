@@ -71,8 +71,8 @@ runner = "green"
 clean_on_exit = true
 
 [screen]
-clear_on_rebuild = true
-keep_scroll = false
+clear_on_rebuild = false
+keep_scroll = true
 
 # Enable live-reloading on the browser.
 [proxy]

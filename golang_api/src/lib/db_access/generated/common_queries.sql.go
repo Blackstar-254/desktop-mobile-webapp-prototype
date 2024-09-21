@@ -7,6 +7,8 @@ package db_access
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const getAllOrganisations = `-- name: GetAllOrganisations :many
@@ -44,4 +46,31 @@ func (q *Queries) GetAllOrganisations(ctx context.Context, db DBTX) ([]*BillingO
 		return nil, err
 	}
 	return items, nil
+}
+
+const getVisitMetadata = `-- name: GetVisitMetadata :one
+select visits_id, visits_created_at, visits_updated_at, metadata, client_id, visitor_id, count, user_id from user_accounts.visits 
+where visitor_id = $1
+limit 1
+`
+
+// GetVisitMetadata
+//
+//	select visits_id, visits_created_at, visits_updated_at, metadata, client_id, visitor_id, count, user_id from user_accounts.visits
+//	where visitor_id = $1
+//	limit 1
+func (q *Queries) GetVisitMetadata(ctx context.Context, db DBTX, visitorID pgtype.UUID) (*UserAccountsVisit, error) {
+	row := db.QueryRow(ctx, getVisitMetadata, visitorID)
+	var i UserAccountsVisit
+	err := row.Scan(
+		&i.VisitsID,
+		&i.VisitsCreatedAt,
+		&i.VisitsUpdatedAt,
+		&i.Metadata,
+		&i.ClientID,
+		&i.VisitorID,
+		&i.Count,
+		&i.UserID,
+	)
+	return &i, err
 }

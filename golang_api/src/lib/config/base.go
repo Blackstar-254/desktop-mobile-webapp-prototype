@@ -13,11 +13,11 @@ var Config = &ConfigStruct{
 
 type ConfigStruct struct {
 	*db.DatabaseEnv
-	BrowserPort string
+	API_PORT string
 }
 
 func init() {
-	Config.BrowserPort = ":" + os.Getenv("BROWSER_PORT")
+	Config.API_PORT = ":" + os.Getenv("GOLANG_API_PORT")
 
-	fmt.Println(Config.BrowserPort)
+	fmt.Println(Config.API_PORT)
 }

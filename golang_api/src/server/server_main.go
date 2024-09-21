@@ -15,7 +15,7 @@ var conf = config.Config
 
 func main() {
 	log.Println("Starting server ")
-	log.Println(fmt.Sprintf("\tlocalhost%s", conf.BrowserPort))
+	log.Println(fmt.Sprintf("\tlocalhost%s", conf.API_PORT))
 
 	ctx := cms_context.CreateNewContextWithParent(context.Background())
 

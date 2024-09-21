@@ -4,6 +4,8 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { ParseReturnType } from 'zod';
 
+import { logo } from "@blackstar/lib/globals.config.json"
+
 type MetaType = {
   property: string;
   content: string;
@@ -107,6 +109,8 @@ export default function MainSection({
 
   const HtmlHead = () => (
     <Head>
+      <link rel="icon" href={logo.src} />
+
       <title>{title}</title>
       {meta?.map((props) => (
         <meta {...props} />
@@ -155,36 +159,66 @@ export default function MainSection({
   );
 }
 
-type DesktopMainProps = {
+type CommonMainProps = {
   children?: React.ReactNode;
   session?: SessionType;
   heading?: string;
-};
+}
+
+type DesktopMainProps = {
+
+} & CommonMainProps;
 
 const CommonCss = {
   MainSection: 'w-screen min-h-screen overflow-x-clip',
-  MainDiv: 'w-full h-full p-2',
+  MainDiv: 'w-full h-full flex min-h-screen',
   Header: '',
   Nav: 'h-[3rem] text-black flex items-center h-full w-full',
 };
 
-export function DesktopMainSection({ children, heading }: DesktopMainProps) {
+
+type SideBarLinkType = {
+  href: string
+  label: string
+}
+
+const side_bar_links: SideBarLinkType[] = [
+  { href: "/dashboard", label: "dashboard" },
+  { href: "/dashboard/gallery", label: "gallery" },
+  { href: "/dashboard/blog", label: "blog" },
+  { href: "/dashboard/contact-forms", label: "contact forms" },
+  { href: "/dashboard/billing", label: "billing" },
+]
+
+export function DesktopMainSection({ children, heading, }: DesktopMainProps) {
+
   return (
     <main className={`${CommonCss.MainSection}`}>
       <DesktopNavbarSection {...{ heading: heading ?? '' }} />
       <div className={`${CommonCss.MainDiv}`}>
-        <h1 className="text-bold text-[3rem]">{heading}</h1>
-        {children}
+        <div className='w-[250px] bg-slate-200'>
+          {
+            side_bar_links.map((v) => {
+              return (
+                <a href={v.href} className='hover:bg-blue-200'>
+                  <div className='flex items-center m-2 rounded-md justify-center capitalize text-lg bg-white hover:bg-blue-200 hover:text-white'>
+                    {v.label}
+                  </div>
+                </a>
+              )
+            })
+          }
+        </div>
+        <div className='w-full p-2'><h1 className="text-bold text-[3rem]">{heading}</h1>
+          {children}</div>
       </div>
     </main>
   );
 }
 
 type MobileMainProps = {
-  children?: React.ReactNode;
-  session?: SessionType;
-  heading?: string;
-};
+
+} & CommonMainProps;
 
 export function MobileMainSection({ children, heading }: MobileMainProps) {
   return (
@@ -216,12 +250,12 @@ type CommonNavbarProps = {
 
 type DesktopNavbarSectionProps = {} & CommonNavbarProps;
 
-export function DesktopNavbarSection({ children }: DesktopNavbarSectionProps) {
+export function DesktopNavbarSection({ children, }: DesktopNavbarSectionProps) {
   return (
     <header className={`${CommonCss.Header}`}>
       <nav className={`${CommonCss.Nav}`}>
-        <div>
-          <img src="/logo.png" />
+        <div className='flex px-2'>
+          <img src={logo.src} alt={logo.alt} className='h-[3rem]' />
         </div>
         {children}
       </nav>
@@ -231,10 +265,14 @@ export function DesktopNavbarSection({ children }: DesktopNavbarSectionProps) {
 
 type MobileNavbarSectionProps = {} & CommonNavbarProps;
 
-export function MobileNavbarSection({ children }: MobileNavbarSectionProps) {
+export function MobileNavbarSection({ children, }: MobileNavbarSectionProps) {
   return (
     <header className={`${CommonCss.Header}`}>
-      <nav className={`${CommonCss.Nav}`}>{children}</nav>
+      <nav className={`${CommonCss.Nav}`}>
+        <div className='flex px-2'>
+          <img src={logo.src} alt={logo.alt} className='h-[3rem]' />
+        </div>
+        {children}</nav>
     </header>
   );
 }
