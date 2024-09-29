@@ -68,6 +68,10 @@ export const env = createEnv({
 		NEXT_PUBLIC_BLACKSTARTECH_CMS_URL: z.string().url(),
 		NEXT_PUBLIC_SUPABASE_API_KEY: z.string(),
 		NEXT_PUBLIC_SUPABASE_PROJECT_URL: z.string().url(),
+		NEXT_PUBLIC_CLIENT_ID:
+			process.env.NODE_ENV === "production"
+				? z.string().uuid()
+				: z.string().uuid().optional(),
 	},
 
 	/**
@@ -98,6 +102,7 @@ export const env = createEnv({
 		NEXT_PUBLIC_SUPABASE_API_KEY: process.env.NEXT_PUBLIC_SUPABASE_API_KEY,
 		NEXT_PUBLIC_SUPABASE_PROJECT_URL:
 			process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL,
+		NEXT_PUBLIC_CLIENT_ID: process.env.CLIENT_ID,
 
 		SUPABASE_SERVICE_ROLE_SECRET: process.env.SUPABASE_SERVICE_ROLE_SECRET,
 		SUPABASE_JWT_SECRET: process.env.SUPABASE_JWT_SECRET,

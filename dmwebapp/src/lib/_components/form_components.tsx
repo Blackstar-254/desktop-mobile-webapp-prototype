@@ -4,6 +4,7 @@ import React, { InputHTMLAttributes } from "react";
 export type InputElProps = {
     error_message?: string
     input_props: Record<string, any> & { name: string } & Partial<InputHTMLAttributes<any>>
+
 }
 
 export function InputEl({ error_message, input_props }: InputElProps) {

@@ -48,6 +48,57 @@ func (q *Queries) GetAllOrganisations(ctx context.Context, db DBTX) ([]*BillingO
 	return items, nil
 }
 
+const getSessionTokens = `-- name: GetSessionTokens :many
+select session_token, user_id, expires, "name", email, email_verified, image, client_org, contact_info from user_accounts."session" 
+right JOIN user_accounts."user" ON session.user_id = user_accounts."user".id
+`
+
+type GetSessionTokensRow struct {
+	SessionToken  *string            `json:"session_token"`
+	UserID        *string            `json:"user_id"`
+	Expires       pgtype.Timestamptz `json:"expires"`
+	Name          *string            `json:"name"`
+	Email         string             `json:"email"`
+	EmailVerified pgtype.Timestamptz `json:"email_verified"`
+	Image         *string            `json:"image"`
+	ClientOrg     *string            `json:"client_org"`
+	ContactInfo   []byte             `json:"contact_info"`
+}
+
+// GetSessionTokens
+//
+//	select session_token, user_id, expires, "name", email, email_verified, image, client_org, contact_info from user_accounts."session"
+//	right JOIN user_accounts."user" ON session.user_id = user_accounts."user".id
+func (q *Queries) GetSessionTokens(ctx context.Context, db DBTX) ([]*GetSessionTokensRow, error) {
+	rows, err := db.Query(ctx, getSessionTokens)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []*GetSessionTokensRow{}
+	for rows.Next() {
+		var i GetSessionTokensRow
+		if err := rows.Scan(
+			&i.SessionToken,
+			&i.UserID,
+			&i.Expires,
+			&i.Name,
+			&i.Email,
+			&i.EmailVerified,
+			&i.Image,
+			&i.ClientOrg,
+			&i.ContactInfo,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, &i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getVisitMetadata = `-- name: GetVisitMetadata :one
 select visits_id, visits_created_at, visits_updated_at, metadata, client_id, visitor_id, count, user_id from user_accounts.visits 
 where visitor_id = $1

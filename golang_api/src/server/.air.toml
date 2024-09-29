@@ -21,7 +21,7 @@ bin = "tmp/server_app.exe"
 # Watch these filename extensions.
 include_ext = ["go", "tpl", "tmpl", "html"]
 # Ignore these filename extensions or directories.
-exclude_dir = ["assets", "tmp", "vendor", "frontend", "drizzle_handler"]
+exclude_dir = ["assets", "tmp", "vendor", "frontend", "public"]
 # Watch these directories if you specified.
 include_dir = []
 # Watch these files.

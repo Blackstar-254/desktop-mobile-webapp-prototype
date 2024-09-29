@@ -15,6 +15,9 @@
   "linter": {
     "enabled": true,
     "rules": {
+      "a11y": {
+        "useKeyWithClickEvents": "info"
+      },
       "recommended": true,
       "complexity": {
         "noBannedTypes": "warn",
@@ -24,7 +27,8 @@
         "noUselessThisAlias": "warn",
         "noUselessTypeConstraint": "warn",
         "noWith": "warn",
-        "useLiteralKeys": "info"
+        "useLiteralKeys": "info",
+        "useOptionalChain": "info"
       },
       "correctness": {
         "noUnusedVariables": "warn",
@@ -59,7 +63,8 @@
         "useImportType": "warn",
         "noNamespace": "warn",
         "useAsConstAssertion": "warn",
-        "useConst": "info"
+        "useConst": "info",
+        "useNodejsImportProtocol": "info"
       },
       "suspicious": {
         "useAwait": "off",

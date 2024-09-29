@@ -154,31 +154,34 @@ const read_new_var_value = (key) => {
 
 const read_env = async () => {
 	for (const key of Object.keys(envItems)) {
+		const value = process.env[key];
 		switch (key) {
 			case "DATABASE_URL": {
 				envItems.DATABASE_URL = `postgres://${envItems.DATABASE_USER}:${envItems.DATABASE_PASSWORD}@${envItems.DATABASE_HOST}:${envItems.DATABASE_PORT.valueOf()}/${envItems.DATABASE_DATABASENAME}`;
 				break;
 			}
 			case "CLIENT_ID": {
-				envItems.CLIENT_ID = z
-					.string()
-					.uuid("client_id")
-					.safeParse(process.env[key]).success
-					? process.env[key]
+				envItems.CLIENT_ID = z.string().uuid("client_id").safeParse(value)
+					.success
+					? value
 					: crypto.randomUUID();
+
 				break;
 			}
-			case "NEXTAUTH_SECRET": {
-				envItems[key] =
-					process.env?.[key] &&
-					parse_nextauth_secret.safeParse(process.env[key]).success
-						? process.env[key]
-						: generate_secret().slice(0, 32);
+
+			case "NEXTAUTH_SECRET":
+				{
+					envItems[key] =
+						process.env?.[key] && parse_nextauth_secret.safeParse(value).success
+							? value
+							: generate_secret().slice(0, 32);
+					break;
+				}
+
 				break;
-			}
 			default:
 				if (process.env?.[key]?.length) {
-					envItems[key] = process.env[key];
+					envItems[key] = value;
 				} else {
 					envItems[key] = await read_new_var_value(key);
 				}

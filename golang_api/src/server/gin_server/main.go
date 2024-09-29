@@ -1,19 +1,19 @@
 package gin_server
 
 import (
-	"encoding/json"
+	"errors"
 	"fmt"
-	"net/http"
-	"strings"
-	"time"
-
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx/v5"
+	"log"
+	"net/http"
+	"os"
+	"time"
 
 	"github.com/Blackstar-254/desktop-mobile-webapp-prototype/tree/main/golang_api/lib/base"
 	"github.com/Blackstar-254/desktop-mobile-webapp-prototype/tree/main/golang_api/lib/config"
 	cms_context "github.com/Blackstar-254/desktop-mobile-webapp-prototype/tree/main/golang_api/lib/context"
 	db "github.com/Blackstar-254/desktop-mobile-webapp-prototype/tree/main/golang_api/lib/db_access"
+	db_access "github.com/Blackstar-254/desktop-mobile-webapp-prototype/tree/main/golang_api/lib/db_access/generated"
 )
 
 var conf = config.Config
@@ -26,6 +26,7 @@ func StartServer(ctx cms_context.Context, err_c chan error) {
 	defer ctx.Finished()
 	g_srv := gin.Default()
 
+	go GetListOfClientsFromDb(ctx.Add())
 	srv := http.Server{
 		Handler: g_srv,
 		Addr:    conf.API_PORT,
@@ -51,6 +52,19 @@ const (
 
 func ApiRouterGroup(ctx cms_context.Context, err_c chan error, api_g *gin.RouterGroup) {
 
+	go GetSessionListFromDb(ctx.Add())
+	api_g.Use(func(gtx *gin.Context) {
+
+		if !ConfirmSessionAuth(gtx) {
+			gtx.JSON(401, gin.H{
+				response_success: false,
+			})
+			gtx.Abort()
+			return
+		}
+
+		gtx.Next()
+	})
 	api_g.GET("/ping", func(gtx *gin.Context) {
 
 		gtx.JSON(200, gin.H{
@@ -60,73 +74,129 @@ func ApiRouterGroup(ctx cms_context.Context, err_c chan error, api_g *gin.Router
 
 	api_cms := api_g.Group("/cms")
 
-	api_cms.POST("/gallery/image", func(gtx *gin.Context) {
-
-		gtx.JSON(200, gin.H{
-			response_success: false,
-		})
-	})
+	ApiGalleryRouterGroup(ctx, err_c, api_cms.Group("/gallery"))
 
 }
 
 var HotCache = &HotCacheT{
-	M: base.NewMutexedMap[*HotCacheItemT](),
+	M:             base.NewMutexedMap[*HotCacheItemT](),
+	Organisations: base.NewMutexedMap[*db_access.BillingOrganisation](),
+	GalleryCache:  base.NewMutexedMap[*GalleryCacheItem](),
+	AuthCache:     base.NewMutexedMap[*AuthCacheItem](),
 }
 
-type HotCacheT struct {
-	M *base.MutexedMap[*HotCacheItemT]
-}
-type HotCacheItemT struct {
-	VisitorItem VisitorInfoT
-	ClientId    string
-	VisitorId   string
-	PrevUrl     map[string]time.Time
-	Banned      BannedItemT
+type AuthCacheItem struct {
+	*db_access.GetSessionTokensRow
+	LastLoad time.Time
 }
 
-func GetItemFromHotCacheGtx(gtx *gin.Context) (hc *HotCacheItemT) {
-	remote_ip := gtx.ClientIP()
-
-	hc = GetItemFromHotCache(remote_ip)
-	hc.ClientId = gtx.GetHeader("client-id")
-	return
-}
-
-func GetItemFromHotCache(new_ip string) (hc *HotCacheItemT) {
-	var ok bool
-	hc, ok = HotCache.M.Get(new_ip)
-	if ok {
-		return
+func ConfirmSessionAuth(gtx *gin.Context) bool {
+	defer fmt.Println("")
+	client_id := gtx.GetHeader("client-id")
+	if len(client_id) < 1 {
+		fmt.Printf("ERROR: no client-id in request; ")
+		return false
 	}
-	hc = &HotCacheItemT{}
-	HotCache.M.Set(new_ip, hc)
-	return
-}
-
-func TestJson(item any) bool {
-	d, err2 := json.MarshalIndent(item, " ", " ")
-	if err2 != nil {
-		fmt.Println("error: ", err2.Error())
-
+	if !HotCache.Organisations.Has(client_id) {
+		fmt.Printf("ERROR: invalid client-id in request: %s; ", client_id)
 		return false
 	}
 
-	fmt.Printf(string(d))
-	return true
-
-}
-
-func HandleDbErrors(conn *pgx.Conn, ctx cms_context.Context, err error) bool {
-	message := err.Error()
-
-	if strings.Contains(message, "SQLSTATE 42P05") {
-		err2 := conn.DeallocateAll(ctx)
-		if err2 != nil {
-			fmt.Println("err2: ", err2)
-		}
-		return err2 == nil
+	session_token := gtx.GetHeader("session-token")
+	if len(session_token) < 1 {
+		fmt.Printf("ERROR: no session-token in request")
+		return false
 	}
 
-	fmt.Printf("unhandled db error: %s\n", message)
-	return false
+	db_sess, ok := HotCache.AuthCache.Get(session_token)
+
+	if !ok || *db_sess.ClientOrg != client_id {
+		return false
+	}
+
+	return true
+}
+
+func GetListOfClientsFromDb(ctx cms_context.Context) {
+	defer ctx.Finished()
+	tc := time.NewTicker(time.Duration(60) * time.Minute)
+	create_dir := map[string]bool{}
+
+	for {
+		func(ctx cms_context.Context, create_dir map[string]bool) {
+
+			conn := get_conn(ctx)
+			defer ret_conn(conn, ctx)
+
+		retry_select_organisations:
+			res, err := db.DB.GetAllOrganisations(ctx, conn)
+			if err != nil {
+				if HandleDbErrors(conn, ctx, err) {
+					goto retry_select_organisations
+				}
+				log.Println("error: ", err)
+				os.Exit(-1)
+			}
+
+			for _, item := range res {
+				// TestJson(item)
+				fmt.Printf("client-id: %s added to HotCache\n", item.ClientID)
+				HotCache.Organisations.Set(item.ClientID, item)
+
+				if create_dir != nil && !create_dir[item.ClientID] {
+					err2 := os.MkdirAll(fmt.Sprintf("public/%s/images", item.ClientID), file_mode)
+					if err2 != nil && !errors.Is(err2, os.ErrExist) {
+						fmt.Println(err2.Error())
+					} else {
+						create_dir[item.ClientID] = true
+					}
+				}
+				if !HotCache.GalleryCache.Has(item.ClientID) {
+					GalleryJson(item.ClientID)
+				}
+
+			}
+
+		}(ctx, create_dir)
+		<-tc.C
+	}
+}
+
+func GetSessionListFromDb(ctx cms_context.Context) {
+	defer ctx.Finished()
+	tc := time.NewTicker(time.Duration(5) * time.Minute)
+
+	for {
+		func(ctx cms_context.Context) {
+
+			conn := get_conn(ctx)
+			defer ret_conn(conn, ctx)
+
+		retry_select_organisations:
+			res, err := db.DB.GetSessionTokens(ctx, conn)
+			if err != nil {
+				if HandleDbErrors(conn, ctx, err) {
+					goto retry_select_organisations
+				}
+				log.Println("error: ", err)
+				os.Exit(-1)
+			}
+
+			for _, item_pre := range res {
+				// TestJson(item)
+
+				if HotCache.AuthCache.Has(*item_pre.SessionToken) {
+					continue
+				}
+				item := &AuthCacheItem{
+					GetSessionTokensRow: item_pre,
+				}
+				fmt.Printf("SESSION_TOKEN: %s added to HotCache\n", *item.SessionToken)
+				HotCache.AuthCache.Set(*item.SessionToken, item)
+
+			}
+
+		}(ctx)
+		<-tc.C
+	}
 }

@@ -181,7 +181,7 @@ type DesktopMainProps = {
 
 const CommonCss = {
   MainSection: 'min-h-screen overflow-x-clip',
-  MainDiv: ' flex min-h-screen',
+  MainDiv: ' flex min-h-[95vh] overflow-y-auto',
   Header: '',
   Nav: 'h-[3rem] text-black flex items-center h-full w-full',
   auth_button: "bg-blue-400 hover:bg-black text-white text-bold capitalize px-2 rounded-md"
@@ -211,7 +211,7 @@ export function DesktopMainSection({ children, heading, session }: DesktopMainPr
           {
             side_bar_links.map((v) => {
               return (
-                <a href={v.href} className='hover:bg-blue-200'>
+                <a href={v.href} key={`link:${v.href}`} className='hover:bg-blue-200'>
                   <div className='flex items-center m-2 rounded-md justify-center capitalize text-lg bg-white hover:bg-blue-200 hover:text-white'>
                     {v.label}
                   </div>

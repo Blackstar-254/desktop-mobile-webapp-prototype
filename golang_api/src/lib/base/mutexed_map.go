@@ -38,6 +38,14 @@ func (mm *MutexedMap[T]) Get(key string) (t T, ok bool) {
 	return
 }
 
+func (mm *MutexedMap[T]) Has(key string) (ok bool) {
+	// log.Println("MutexedMap[T] ", key)
+	mm.RLock()
+	_, ok = mm.M[key]
+	mm.RUnlock()
+	// log.Println("MutexedMap[T] unlocked", key)
+	return
+}
 func (mm *MutexedMap[T]) Clear() {
 	mm.Lock()
 	clear(mm.M)

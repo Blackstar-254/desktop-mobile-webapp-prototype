@@ -44,6 +44,14 @@ export async function middleware(request: NextRequest) {
 		}
 	}
 
+	const session_token = request.cookies.has("next-auth.session-token");
+	if (!session_token) {
+		for (const protected_subroute of ["dashboard"]) {
+			if (nextUrl.pathname.includes(protected_subroute)) {
+				return NextResponse.redirect(`${base}/api/auth/signin`);
+			}
+		}
+	}
 	let res = NextResponse.next();
 	HandleVisitorCookies(request, res);
 
