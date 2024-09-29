@@ -1,5 +1,48 @@
 # COMMIT NOTES
 
+### 2024 September 29th, 17:54 PM GMT+3
+```sh
+1. Able to choose image
+2. working on posting to CMS 
+3. Need to setup push to Vercel and AWS
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is ahead of 'origin/main' by 2 commits.
+#   (use "git push" to publish your local commits)
+#
+# Changes to be committed:
+#	modified:   dmwebapp/biome.json
+#	modified:   dmwebapp/package-lock.json
+#	modified:   dmwebapp/package.json
+#	modified:   dmwebapp/src/env.js
+#	modified:   dmwebapp/src/lib/_components/form_components.tsx
+#	modified:   dmwebapp/src/lib/_components/main.tsx
+#	new file:   dmwebapp/src/lib/api/email_handlers.ts
+#	new file:   dmwebapp/src/lib/api/log_errors.ts
+#	modified:   dmwebapp/src/middleware.ts
+#	modified:   dmwebapp/src/pages/api/auth/[...nextauth].ts
+#	new file:   dmwebapp/src/pages/api/cms/log.ts
+#	modified:   dmwebapp/src/pages/dashboard/gallery/index.tsx
+#	modified:   dmwebapp/src/pages/dashboard/index.tsx
+#	deleted:    dmwebapp/src/pages/index.tsx
+#	modified:   dmwebapp/src/server/api/root.ts
+#	modified:   dmwebapp/src/server/api/routers/contact_forms.ts
+#	new file:   dmwebapp/src/server/api/routers/gallery.ts
+#	deleted:    dmwebapp/src/server/api/routers/post.ts
+#	modified:   dmwebapp/src/server/api/trpc.ts
+#	modified:   golang_api/src/lib/base/mutexed_map.go
+#	modified:   golang_api/src/lib/db_access/generated/common_queries.sql.go
+#	modified:   golang_api/src/lib/db_access/sql/queries/common_queries.sql
+#	modified:   golang_api/src/server/.air.toml
+#	new file:   golang_api/src/server/gin_server/gallery_handlers.go
+#	modified:   golang_api/src/server/gin_server/hot_cache_item.go
+#	modified:   golang_api/src/server/gin_server/main.go
+#	modified:   setup/lib/env_handler.js
+#
+```
+
 ### 2024 September 21st, 20:27 PM GMT+3
 ```sh
 1. using nextauth for authentication
