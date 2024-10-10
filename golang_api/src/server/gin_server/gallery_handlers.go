@@ -89,7 +89,7 @@ func SaveImagesEngine(ctx cms_context.Context, save_chan chan string) {
 			if exists {
 				cache_item.Save()
 			} else {
-				log.Println("client-id: ", client_id, " doesnt't exist")
+				log.Println("client-id: ", client_id, " doesn't exist")
 			}
 
 			continue
