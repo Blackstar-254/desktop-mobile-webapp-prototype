@@ -51,6 +51,7 @@ func (q *Queries) GetAllOrganisations(ctx context.Context, db DBTX) ([]*BillingO
 const getSessionTokens = `-- name: GetSessionTokens :many
 select session_token, user_id, expires, "name", email, email_verified, image, client_org, contact_info from user_accounts."session" 
 right JOIN user_accounts."user" ON session.user_id = user_accounts."user".id
+where expires > NOW()
 `
 
 type GetSessionTokensRow struct {
@@ -69,6 +70,7 @@ type GetSessionTokensRow struct {
 //
 //	select session_token, user_id, expires, "name", email, email_verified, image, client_org, contact_info from user_accounts."session"
 //	right JOIN user_accounts."user" ON session.user_id = user_accounts."user".id
+//	where expires > NOW()
 func (q *Queries) GetSessionTokens(ctx context.Context, db DBTX) ([]*GetSessionTokensRow, error) {
 	rows, err := db.Query(ctx, getSessionTokens)
 	if err != nil {

@@ -44,9 +44,9 @@ func HashFile(Fo *FileBasic, bs *BytesStore) (hash string, err error) {
 	return
 }
 
-func NewFileHashOpen(file_path string) (Fh *FileHash, err error) {
+func NewFileHashOpen(file_path string) (Fh FileHash, err error) {
 	loc := log_item.Loc("NewFileHashOpen(file_path string) (Fh *FileHash, err error)")
-	Fh = &FileHash{}
+	Fh = FileHash{}
 	var err1 error
 	Fh.FileBasic, err1 = Open(file_path)
 	if err1 != nil {

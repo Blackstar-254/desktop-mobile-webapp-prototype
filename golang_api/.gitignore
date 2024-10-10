@@ -21,6 +21,10 @@ network_package
 */tmp*
 /.git
 
+golang_api/**/*.jpg
+golang_api/**/*.png
+golang_api/**/*.webp
+
 build
 .env
 /logs
