@@ -1,5 +1,7 @@
 import { z } from 'zod';
+import { client } from '../initialise/index.js';
 const parse_uuid = z.string().uuid();
+const parse_string = z.string().min(`select`.length);
 /**
  * @typedef {{name:string, query_string:string}|{name:string, query_gen:(...any)=>string}} query_type
  */
@@ -27,4 +29,15 @@ limit 1`;
 right JOIN user_accounts."user" ON session.user_id = user_accounts."user".id
 where session.expires > NOW()`,
   },
+};
+
+/**
+ *
+ * @type {(query_string)=>Promise<any>}
+ */
+export const make_query = async (query_string) => {
+  parse_string.parse(query_string);
+  const good_response = await client.query(query_string);
+
+  return good_response?.rows ?? [];
 };
