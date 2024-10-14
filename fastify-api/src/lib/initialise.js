@@ -1,7 +1,6 @@
 // Import the framework and instantiate it
 import Fastify from 'fastify';
-import pg from 'pg';
-import { env } from '../../env.js';
+import { env } from '../env.js';
 
 import middie from '@fastify/middie';
 import cors from 'cors';
@@ -12,7 +11,7 @@ import hsts from 'hsts';
 import ienoopen from 'ienoopen';
 import xssProtection from 'x-xss-protection';
 import Client from 'pg/lib/client.js';
-import { getUnique } from '../utils/global_reference.js';
+import { getUnique } from './utils/global_reference.js';
 
 console.log('initialise server');
 
