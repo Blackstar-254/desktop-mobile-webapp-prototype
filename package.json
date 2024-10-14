@@ -9,10 +9,13 @@
     "setup:env": "node ./setup/lib/env_handler.js",
     "setup:db_schema": "node ./setup/lib/create_uniform_db_schema.js",
     "dev:golang_api": "cd golang_api/src/server && air",
+    "dev:fastify_api": "cd fastify-api && npm run dev",
     "dev:webapp": "cd dmwebapp &&  npm run refresh",
+    "dev:blackstar": "cd blackstar_cms &&  npm run refresh",
     "dev:setup:db_schema": "nodemon --config ./setup/nodemon_config/uniform_db_schema.json",
     "dev:make_routes": "nodemon --config ./setup/nodemon_config/make_routes.json",
-    "dev:json_recurse": "nodemon --config ./setup/nodemon_config/json_recurse.json"
+    "dev:json_recurse": "nodemon --config ./setup/nodemon_config/json_recurse.json",
+    "kill": "taskkill -im node* -f"
   },
   "keywords": [],
   "author": "",

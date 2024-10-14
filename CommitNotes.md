@@ -1,5 +1,73 @@
 # COMMIT NOTES
 
+### 2024 October 14th, 02:16 AM GMT+3
+```sh
+1. Implementing fastify-api as api for cms 
+2. implementing cross server communication 
+3. nodejs development is so far much faster than 
+golang
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   src/index.js
+#	modified:   src/lib/db/common_queries.js
+#	new file:   src/lib/db/users.js
+#	modified:   src/lib/initialise/index.js
+#	new file:   src/routes/api/cms.gallery.js
+#	new file:   src/routes/api/index.js
+#	modified:   src/routes/gallery.js
+#	new file:   test_bed/index.js
+#
+# Changes not staged for commit:
+#	modified:   ../.env.example
+#	modified:   ../.gitignore
+#	modified:   ../CommitNotes.md
+#	modified:   ../biome.json
+#	modified:   ../database_management/@types/env.d.ts
+#	modified:   ../database_management/src/env.js
+#	modified:   ../dmwebapp/src/env.js
+#	modified:   ../golang_api/src/lib/config/base.go
+#	modified:   ../package.json
+#	modified:   ../setup/lib/env_handler.js
+#
+# Untracked files:
+#	../blackstar_cms/
+#
+```
+
+### 2024 October 10th, 23:25 PM GMT+3
+```sh
+1. working on golang is taking too long and comp 
+is struggling, 
+implementing fastify api for faster development
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is ahead of 'origin/main' by 1 commit.
+#   (use "git push" to publish your local commits)
+#
+# Changes to be committed:
+#	modified:   .gitignore
+#	modified:   golang_api/.gitignore
+#	modified:   golang_api/src/lib/db_access/generated/common_queries.sql.go
+#	modified:   golang_api/src/lib/db_access/sql/queries/common_queries.sql
+#	modified:   golang_api/src/lib/file_handler/file_hash.go
+#	modified:   golang_api/src/server/gin_server/gallery_handlers.go
+#	new file:   golang_api/src/server/public/91ff7cee-bb4e-4551-a9c7-5b7f4a5326dc/images/116449445_3148661418504399_49363013400333769_n.png
+#	new file:   golang_api/src/server/public/91ff7cee-bb4e-4551-a9c7-5b7f4a5326dc/images/78997724_2591073760929837_2536989060933615616_n.png
+#	new file:   golang_api/src/server/public/91ff7cee-bb4e-4551-a9c7-5b7f4a5326dc/images/81358662_2629018217135391_4360776004680024064_n.png
+#	new file:   golang_api/src/server/public/91ff7cee-bb4e-4551-a9c7-5b7f4a5326dc/images/81668032_2655253744511838_6107655069295968256_n.png
+#	new file:   golang_api/src/server/public/91ff7cee-bb4e-4551-a9c7-5b7f4a5326dc/images/82220007_2655299367840609_4743437215428771840_n.png
+#	new file:   golang_api/src/server/public/91ff7cee-bb4e-4551-a9c7-5b7f4a5326dc/images/83930275_2709691425734736_48241966021869568_n.png
+#	new file:   golang_api/src/server/public/91ff7cee-bb4e-4551-a9c7-5b7f4a5326dc/images/88108975_2756600341043844_8218669132078383104_n.png
+#
+```
+
 ### 2024 September 29th, 17:54 PM GMT+3
 ```sh
 1. Able to choose image

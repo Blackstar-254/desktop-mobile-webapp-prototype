@@ -1,4 +1,4 @@
-import { fastify } from './lib/initialise/index.js';
+import { fastify } from './lib/initialise.js';
 import { env } from './env.js';
 import { getUnique } from './lib/utils/global_reference.js';
 import { make_query } from './lib/db/common_queries.js';

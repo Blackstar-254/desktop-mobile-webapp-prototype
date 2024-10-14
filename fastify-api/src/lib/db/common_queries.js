@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { client } from '../initialise/index.js';
+import { client } from '../initialise.js';
 const parse_uuid = z.string().uuid();
 const parse_string = z.string().min(`select`.length);
 /**

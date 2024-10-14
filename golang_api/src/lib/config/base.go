@@ -17,7 +17,7 @@ type ConfigStruct struct {
 }
 
 func init() {
-	Config.API_PORT = ":" + os.Getenv("GOLANG_API_PORT")
+	Config.API_PORT = ":" + os.Getenv("API_PORT")
 
 	fmt.Println(Config.API_PORT)
 }

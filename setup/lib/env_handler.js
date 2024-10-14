@@ -40,7 +40,7 @@ const envItemsSchema = z.object({
 	NEXTAUTH_SECRET: parse_nextauth_secret,
 	NEXTAUTH_URL: z.string().url(),
 
-	GOLANG_API_PORT: parse_port,
+	API_PORT: parse_port,
 	PORT: parse_port,
 	NEXT_PUBLIC_BLACKSTARTECH_CMS_URL: z.string().url(),
 
@@ -97,7 +97,7 @@ const envItems = {
 	NEXTAUTH_SECRET: "",
 	NEXTAUTH_URL: "http://localhost:3000",
 
-	GOLANG_API_PORT: "",
+	API_PORT: "",
 	PORT: "",
 	CLIENT_ID: "",
 	NEXT_PUBLIC_BLACKSTARTECH_CMS_URL: "",
@@ -200,6 +200,8 @@ const read_env = async () => {
 			"golang_api/src/server",
 			"dmwebapp",
 			"database_management",
+			"fastify-api",
+			"blackstar_cms"
 		]) {
 			fs.writeFileSync(`${folder}/.env`, envCreateString(true), {
 				flag: "w",
