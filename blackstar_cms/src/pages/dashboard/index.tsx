@@ -2,10 +2,12 @@ import { env } from '@blackstar/env';
 import MainSection from '@blackstar/lib/_components/main';
 import { send_log } from '@blackstar/lib/api/log_errors';
 import routes from "@blackstar/lib/utils/routes.json"
+import globals_config from "@blackstar/lib/globals.config.json"
 import { api } from '@blackstar/utils/api';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useCookies } from "react-cookie";
+import { useSession } from 'next-auth/react';
 
 
 type contact_forms_list_t = {
@@ -21,6 +23,7 @@ type contact_forms_list_t = {
 }[]
 
 export default function DashboardIndex() {
+  const session = useSession()
   const api_contact_forms = api.contactForms.view_all.useQuery()
   const [contact_forms_list, sContactFormsList] = React.useState<contact_forms_list_t>([])
   React.useEffect(() => {
@@ -105,8 +108,9 @@ export default function DashboardIndex() {
     <MainSection title="dashboard" heading="Dashboard">
       <div className='flex items-center justify-center w-full'>
         <iframe
-          src={true ? routes.test.Home : routes.index}
-          className={`h-[50vh] w-full`}
+          title="homepage"
+          src={session?.data?.org?.domain_name}
+          className="h-[50vh] w-full"
           sandbox='allow-forms allow-scripts allow-top-navigation allow-same-origin'
         />
       </div>

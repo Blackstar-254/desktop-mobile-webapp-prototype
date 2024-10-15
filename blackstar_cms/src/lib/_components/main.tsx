@@ -118,7 +118,7 @@ export default function MainSection({
     return (
       <>
         <HtmlHead />
-        <LoadingSection />
+        <LoadingSection loading={() => { return ((secure && session.status === 'loading') || screenWidth === '') }} />
       </>
     );
   }
@@ -256,11 +256,13 @@ export function MobileMainSection({ children, heading }: MobileMainProps) {
   );
 }
 
-export function LoadingSection({ children }: { children?: React.ReactNode }) {
+export function LoadingSection({ children, loading }: { children?: React.ReactNode, loading: () => boolean }) {
+  const [load_count, sLoadCount] = React.useState(0)
+
   return (
     <>
-      <div className="w-screen min-h-[80vh] flex items-center">
-        <div>Loading</div>
+      <div className="w-screen min-h-[80vh] flex items-center justify-center">
+        <div>Loading </div>
       </div>
     </>
   );
@@ -275,7 +277,16 @@ type CommonNavbarProps = {
 type DesktopNavbarSectionProps = {} & CommonNavbarProps;
 
 export function DesktopNavbarSection({ children, session }: DesktopNavbarSectionProps) {
+  const [session_data, sSessionData] = React.useState(session?.data)
+  React.useEffect(() => {
+    if (!session?.data) {
+      return
+    }
 
+    const { data, status } = session
+    console.log({ session: data, loc: "DesktopNavbarSection" })
+    sSessionData(session.data)
+  }, [session])
   return (
     <header className={`${CommonCss.Header}`}>
       <nav className={`${CommonCss.Nav}`}>
@@ -283,7 +294,14 @@ export function DesktopNavbarSection({ children, session }: DesktopNavbarSection
           <img src={logo.src} alt={logo.alt} className='h-[3rem]' />
         </div>
         {children}
-        <div className='flex flex-reverse ml-auto px-2'>
+        <div className='flex w-full items-center  '>
+          {session_data?.org?.domain_name}
+        </div>
+        <div className='flex flex-reverse ml-auto px-2 shrink-0'>
+
+          <div className='p-2'>
+            {session_data?.user?.name}
+          </div>
           {session?.status === 'authenticated' ?
             <button className={CommonCss.auth_button} type="button" onClick={() => signOut()}>Sign Out</button> :
             <button className={CommonCss.auth_button} type="button" onClick={() => signIn("email")}>Sign In</button>

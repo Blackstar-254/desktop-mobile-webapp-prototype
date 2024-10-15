@@ -1,16 +1,14 @@
 import { fastify } from './lib/initialise.js';
 import { env } from './env.js';
-import { getUnique } from './lib/utils/global_reference.js';
-import { make_query } from './lib/db/common_queries.js';
-import { users } from './lib/db/users.js';
-import { gallery_routes } from './routes/api/cms.gallery.js';
+import { api_routes } from './routes/api/index.js';
 // Declare a route
 fastify.get('/', async function handler(request, reply) {
   return { hello: 'world' };
 });
 
-Object.keys(gallery_routes).map((key) => {
-  fastify.get(key, gallery_routes[key]);
+Object.keys(api_routes).map((key) => {
+  fastify.get(key, api_routes[key]);
+  console.log(`registered route: ${key}`);
 });
 
 // Run the server!
