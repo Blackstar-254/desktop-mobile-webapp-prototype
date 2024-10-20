@@ -1,7 +1,7 @@
 // Import the framework and instantiate it
 import Fastify from 'fastify';
 import { env } from '../env.js';
-
+import fstatic from '@fastify/static';
 import middie from '@fastify/middie';
 import cors from 'cors';
 
@@ -12,6 +12,7 @@ import ienoopen from 'ienoopen';
 import xssProtection from 'x-xss-protection';
 import Client from 'pg/lib/client.js';
 import { getUnique } from './utils/global_reference.js';
+import path from 'path';
 
 console.log('initialise server');
 
@@ -59,3 +60,8 @@ fastify.use(frameGuard());
 fastify.use(hsts());
 fastify.use(ienoopen());
 fastify.use(xssProtection());
+const public_path = path.resolve('./public');
+await fastify.register(fstatic, {
+  root: public_path,
+});
+console.log(`public path: ${public_path}`);

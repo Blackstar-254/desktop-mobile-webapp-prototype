@@ -21,17 +21,3 @@ export default function PhotoIdPage() {
     </MainSection>
   );
 }
-
-
-
-function NewImageSubpage() {
-
-
-  return (
-    <MainSection
-      title={`dashboard/gallery/new`}
-      heading={'Dashboard Gallery'}>
-      {/* Dashboard */}
-    </MainSection>
-  );
-}

@@ -1,6 +1,6 @@
 import { env } from "@blackstar/env";
 import { InputEl } from "@blackstar/lib/_components/form_components";
-import MainSection from "@blackstar/lib/_components/main";
+import MainSection, { LoadingSection } from "@blackstar/lib/_components/main";
 import { image_t } from "@blackstar/server/api/routers/gallery";
 import { api } from "@blackstar/utils/api";
 import Image from "next/image";
@@ -10,10 +10,43 @@ import { useForm } from "react-hook-form";
 
 export default function DashboardGalleryIndex() {
   const gallery_images_list = api.dashboardGallery.view_all.useQuery();
+  const [images_list, sImagesList] = React.useState<image_t[]>()
+  React.useEffect(() => {
+    const { data, error, isLoading } = gallery_images_list
+    if (isLoading) {
+      return
+    }
+
+    if (data) {
+      sImagesList(data)
+    }
+
+
+  }, [gallery_images_list])
 
   return (
     <MainSection title="dashboard/gallery" heading="Gallery">
-      Gallery
+      <div className=" overflow-y-scroll">
+        <div className="flex flex-wrap">
+          <GalleryCard>
+            <div className=" w-[200px] h-[200px] m-auto bg-blue-200 rounded-md flex items-center justify-center">
+              <a href="/dashboard/gallery/new" className="p-2 rounded-md hover:bg-blue-400 hover:text-white">
+                Add New Image
+              </a>
+            </div>
+          </GalleryCard>
+          {
+            images_list?.length ?
+              images_list?.map((p, i) => {
+
+                return (
+                  <GalleryCard key={`photo:${i}`}>
+                    <img src={p.url} alt={p.alt} className="max-h-full w-full" />
+                  </GalleryCard>
+                )
+              }) : <GalleryCard><LoadingSection loading={() => images_list !== undefined} /></GalleryCard>}
+        </div>
+      </div>
     </MainSection>
   );
 }
@@ -23,7 +56,7 @@ type GalleryCardProps = {
 };
 function GalleryCard({ children }: GalleryCardProps) {
   return (
-    <div className="flex flex-col p-2 m-2 rounded-md hover:border-blue-500 border-2 border-blue-100 w-[40vw] lg:w-[30vw] justify-center items-center bg-white overflow-clip relative">
+    <div className="max-w-[300px]  max-h-[300px] items-center p-2 m-2 border-2 border-blue-300 hover:border-blue-600">
       {children}
     </div>
   );

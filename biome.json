@@ -60,7 +60,7 @@
         "useImportType": "warn",
         "noNamespace": "warn",
         "useAsConstAssertion": "warn",
-        "useConst": "info",
+        "useConst": "off",
         "useNodejsImportProtocol": "info",
         "noUnusedTemplateLiteral": "info"
       },

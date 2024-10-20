@@ -19,6 +19,11 @@ export type image_t = {
   label: string;
   url: string;
   alt: string;
+
+  name: string;
+  uuid: string;
+  size: number;
+  type: string;
 };
 
 export const dashboardGallery = createTRPCRouter({
@@ -42,7 +47,6 @@ export const dashboardGallery = createTRPCRouter({
         headers: {
           'client-id': env.CLIENT_ID,
           'visitor-id': ctx.visitor_id ?? '',
-          'session-token': session_token,
         },
       },
     )
@@ -50,6 +54,13 @@ export const dashboardGallery = createTRPCRouter({
       .catch((err) => console.log(err));
 
     console.log(JSON.stringify({ a }, null, 4));
+
+    if (a?.success && a?.metadata?.photos) {
+      return (a?.metadata?.photos as unknown as image_t[]).map((v) => ({
+        ...v,
+        url: `${env.NEXT_PUBLIC_BLACKSTARTECH_CMS_URL}/${v.url}`,
+      }));
+    }
 
     return [];
   }),

@@ -1,21 +1,58 @@
 import { users } from '../../lib/db/users.js';
 import fs from 'fs';
 import { getUnique } from '../../lib/utils/global_reference.js';
+import { make_query } from '../../lib/db/common_queries.js';
+import { z } from 'zod';
+
+const parse_uuid = z.string().uuid();
 
 /**
  * @type {Record<string, RouteHandlerMethod>}
  */
 export const gallery_routes = {
-  '/api/cms/gallery': async function handler(request, reply) {
+  'GET,POST|/api/cms/gallery': async function handler(request, reply) {
     const { body, method, url, headers } = request;
-    const { 'client-id': client_id, 'visitor-id': visitor_id } = headers;
+    const [client_id, visitor_id] = [
+      headers['client-id'],
+      headers['visitor-id'],
+    ];
 
-    if (!client_id || !visitor_id) {
+    if (
+      !client_id ||
+      !visitor_id ||
+      !parse_uuid.safeParse(client_id).success ||
+      !parse_uuid.safeParse(visitor_id).success
+    ) {
+      console.log(`client_id: ${client_id}, visitor-id: ${visitor_id}`);
+      console.log({ headers });
       return { success: false };
     }
 
     const user = users.data[client_id];
-    const { metadata, valid } = await setup_gallery(client_id);
+    switch (method) {
+      case 'GET':
+        {
+          const { metadata, valid } = await setup_gallery(client_id);
+          return { success: true, metadata };
+        }
+        break;
+      case 'POST': {
+        /** @type {Record<string,any>} */
+        let Data = {};
+        try {
+          const tmp = JSON.parse(body);
+          Object.keys(tmp).map((key) => {
+            Data[key] = tmp[key];
+          });
+          console.log({ Data, tmp });
+        } catch (err) {
+          console.log({
+            headers,
+            error: err,
+          });
+        }
+      }
+    }
 
     console.log({ method, url, headers, user, client_id });
     return { success: false };
@@ -24,8 +61,19 @@ export const gallery_routes = {
 
 /**
  * @typedef {{
+ * name:string,
+ * url:string,
+ * uuid:string
+ * size:number
+ * type:string
+ *  label: string
+ * url: string
+ * alt: string
+ * }} photo_t
+ *
+ * @typedef {{
  *  client_id:string
- *  photos: Array<{name:string,route:string,uuid?:string}>
+ *  photos: Array<photo_t>
  * }} metadata_t
  *
  * @type {(client_id:string)=>({valid:boolean, metadata:Record<string,any> & Partial<metadata_t> })}}
@@ -45,6 +93,7 @@ var setup_gallery = async (client_id) => {
     photos: [],
   };
   const metadata_filename = `${gallery_static_dir}/metadata`;
+  let make_write = false;
   if (fs.existsSync(metadata_filename)) {
     const filedata = fs.readFileSync(metadata_filename, {
       encoding: 'utf-8',
@@ -59,6 +108,8 @@ var setup_gallery = async (client_id) => {
     } catch (err) {
       console.error({ err, loc: 'setup_gallery' });
     }
+  } else {
+    make_write = true;
   }
 
   const files = fs.readdirSync(gallery_static_dir, {
@@ -66,6 +117,14 @@ var setup_gallery = async (client_id) => {
     withFileTypes: true,
   });
 
+  /**
+   * @type {Record<string,photo_t>}
+   *
+   */
+  let unique_file = {};
+  metadata.photos.map((value) => {
+    unique_file[value.url] = value;
+  });
   files
     .filter((v) => {
       if (v.name === 'metadata') {
@@ -88,14 +147,35 @@ var setup_gallery = async (client_id) => {
 
       return false;
     })
+    .filter((v) => v.parentPath.includes(client_id))
     .map((file, i) => {
-      console.log({ file });
+      let file_p = `${file.parentPath}/${file.name}`;
+      console.log({ file_p });
+      const url = file_p.slice('public/'.length);
+      if (unique_file[url]) {
+        return;
+      }
+
+      const stats = fs.statSync(file_p);
+      unique_file[url] = {
+        name: file.name,
+        url,
+        uuid: crypto.randomUUID(),
+        size: stats.size,
+        label: '',
+        alt: '',
+      };
+      make_write = true;
     });
 
-  fs.writeFileSync(metadata_filename, JSON.stringify(metadata, null, 2), {
-    encoding: 'utf-8',
-    flag: 'w',
-  });
+  if (make_write) {
+    metadata.photos = [...Object.values(unique_file)];
+
+    fs.writeFileSync(metadata_filename, JSON.stringify(metadata, null, 2), {
+      encoding: 'utf-8',
+      flag: 'w',
+    });
+  }
 
   return {
     valid: true,

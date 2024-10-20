@@ -1,5 +1,212 @@
 # COMMIT NOTES
 
+### 2024 October 15thm 15:00 PM GMT+3
+```sh
+1. using blackstar_cms as main app, 
+2. will create client apps per client 
+3. introduce fastify, and regularise routes api
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   blackstar_cms/src/lib/_components/main.tsx
+#	modified:   blackstar_cms/src/middleware.ts
+#	modified:   blackstar_cms/src/pages/dashboard/index.tsx
+#	new file:   blackstar_cms/src/pages/dashboard/profile/index.tsx
+#	modified:   blackstar_cms/src/pages/index.tsx
+#	modified:   blackstar_cms/src/server/auth.ts
+#	deleted:    dmwebapp/.env.example
+#	deleted:    dmwebapp/.gitignore
+#	deleted:    dmwebapp/README.md
+#	deleted:    dmwebapp/biome.json
+#	deleted:    dmwebapp/cache/config.json
+#	deleted:    dmwebapp/drizzle.config.ts
+#	deleted:    dmwebapp/make_routes.cjs
+#	deleted:    dmwebapp/next.config.js
+#	deleted:    dmwebapp/package-lock.json
+#	deleted:    dmwebapp/package.json
+#	deleted:    dmwebapp/postcss.config.cjs
+#	deleted:    dmwebapp/public/error-message-images/404-Colorlib-Error-Page-Template-v9.webp
+#	deleted:    dmwebapp/public/error-message-images/404-dialog-box-triangle.webp
+#	deleted:    dmwebapp/public/error-message-images/404-error-page-isometric-scene.webp
+#	deleted:    dmwebapp/public/error-message-images/404-error-page-or-file-not-found-icon.png
+#	deleted:    dmwebapp/public/error-message-images/404-error-page-vector-design.webp
+#	deleted:    dmwebapp/public/error-message-images/404-message-boxes.webp
+#	deleted:    dmwebapp/public/error-message-images/500-error-page-001.webp
+#	deleted:    dmwebapp/public/error-message-images/500-error-page-002.png
+#	deleted:    dmwebapp/public/error-message-images/500-error-page-003.png
+#	deleted:    dmwebapp/public/error-message-images/Animated-500-Error.webp
+#	deleted:    dmwebapp/public/favicon.ico
+#	deleted:    dmwebapp/public/logo.png
+#	deleted:    dmwebapp/public/test/Gallery.css
+#	deleted:    dmwebapp/public/test/Gallery.html
+#	deleted:    dmwebapp/public/test/Home.html
+#	deleted:    dmwebapp/public/test/images/10486568.png
+#	deleted:    dmwebapp/public/test/images/116449445_3148661418504399_49363013400333769_n.png
+#	deleted:    dmwebapp/public/test/images/121352197_3369841003053105_51205684272514932_n.png
+#	deleted:    dmwebapp/public/test/images/130285072_3525514494152421_1544287742367305442_n.png
+#	deleted:    dmwebapp/public/test/images/186543141_153732450098724_5169552202587625704_n.png
+#	deleted:    dmwebapp/public/test/images/191047715_160386636099972_3067390665334471319_n.png
+#	deleted:    dmwebapp/public/test/images/284294744_410474884424478_3955126763285761820_n.png
+#	deleted:    dmwebapp/public/test/images/287295230_424870179651615_8639128166918859655_n.png
+#	deleted:    dmwebapp/public/test/images/293229472_440831021388864_4550485181881416156_n.png
+#	deleted:    dmwebapp/public/test/images/309477480_499565025515463_8751996586965130244_n.png
+#	deleted:    dmwebapp/public/test/images/78997724_2591073760929837_2536989060933615616_n.png
+#	deleted:    dmwebapp/public/test/images/81358662_2629018217135391_4360776004680024064_n.png
+#	deleted:    dmwebapp/public/test/images/81668032_2655253744511838_6107655069295968256_n.png
+#	deleted:    dmwebapp/public/test/images/82220007_2655299367840609_4743437215428771840_n.png
+#	deleted:    dmwebapp/public/test/images/83930275_2709691425734736_48241966021869568_n.png
+#	deleted:    dmwebapp/public/test/images/88108975_2756600341043844_8218669132078383104_n.png
+#	deleted:    dmwebapp/public/test/images/brimage_fotos_logo_Fotor.png
+#	deleted:    dmwebapp/public/test/images/business-team-5.jpg
+#	deleted:    dmwebapp/public/test/images/default-image.jpg
+#	deleted:    dmwebapp/public/test/index.css
+#	deleted:    dmwebapp/public/test/index.html
+#	deleted:    dmwebapp/public/test/intlTelInput/intlTelInput.css
+#	deleted:    dmwebapp/public/test/intlTelInput/intlTelInput.min.js
+#	deleted:    dmwebapp/public/test/intlTelInput/utils.js
+#	deleted:    dmwebapp/public/test/jquery.js
+#	deleted:    dmwebapp/public/test/nicepage.css
+#	deleted:    dmwebapp/public/test/nicepage.js
+#	deleted:    dmwebapp/src/env.js
+#	deleted:    dmwebapp/src/lib/_components/form_components.tsx
+#	deleted:    dmwebapp/src/lib/_components/html_templates/user_verification_email.html
+#	deleted:    dmwebapp/src/lib/_components/main.tsx
+#	deleted:    dmwebapp/src/lib/api/auth.ts
+#	deleted:    dmwebapp/src/lib/api/contact_us_forms.ts
+#	deleted:    dmwebapp/src/lib/api/email_handlers.ts
+#	deleted:    dmwebapp/src/lib/api/log_errors.ts
+#	deleted:    dmwebapp/src/lib/db_accessories/client.ts
+#	deleted:    dmwebapp/src/lib/globals.config.json
+#	deleted:    dmwebapp/src/lib/middleware/check_visitors.ts
+#	deleted:    dmwebapp/src/lib/utils/cache_global.ts
+#	deleted:    dmwebapp/src/lib/utils/resources_urls.json
+#	deleted:    dmwebapp/src/middleware.ts
+#	deleted:    dmwebapp/src/pages/404.tsx
+#	deleted:    dmwebapp/src/pages/_app.tsx
+#	deleted:    dmwebapp/src/pages/_auth/[...auth].tsx
+#	deleted:    dmwebapp/src/pages/_auth/index.tsx
+#	deleted:    dmwebapp/src/pages/api/auth/[...nextauth].ts
+#	deleted:    dmwebapp/src/pages/api/cms/client-id.ts
+#	deleted:    dmwebapp/src/pages/api/cms/log.ts
+#	deleted:    dmwebapp/src/pages/api/cms/visitors.ts
+#	deleted:    dmwebapp/src/pages/api/forms/contact-us.ts
+#	deleted:    dmwebapp/src/pages/api/trpc/[trpc].ts
+#	deleted:    dmwebapp/src/pages/blogs/[blog-id]/index.tsx
+#	deleted:    dmwebapp/src/pages/blogs/index.tsx
+#	deleted:    dmwebapp/src/pages/dashboard/billing/[bill-id]/index.tsx
+#	deleted:    dmwebapp/src/pages/dashboard/billing/index.tsx
+#	deleted:    dmwebapp/src/pages/dashboard/blog/[blog-id]/index.tsx
+#	deleted:    dmwebapp/src/pages/dashboard/blog/index.tsx
+#	deleted:    dmwebapp/src/pages/dashboard/contact-forms/index.tsx
+#	deleted:    dmwebapp/src/pages/dashboard/email/index.tsx
+#	deleted:    dmwebapp/src/pages/dashboard/gallery/[photo-id].tsx
+#	deleted:    dmwebapp/src/pages/dashboard/gallery/index.tsx
+#	deleted:    dmwebapp/src/pages/dashboard/index.tsx
+#	deleted:    dmwebapp/src/pages/dashboard/seo.tsx
+#	deleted:    dmwebapp/src/pages/gallery/[photo-id].tsx
+#	deleted:    dmwebapp/src/pages/gallery/index.tsx
+#	deleted:    dmwebapp/src/server/api/root.ts
+#	deleted:    dmwebapp/src/server/api/routers/contact_forms.ts
+#	deleted:    dmwebapp/src/server/api/routers/gallery.ts
+#	deleted:    dmwebapp/src/server/api/trpc.ts
+#	deleted:    dmwebapp/src/server/auth.ts
+#	deleted:    dmwebapp/src/server/db/index.ts
+#	deleted:    dmwebapp/src/server/db/schema/index.ts
+#	deleted:    dmwebapp/src/server/db/schema/table_common.ts
+#	deleted:    dmwebapp/src/server/db/schema/tables.billing.ts
+#	deleted:    dmwebapp/src/server/db/schema/tables.content.ts
+#	deleted:    dmwebapp/src/server/db/schema/tables.public.ts
+#	deleted:    dmwebapp/src/server/db/schema/tables.user_accounts.ts
+#	deleted:    dmwebapp/src/server/db/schema/utils/common_types.ts
+#	deleted:    dmwebapp/src/server/db/schema/utils/contact_info.ts
+#	deleted:    dmwebapp/src/server/db/schema/utils/custom_json_type.ts
+#	deleted:    dmwebapp/src/server/db/schema/utils/index.ts
+#	deleted:    dmwebapp/src/server/db/schema/utils/valid_schemas.ts
+#	deleted:    dmwebapp/src/server/db/schema/utils/visitor_info.ts
+#	deleted:    dmwebapp/src/styles/base.css
+#	deleted:    dmwebapp/src/styles/globals.css
+#	deleted:    dmwebapp/src/styles/tailwind.css
+#	deleted:    dmwebapp/src/utils/api.ts
+#	deleted:    dmwebapp/tailwind.config.ts
+#	deleted:    dmwebapp/test_data.txt
+#	deleted:    dmwebapp/tsconfig.json
+#	modified:   fastify-api/src/index.js
+#	modified:   fastify-api/src/lib/utils/server_types.js
+#	modified:   fastify-api/src/routes/api/cms.gallery.js
+#	modified:   fastify-api/src/routes/api/index.js
+#	new file:   fastify-api/src/routes/index.js
+#	deleted:    golang_api/.gitignore
+#	deleted:    golang_api/CommitNotes.md
+#	deleted:    golang_api/dev_frontend.cmd
+#	deleted:    golang_api/dev_server.cmd
+#	deleted:    golang_api/post_cmd.txt
+#	deleted:    golang_api/postgres_error_codes.md
+#	deleted:    golang_api/scripts/bash/dev_dev.ps1
+#	deleted:    golang_api/scripts/bash/dev_peer.cmd
+#	deleted:    golang_api/scripts/bash/dev_server.cmd
+#	deleted:    golang_api/scripts/setup_script.sh
+#	deleted:    golang_api/src/go.mod
+#	deleted:    golang_api/src/go.sum
+#	deleted:    golang_api/src/lib/base/atomic_json.go
+#	deleted:    golang_api/src/lib/base/base.go
+#	deleted:    golang_api/src/lib/base/buffer_pool.go
+#	deleted:    golang_api/src/lib/base/init.go
+#	deleted:    golang_api/src/lib/base/ip_handling.go
+#	deleted:    golang_api/src/lib/base/mutexed_map.go
+#	deleted:    golang_api/src/lib/base/os_termination_signal.go
+#	deleted:    golang_api/src/lib/base/string_operations.go
+#	deleted:    golang_api/src/lib/base/utils.go
+#	deleted:    golang_api/src/lib/config/base.go
+#	deleted:    golang_api/src/lib/context/context.go
+#	deleted:    golang_api/src/lib/cors/cors_test.go
+#	deleted:    golang_api/src/lib/cors/hash_javascript.go
+#	deleted:    golang_api/src/lib/cors/hash_javascript_directory.go
+#	deleted:    golang_api/src/lib/cors/types.go
+#	deleted:    golang_api/src/lib/db_access/db_main.go
+#	deleted:    golang_api/src/lib/db_access/generated/common_queries.sql.go
+#	deleted:    golang_api/src/lib/db_access/generated/db.go
+#	deleted:    golang_api/src/lib/db_access/generated/models.go
+#	deleted:    golang_api/src/lib/db_access/init/common_queries.sql
+#	deleted:    golang_api/src/lib/db_access/sql/queries/common_queries.sql
+#	deleted:    golang_api/src/lib/db_access/sql/schema/0000_shiny_dreadnoughts.sql
+#	deleted:    golang_api/src/lib/db_access/sql/schema/constraints_schema.sql
+#	deleted:    golang_api/src/lib/file_handler/bytes_store.go
+#	deleted:    golang_api/src/lib/file_handler/file_basic.go
+#	deleted:    golang_api/src/lib/file_handler/file_hash.go
+#	deleted:    golang_api/src/lib/file_handler/lock_file.go
+#	deleted:    golang_api/src/lib/file_handler/read_csv.go
+#	deleted:    golang_api/src/lib/logging/log_item/v2/log_item_type.go
+#	deleted:    golang_api/src/lib/logging/logger_engine.go
+#	deleted:    golang_api/src/lib/logging/logger_type.go
+#	deleted:    golang_api/src/lib/logging/writer_type.go
+#	deleted:    golang_api/src/lib/tls_handler/cert_data.go
+#	deleted:    golang_api/src/lib/tls_handler/cert_handler_2.go
+#	deleted:    golang_api/src/peer/.air.toml
+#	deleted:    golang_api/src/peer/peer_main.go
+#	deleted:    golang_api/src/post_cmd.txt
+#	deleted:    golang_api/src/public/index.html
+#	deleted:    golang_api/src/server/.air.toml
+#	deleted:    golang_api/src/server/gin_server/gallery_handlers.go
+#	deleted:    golang_api/src/server/gin_server/hot_cache_item.go
+#	deleted:    golang_api/src/server/gin_server/main.go
+#	deleted:    golang_api/src/server/gin_server/visitor_info.go
+#	deleted:    golang_api/src/server/post_cmd.txt
+#	deleted:    golang_api/src/server/public/91ff7cee-bb4e-4551-a9c7-5b7f4a5326dc/images/116449445_3148661418504399_49363013400333769_n.png
+#	deleted:    golang_api/src/server/public/91ff7cee-bb4e-4551-a9c7-5b7f4a5326dc/images/78997724_2591073760929837_2536989060933615616_n.png
+#	deleted:    golang_api/src/server/public/91ff7cee-bb4e-4551-a9c7-5b7f4a5326dc/images/81358662_2629018217135391_4360776004680024064_n.png
+#	deleted:    golang_api/src/server/public/91ff7cee-bb4e-4551-a9c7-5b7f4a5326dc/images/81668032_2655253744511838_6107655069295968256_n.png
+#	deleted:    golang_api/src/server/public/91ff7cee-bb4e-4551-a9c7-5b7f4a5326dc/images/82220007_2655299367840609_4743437215428771840_n.png
+#	deleted:    golang_api/src/server/public/91ff7cee-bb4e-4551-a9c7-5b7f4a5326dc/images/83930275_2709691425734736_48241966021869568_n.png
+#	deleted:    golang_api/src/server/public/91ff7cee-bb4e-4551-a9c7-5b7f4a5326dc/images/88108975_2756600341043844_8218669132078383104_n.png
+#	deleted:    golang_api/src/server/server_main.go
+#	deleted:    golang_api/src/sqlc.yaml
+#
+```
+
 ### 2024 October 14th, 02:16 AM GMT+3
 ```sh
 1. Implementing fastify-api as api for cms 

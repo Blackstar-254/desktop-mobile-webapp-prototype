@@ -118,50 +118,19 @@ export default function MainSection({
     return (
       <>
         <HtmlHead />
-        <LoadingSection loading={() => { return ((secure && session.status === 'loading') || screenWidth === '') }} />
+        <LoadingSection />
       </>
     );
   }
 
-  switch (screenWidth) {
-    case 'mobile':
-    case 'tablet':
-      return (
-        <>
-          <HtmlHead />
-          <MobileMainSection {...{ session, heading }}>
-            {children}
-          </MobileMainSection>
-        </>
-      );
-
-    case 'laptop':
-    case 'desktop':
-      if (session.status !== 'authenticated') {
-        return (
-          <>
-            <HtmlHead />
-            <DesktopMainNoSessionSection {...{ session, heading }}>
-              {children}
-            </DesktopMainNoSessionSection>
-          </>
-        )
-      }
-      return (
-        <>
-          <HtmlHead />
-          <DesktopMainSection {...{ session, heading }}>
-            {children}
-          </DesktopMainSection>
-        </>
-      );
-  }
 
   // we are unlikely to reach here
   return (
     <>
       <HtmlHead />
-      <main> {children} </main>
+      <DesktopMainSection {...{ session, heading }}>
+        {children}
+      </DesktopMainSection>
     </>
   );
 }
@@ -178,7 +147,7 @@ type DesktopMainProps = {
 
 const CommonCss = {
   MainSection: 'min-h-screen overflow-x-clip',
-  MainDiv: ' flex min-h-[95vh] overflow-y-auto',
+  MainDiv: ' flex h-[calc(100vh-3rem)] overflow-y-auto',
   Header: '',
   Nav: 'h-[3rem] text-black flex items-center h-full w-full',
   auth_button: "bg-blue-400 hover:bg-black text-white text-bold capitalize px-2 rounded-md"
@@ -256,8 +225,8 @@ export function MobileMainSection({ children, heading }: MobileMainProps) {
   );
 }
 
-export function LoadingSection({ children, loading }: { children?: React.ReactNode, loading: () => boolean }) {
-  const [load_count, sLoadCount] = React.useState(0)
+export function LoadingSection({ children, }: { children?: React.ReactNode, }) {
+
 
   return (
     <>
