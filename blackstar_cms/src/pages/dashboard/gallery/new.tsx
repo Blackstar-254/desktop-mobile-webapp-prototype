@@ -3,11 +3,11 @@ import MainSection from '@blackstar/lib/_components/main';
 import { getServerAuthSession } from '@blackstar/server/auth';
 import type { GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import { NextRouter, useRouter } from 'next/router';
 import { zodResolver } from "@hookform/resolvers/zod"
-import React from 'react';
+import React, { DetailedHTMLProps, InputHTMLAttributes } from 'react';
 import { useCookies } from 'react-cookie';
-import { useForm } from 'react-hook-form';
+import { FieldValues, Path, useForm, UseFormReturn } from 'react-hook-form';
 import { FaX } from "react-icons/fa6";
 import { z } from 'zod';
 
@@ -33,7 +33,16 @@ export const getServerSide: GetServerSideProps = async (ctx) => {
     }
 }
 
-export default function PhotoIdPage({ client_id, visitor_id }: { client_id: string, visitor_id: string }) {
+const form_schema = z.object({
+    img_name: z.string().min(3, "too short"),
+    key_words: z.string().optional(),
+    description: z.string().min(12, "too short"),
+    alt: z.string().min(3, "too short"),
+    file: z.any(),
+
+})
+
+export default function PhotoIdPage() {
     const router = useRouter()
     const session = useSession()
     const cookies = useCookies()
@@ -50,14 +59,7 @@ export default function PhotoIdPage({ client_id, visitor_id }: { client_id: stri
         }
     }, [router])
 
-    const form_schema = z.object({
-        img_name: z.string().min(3, "too short"),
-        key_words: z.string().optional(),
-        description: z.string().min(12, "too short"),
-        alt: z.string().min(3, "too short"),
-        file: z.any(),
 
-    })
     const [default_data, sFormData] = React.useState({
         img_name: "",
         key_words: "",
@@ -65,9 +67,38 @@ export default function PhotoIdPage({ client_id, visitor_id }: { client_id: stri
         alt: "",
         file: new File([], ""),
     })
+    const [auto_focus, sAutoFocus] = React.useState({
+        img_name: false,
+        key_words: false,
+        description: false,
+        alt: false,
+        file: false,
+    })
+    const focus_on = (e: keyof typeof auto_focus) => {
+        sAutoFocus((curr) => {
+
+            let next = curr
+            Object.keys(curr).map((k) => {
+                let key = k as unknown as keyof typeof auto_focus
+                next[key] = false
+
+            })
+            next[e] = true
+            return next
+        })
+    }
+    const input_id = {
+        img_name: React.useId(),
+        key_words: React.useId(),
+        description: React.useId(),
+        alt: React.useId(),
+        file: React.useId(),
+    }
     const [keywords_map, sKeywordsMap] = React.useState<Record<string, string>>({})
     const form_object = useForm({
         defaultValues: default_data,
+        reValidateMode: 'onSubmit',
+        mode: 'onSubmit',
         delayError: 200,
         resolver: zodResolver(form_schema),
     },
@@ -77,6 +108,14 @@ export default function PhotoIdPage({ client_id, visitor_id }: { client_id: stri
     const [file, sFile] = React.useState<File>()
 
     const { errors } = form_object.formState
+    const [keywords_autofocus, sKeywordsAutofocus] = React.useState(false)
+
+    const form_id = React.useId()
+    // const keywords_id = React.useId()
+    const defocus_keywords = () => sKeywordsAutofocus(false)
+    React.useEffect(() => {
+        console.log({ errors, loc: "formState" })
+    }, [keywords_map])
 
     const onSubmit = form_object.handleSubmit(async (data) => {
         const id_data = await fetch("/api/cms/client-id").then((res) => res.json())
@@ -116,26 +155,33 @@ export default function PhotoIdPage({ client_id, visitor_id }: { client_id: stri
     })
 
 
+
     return (
         <MainSection
             title={"Add New Photo"}
             heading={'New Photo'}>
             {/* Dashboard */}
-            <form {...{ onSubmit }} className='p-2 border-2 border-black-800 max-w-[600px]'>
+            <form {...{
+                onSubmit, onChange: (e) => {
+
+                    const target = e.target as EventTarget & { id: string }
+                    // console.log({ target, id: target?.id, loc: "FormOnChange" })
+                    Object.keys(input_id).filter((key) => input_id[(key as unknown as keyof typeof input_id)] === target.id).map((v) => {
+                        focus_on(v as unknown as keyof typeof input_id)
+                    })
+                    e.preventDefault()
+
+                },
+                id: form_id,
+
+            }} className='p-2 border-2 border-black-800 max-w-[600px]'>
                 <div className='flex items-center justify-center p-2 rounded-md bg-bray-200'>
-                    <div className='min-w-[300px] min-h-[300px] flex items-center justify-center bg-gray-200 rounded-md'>
-                        {
-                        }
+                    <div className='min-w-[300px] min-h-[300px] flex flex-col items-center justify-center bg-gray-200 rounded-md'>
+
                         <div className={`relative ${preview?.length && preview?.length > 0 ? "" : "hidden"}`}>
                             <div className='p-2 rounded-md m-2 bg-blue-200 transparency-50 hover:bg-blue-500 absolute top-0 right-0'
 
-                                onClick={(e) => {
-                                    e.preventDefault()
-
-                                    setPreview(undefined)
-                                    sFile(undefined)
-                                    form_object.resetField("file")
-                                }}
+                                onClick={reset_image(sFile, setPreview, form_object)}
                             > <FaX /> </div>
                             <img src={preview} alt="image preview" className="" />
 
@@ -143,144 +189,237 @@ export default function PhotoIdPage({ client_id, visitor_id }: { client_id: stri
 
                         <FormInput input_props={{
                             ...form_object.register("file"),
-                            onChange: (e) => {
-                                const val = e?.target?.value as unknown as string | undefined
-                                // console.log({ target: e?.target })
-                                if (val) {
-                                    console.log({ val })
-                                    sFile((__) => {
-
-                                        const nw_file = e?.target?.files?.[0]
-                                        if (nw_file) {
-                                            const objectUrl = URL.createObjectURL(nw_file)
-                                            setPreview(objectUrl)
-                                        }
-
-                                        return nw_file
-                                    })
+                            onChange: file_on_change(sFile, setPreview, router), type: "file", accept: "image/*, video/*", className: "hover:bg-blue-200",
+                            id: input_id.file,
+                            autoFocus: auto_focus.file,
 
 
-                                }
-                                const { uuid } = router?.query
-                                if (!uuid) {
-                                    router.push(`/dashboard/gallery/new?uuid=${crypto.randomUUID()}`)
-                                }
-
-                            }, type: "file", accept: "image/*, video/*", className: "w-full h-full", required: true,
-                        }} div_props={{ className: `h-full w-full ${preview?.length ? "hidden" : ""}` }} />
+                        }} errors={errors} div_props={{ className: `h-full  w-full ${preview?.length ? "transparency-100" : ""}` }} />
                     </div>
                 </div>
 
 
                 <div className='flex p-2 flex-wrap'> {Object.keys(keywords_map).map((v, i) =>
                 (<div key={`keywords:${i}`} className='bg-blue-200 rounded-md px-2 m-2 capitalize flex items-center p-2'><p className='px-2'>{v}</p>
-                    <span className='p-2 rounded-md hover:bg-blue-400' onClick={(e) => {
-                        e.preventDefault()
-                        sKeywordsMap((curr) => {
-                            let next: Record<string, string> = {}
-                            Object.keys((curr)).filter((k) => k !== v).map((v) => {
-                                next[v] = v
-                            })
-                            return next
-                        })
-                    }}><FaX />
+                    <span className='p-2 rounded-md hover:bg-blue-400' onClick={keywords_map_delete(sKeywordsMap, v)}><FaX />
                     </span></div>))}
                 </div>
                 <FormInput input_props={{
                     ...form_object.register("key_words"),
-                    onKeyDown: (e) => {
-                        const key = e?.nativeEvent?.key
-                        if (key === 'Enter') {
-                            e.preventDefault()
-                        }
-                    },
+                    autoFocus: auto_focus.key_words,
+
                     onKeyUp: (e) => {
+
                         const target = e?.target as unknown as { value?: string }
+
                         const key = e?.nativeEvent?.key
                         // console.log({ key, e })
                         const val = target?.value
-                        switch (key) {
 
-                            case 'Enter': {
-                                e.preventDefault()
-                            } break
+                        if (key !== ' ' && key !== 'Enter') {
+                            return
                         }
-                        if (val) {
+                        e.stopPropagation()
+                        e.preventDefault()
+                        if (val?.length) {
+                            const words_list = val.split(" ").map((v) => v.trim()).filter(v => v?.length)
                             sKeywordsMap((curr) => {
 
                                 let next = { ...curr }
-                                const update = () => val.split(" ").map((v) => v.trim()).filter(v => v?.length).map((val) => {
+                                words_list.map((val) => {
                                     if (val) {
                                         next[val] = val
                                     }
                                 })
 
-                                switch (key) {
-                                    case ' ':
-                                        update()
-                                        break
-                                    case 'Enter': {
-                                        update()
 
-                                        target.value = ""
-                                        e.preventDefault()
-                                    } break
-                                }
+
+
 
 
                                 return next
                             })
+
                         }
+                        target.value = ""
 
 
                     }
+                    , id: input_id.key_words
+                }
 
-                }} input_label='Keyword' errors={errors} />
-                <FormInput input_props={form_object.register("img_name")} input_label='Image Name' errors={errors} />
-                <FormInput input_props={{ ...form_object.register("description"), className: "min-h-[100px]", type: "textarea" }} input_label='Description' errors={errors} />
-                <FormInput input_props={form_object.register("alt")} input_label='Alt text' errors={errors} />
+                } input_label='Keyword' errors={errors} />
 
+                <FormInput input_props={{ ...form_object.register("img_name"), required: true, id: input_id.img_name, autoFocus: auto_focus.img_name }} input_label='Image Name' errors={errors} />
+                <FormInput input_props={{ ...form_object.register("description"), type: "textarea", id: input_id.description, autoFocus: auto_focus.description }} input_label='Description' errors={errors} />
+                <FormInput input_props={{ ...form_object.register("alt"), id: input_id.alt, autoFocus: auto_focus.alt }} input_label='Alt text' errors={errors} />
 
-                <button className='bg-blue-200 p-2 rounded-md hover:bg-black hover:text-white' type="submit">Submit</button>
+                {Object.keys(errors).map((v, i) => {
+                    const err = (errors as unknown as Record<string, { message?: string }>)[v]
+                    console.log(err)
+                    return (<div key={`error:${i}`} className='flex w-full items-center  border-2 border-red rounded-md'>
+                        <p className='text-red-900'> <span className='px-2 bg-red-200 text-black'>{v === 'img_name' ? "Image Name" : v}</span>  {err?.message} </p>
+                    </div>)
+                })}
+                <div className='flex w-full'>
+
+                    <button className='bg-gray-200 p-2 rounded-md hover:bg-red-200 hover:text-red-600 ' type="reset">Cancel</button>
+                    <button className='bg-blue-200 p-2 px-5 rounded-md hover:bg-black hover:text-white ml-auto ' type="submit">Submit</button>
+                </div>
             </form>
         </MainSection>
     );
 }
 
-interface FornInputProps {
+const reset_image = <T extends FieldValues = FieldValues>(
+    sFile: React.Dispatch<React.SetStateAction<File | undefined>>,
+    setPreview: React.Dispatch<React.SetStateAction<string | undefined>>,
+    form_object: UseFormReturn<T, any, undefined>
+): React.MouseEventHandler<HTMLDivElement> => (e) => {
+    e.preventDefault()
+
+    setPreview(undefined)
+    sFile(undefined)
+    form_object.resetField("file" as unknown as Path<T>)
+}
+
+const file_on_change = (sFile: React.Dispatch<React.SetStateAction<File | undefined>>,
+    setPreview: React.Dispatch<React.SetStateAction<string | undefined>>,
+    router: NextRouter): React.ChangeEventHandler<any> => (e) => {
+        const val = e?.target?.value as unknown as string | undefined
+        // console.log({ target: e?.target })
+        if (val) {
+            console.log({ val })
+            sFile((__) => {
+
+                const nw_file = e?.target?.files?.[0]
+                if (nw_file) {
+                    const objectUrl = URL.createObjectURL(nw_file)
+                    setPreview(objectUrl)
+                }
+
+                return nw_file
+            })
+
+            return e
+        }
+        const { uuid } = router?.query
+        if (!uuid) {
+            router.push(`/dashboard/gallery/new?uuid=${crypto.randomUUID()}`)
+        }
+
+    }
+
+let i = 0
+const keywords_key_up = (sKeywordsMap: React.Dispatch<React.SetStateAction<Record<string, string>>>): React.KeyboardEventHandler<any> => (e) => {
+    const target = e?.target as unknown as { value?: string }
+
+    const key = e?.nativeEvent?.key
+    // console.log({ key, e })
+    const val = target?.value
+
+    if (val) {
+        sKeywordsMap((curr) => {
+
+            let next = { ...curr }
+            const update = () => val.split(" ").map((v) => v.trim()).filter(v => v?.length).map((val) => {
+                if (val) {
+                    next[val] = val
+                }
+            })
+
+
+            if (key === ' ') {
+                update()
+            }
+            if (key === 'Enter') {
+                update()
+                target.value = ""
+            }
+
+
+
+            return next
+        })
+    }
+
+
+}
+
+const keywords_map_delete = (sKeywordsMap: React.Dispatch<React.SetStateAction<Record<string, string>>>, v: string): React.MouseEventHandler<HTMLSpanElement> => (e) => {
+    e.preventDefault()
+    sKeywordsMap((curr) => {
+        let next: Record<string, string> = {}
+        Object.keys((curr)).filter((k) => k !== v).map((v) => {
+            next[v] = v
+        })
+        return next
+    })
+}
+
+interface FormInputProps<T extends HTMLInputElement> {
     input_label?: string
-    input_props: React.InputHTMLAttributes<any>
+    input_props: React.InputHTMLAttributes<T> & React.TextareaHTMLAttributes<T>
     div_props?: React.AllHTMLAttributes<any>
     errors?: Record<string, { message?: string }>
 
 }
 
-function FormInput({ input_props, input_label, div_props, errors }: FornInputProps) {
-    const [errors_message, sErrMessage] = React.useState("")
+function FormInput<T extends HTMLInputElement>({ input_props, input_label, div_props, errors, }: FormInputProps<T>) {
+    const [errors_message, sErrMessage] = React.useState<string>()
     React.useEffect(() => {
-        const err_message = errors?.[input_props?.name ?? ""]?.message
-        if (!err_message?.length) {
+        const name = input_props?.name
+        if (!name?.length) {
+            sErrMessage(undefined)
             return
         }
-        sErrMessage(err_message)
+        const err = errors?.[name]
+        if (!err?.message?.length) {
+            sErrMessage(undefined)
+            return
+        }
+
+        sErrMessage(err.message)
     }, [errors])
+    const input_class = `bg-gray-200 rounded-md p-2 my-2 w-full ${input_props.className}`
+    const InputType = (props: React.InputHTMLAttributes<any>) => {
+
+        switch (input_props.type) {
+
+            case 'textarea':
+                return (
+                    <textarea {...{
+                        ...(input_props as unknown as DetailedHTMLProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>),
+                        rows: 4, cols: 80,
+                    }} className={input_class} />
+
+                )
+            default:
+                return (
+                    <input {...{ ...input_props, }} className={input_class} />
+
+                )
+
+        }
+    }
+
     if (div_props) {
         return (
             <>
                 <div {...{ ...div_props }} className={`w-full flex items-center ${div_props.className}`}>
                     {input_label && <label htmlFor={input_props.name} className='capitalize w-[150px] mx-2' > {input_label} </label>}
-                    <input {...{ ...input_props }} className='bg-gray-200 rounded-md p-2 my-2 w-full' />
-
+                    <InputType />
                 </div>
-                <div><p>{errors_message}</p></div>
             </>
         )
     }
 
     return (
-        <div className="w-full flex items-center">
-            {input_label && <label htmlFor={input_props.name} className='capitalize w-[150px] mx-2' > {input_label} </label>}
-            <input {...{ ...input_props }} className='bg-gray-200 rounded-md p-2 my-2 w-full' />
-        </div>
+        <>
+            <div className="w-full flex items-center">
+                {input_label && <label htmlFor={input_props.name} className='capitalize w-[150px] mx-2' > {input_label} </label>}
+                <InputType />
+            </div>
+        </>
     )
 }

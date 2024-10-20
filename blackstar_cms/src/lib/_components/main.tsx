@@ -246,16 +246,11 @@ type CommonNavbarProps = {
 type DesktopNavbarSectionProps = {} & CommonNavbarProps;
 
 export function DesktopNavbarSection({ children, session }: DesktopNavbarSectionProps) {
-  const [session_data, sSessionData] = React.useState(session?.data)
-  React.useEffect(() => {
-    if (!session?.data) {
-      return
-    }
+  const [session_data, sSessionData] = React.useState({
+    domain_name: session?.data?.org?.domain_name,
+    user_name: session?.data?.user?.name
+  })
 
-    const { data, status } = session
-    console.log({ session: data, loc: "DesktopNavbarSection" })
-    sSessionData(session.data)
-  }, [session])
   return (
     <header className={`${CommonCss.Header}`}>
       <nav className={`${CommonCss.Nav}`}>
@@ -264,12 +259,12 @@ export function DesktopNavbarSection({ children, session }: DesktopNavbarSection
         </div>
         {children}
         <div className='flex w-full items-center  '>
-          {session_data?.org?.domain_name}
+          {session_data.domain_name}
         </div>
         <div className='flex flex-reverse ml-auto px-2 shrink-0'>
 
           <div className='p-2'>
-            {session_data?.user?.name}
+            {session_data.user_name}
           </div>
           {session?.status === 'authenticated' ?
             <button className={CommonCss.auth_button} type="button" onClick={() => signOut()}>Sign Out</button> :
