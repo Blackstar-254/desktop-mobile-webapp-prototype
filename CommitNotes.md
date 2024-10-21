@@ -1,6 +1,60 @@
 # COMMIT NOTES
 
-### 2024 October 15thm 15:00 PM GMT+3
+### 2024 October 21st, 21:37 PM GMT+3
+```sh
+1. Able to upload image to server backend
+2. Able to load images from backend
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   src/lib/_components/main.tsx
+#	modified:   src/pages/dashboard/gallery/new.tsx
+#
+# Changes not staged for commit:
+#	modified:   ../CommitNotes.md
+#	modified:   ../fastify-api/src/routes/api/cms.gallery.js
+#
+
+```
+
+### 2024 October 20th, 03:36 AM GMT+3
+```sh
+1. Improving new photo form, able to send photo to
+server 
+2. able to add keywords, change chosen photo 
+3. need to:
+    - save photo server side
+    - rate-limit number of uploads 
+    - charge per upload 
+    - upload blog posts
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   CommitNotes.md
+#	modified:   biome.json
+#	modified:   blackstar_cms/next.config.js
+#	modified:   blackstar_cms/src/lib/_components/main.tsx
+#	modified:   blackstar_cms/src/pages/api/cms/client-id.ts
+#	modified:   blackstar_cms/src/pages/dashboard/gallery/[photo-id].tsx
+#	modified:   blackstar_cms/src/pages/dashboard/gallery/index.tsx
+#	new file:   blackstar_cms/src/pages/dashboard/gallery/new.tsx
+#	modified:   blackstar_cms/src/server/api/routers/gallery.ts
+#	modified:   fastify-api/src/index.js
+#	modified:   fastify-api/src/lib/initialise.js
+#	modified:   fastify-api/src/routes/api/cms.gallery.js
+#	new file:   install_pandoc.md
+#
+```
+
+### 2024 October 15th, 15:00 PM GMT+3
 ```sh
 1. using blackstar_cms as main app, 
 2. will create client apps per client 

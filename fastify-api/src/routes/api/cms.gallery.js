@@ -6,8 +6,10 @@ import { z } from 'zod';
 
 const parse_uuid = z.string().uuid();
 
+/** @typdef {} */
+
 /**
- * @type {Record<string, RouteHandlerMethod>}
+ * @type {Record<string, import('fastify').RouteHandlerMethod>}
  */
 export const gallery_routes = {
   'GET,POST|/api/cms/gallery': async function handler(request, reply) {
@@ -50,7 +52,13 @@ export const gallery_routes = {
             headers,
             error: err,
           });
+          reply.status(400);
+          return { success: false };
         }
+
+        await handle_img_post(request, Data);
+
+        return { success: true };
       }
     }
 
@@ -76,15 +84,24 @@ export const gallery_routes = {
  *  photos: Array<photo_t>
  * }} metadata_t
  *
- * @type {(client_id:string)=>({valid:boolean, metadata:Record<string,any> & Partial<metadata_t> })}}
  */
 
-var setup_gallery = async (client_id) => {
+/**
+ *
+ * @type {(client_id:string)=>Promise<{metadata:metadata_t,make_write:boolean, gallery_static_dir:string,metadata_filename:string, unique_file:Record<string,photo_t>}>}
+ */
+const read_metadata = async (client_id) => {
   const gallery_static_dir = `public/gallery/${client_id}`;
   if (!fs.existsSync(gallery_static_dir)) {
     fs.mkdirSync(gallery_static_dir, { recursive: true });
     console.log(`successfully mkdir ${gallery_static_dir}`);
   }
+  /**
+   * @type {Record<string,photo_t>}
+   *
+   */
+  let unique_file = {};
+
   /**
    * @type {metadata_t}
    */
@@ -111,20 +128,44 @@ var setup_gallery = async (client_id) => {
   } else {
     make_write = true;
   }
+  metadata.photos.map((value) => {
+    unique_file[value.url] = value;
+  });
+  return {
+    metadata,
+    make_write,
+    gallery_static_dir,
+    metadata_filename,
+    unique_file,
+  };
+};
+
+/**
+ *
+ * @type {(metadata:metadata_t,unique_file:Record<string,photo_t>,metadata_filename:string)=>Promise<void>}
+ */
+const write_metadata = async (metadata, unique_file, metadata_filename) => {
+  metadata.photos = [...Object.values(unique_file)];
+
+  fs.writeFileSync(metadata_filename, JSON.stringify(metadata, null, 2), {
+    encoding: 'utf-8',
+    flag: 'w',
+  });
+};
+
+/**
+ *  @type {(client_id:string)=>({valid:boolean, metadata:Record<string,any> & Partial<metadata_t> })}}
+ */
+var setup_gallery = async (client_id) => {
+  const gallery_static_dir = `public/gallery/${client_id}`;
+  const { metadata, make_write, metadata_filename } =
+    await read_metadata(client_id);
 
   const files = fs.readdirSync(gallery_static_dir, {
     recursive: true,
     withFileTypes: true,
   });
 
-  /**
-   * @type {Record<string,photo_t>}
-   *
-   */
-  let unique_file = {};
-  metadata.photos.map((value) => {
-    unique_file[value.url] = value;
-  });
   files
     .filter((v) => {
       if (v.name === 'metadata') {
@@ -169,16 +210,69 @@ var setup_gallery = async (client_id) => {
     });
 
   if (make_write) {
-    metadata.photos = [...Object.values(unique_file)];
-
-    fs.writeFileSync(metadata_filename, JSON.stringify(metadata, null, 2), {
-      encoding: 'utf-8',
-      flag: 'w',
-    });
+    write_metadata(metadata, unique_file, metadata_filename);
   }
 
   return {
     valid: true,
     metadata,
   };
+};
+
+/**
+ * @typedef{{
+ *    keywords: string[];
+ *    uuid: string | undefined;
+ *    file_data: string;
+ *    img_name: string;
+ *    key_words: string;
+ *    description: string;
+ * file_name:string;
+ *    alt: string;
+ *    file: File;
+ *}} form_data
+ *
+ * @type {(request:import('fastify/types/type-provider.js',
+ * json_body:Partial<form_data>).FastifyRequestType)=>
+ * Promise<void>}
+ */
+var handle_img_post = async (request, json_body) => {
+  const { body, method, url, headers } = request;
+  const {
+    file_data,
+    img_name,
+    file_name: img_file_name,
+    uuid,
+    description,
+    alt,
+  } = json_body;
+  const [client_id, visitor_id] = [headers['client-id'], headers['visitor-id']];
+
+  const gallery_static_dir = `public/gallery/${client_id}`;
+  const ext = img_file_name.split('.').pop();
+  const file_name = `${gallery_static_dir}/${img_name}${ext ? `.${ext}` : ''}`;
+
+  let size = 0;
+  if (file_data) {
+    const data = Buffer.from(file_data, 'hex');
+    size = data.length;
+    fs.writeFileSync(file_name, data);
+  }
+
+  const { metadata, metadata_filename, unique_file } =
+    await read_metadata(client_id);
+
+  const file_url = `/gallery/${client_id}/${file_name}`;
+  unique_file[file_url] = {
+    name: img_name,
+    url: file_url,
+    uuid,
+    size,
+    type: ext,
+    label: '',
+    alt,
+    description,
+  };
+
+  await write_metadata(metadata, unique_file, metadata_filename);
 };
