@@ -3,11 +3,12 @@ import MainSection from '@blackstar/lib/_components/main';
 import { getServerAuthSession } from '@blackstar/server/auth';
 import type { GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/react';
-import { NextRouter, useRouter } from 'next/router';
+import { type NextRouter, useRouter } from 'next/router';
 import { zodResolver } from "@hookform/resolvers/zod"
-import React, { DetailedHTMLProps, InputHTMLAttributes } from 'react';
+import React, { type DetailedHTMLProps, } from 'react';
 import { useCookies } from 'react-cookie';
-import { FieldValues, Path, useForm, UseFormReturn } from 'react-hook-form';
+import type { FieldValues, Path, UseFormReturn } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { FaX } from "react-icons/fa6";
 import { z } from 'zod';
 
@@ -47,18 +48,9 @@ export default function PhotoIdPage() {
     const session = useSession()
     const cookies = useCookies()
     const [identity, sIdentity] = React.useState<string>()
-    React.useEffect(() => {
-        const { query } = router
-        if (query) {
-            const uuid = query?.uuid as unknown as string | undefined
-            if (uuid) {
-                sIdentity(uuid)
-            } else {
 
-            }
-        }
-    }, [router])
 
+    const [page_url, sPageUrl] = React.useState<string>()
 
     const [default_data, sFormData] = React.useState({
         img_name: "",
@@ -66,13 +58,14 @@ export default function PhotoIdPage() {
         description: "",
         alt: "",
         file: new File([], ""),
+        file_name: ""
     })
     const [auto_focus, sAutoFocus] = React.useState({
         img_name: false,
         key_words: false,
         description: false,
         alt: false,
-        file: false,
+        file: true,
     })
     const focus_on = (e: keyof typeof auto_focus) => {
         sAutoFocus((curr) => {
@@ -103,19 +96,23 @@ export default function PhotoIdPage() {
         resolver: zodResolver(form_schema),
     },
     )
+    React.useEffect(() => {
+        const { query, } = router
+        if (query) {
+            const uuid = query?.uuid as unknown as string | undefined
+            if (uuid) {
+                sIdentity(uuid);
 
+
+
+            }
+        }
+    }, [router])
     const [preview, setPreview] = React.useState<string>()
     const [file, sFile] = React.useState<File>()
-
     const { errors } = form_object.formState
-    const [keywords_autofocus, sKeywordsAutofocus] = React.useState(false)
 
     const form_id = React.useId()
-    // const keywords_id = React.useId()
-    const defocus_keywords = () => sKeywordsAutofocus(false)
-    React.useEffect(() => {
-        console.log({ errors, loc: "formState" })
-    }, [keywords_map])
 
     const onSubmit = form_object.handleSubmit(async (data) => {
         const id_data = await fetch("/api/cms/client-id").then((res) => res.json())
@@ -152,6 +149,9 @@ export default function PhotoIdPage() {
         }).then((res) => res.json())
 
         console.log({ res })
+        if (res?.success) {
+            router.push("/dashboard/gallery")
+        }
     })
 
 
@@ -164,10 +164,31 @@ export default function PhotoIdPage() {
             <form {...{
                 onSubmit, onChange: (e) => {
 
-                    const target = e.target as EventTarget & { id: string }
+                    const target = e.target as EventTarget & { id: string, value?: any }
                     // console.log({ target, id: target?.id, loc: "FormOnChange" })
-                    Object.keys(input_id).filter((key) => input_id[(key as unknown as keyof typeof input_id)] === target.id).map((v) => {
-                        focus_on(v as unknown as keyof typeof input_id)
+                    Object.keys(input_id).map((v) => {
+                        let key = v as unknown as keyof typeof input_id
+                        const val = target?.value
+                        if (input_id[key] === target.id) {
+                            focus_on(key)
+
+
+
+                            sFormData((curr) => {
+                                let next = { ...curr };
+
+                                if (key === 'file') {
+                                    next.file_name = val
+                                } else {
+                                    next[key] = val;
+
+                                }
+
+
+                                return next
+                            })
+
+                        }
                     })
                     e.preventDefault()
 
@@ -189,7 +210,34 @@ export default function PhotoIdPage() {
 
                         <FormInput input_props={{
                             ...form_object.register("file"),
-                            onChange: file_on_change(sFile, setPreview, router), type: "file", accept: "image/*, video/*", className: "hover:bg-blue-200",
+                            onChange: (e) => {
+                                const val = e?.target?.value as unknown as string | undefined
+                                // console.log({ target: e?.target })
+                                if (val) {
+                                    console.log({ val })
+                                    sFile((__) => {
+
+                                        const nw_file = e?.target?.files?.[0]
+                                        if (nw_file) {
+                                            const objectUrl = URL.createObjectURL(nw_file)
+                                            setPreview(objectUrl)
+
+                                        }
+
+                                        return nw_file
+                                    })
+
+
+
+                                }
+                                const { uuid } = router?.query
+                                if (!uuid) {
+                                    router.push(`/dashboard/gallery/new?uuid=${crypto.randomUUID()}`)
+                                }
+
+                            }
+
+                            , type: "file", accept: "image/*, video/*", className: "hover:bg-blue-200",
                             id: input_id.file,
                             autoFocus: auto_focus.file,
 
@@ -208,12 +256,13 @@ export default function PhotoIdPage() {
                     ...form_object.register("key_words"),
                     autoFocus: auto_focus.key_words,
 
+
                     onKeyUp: (e) => {
 
                         const target = e?.target as unknown as { value?: string }
 
                         const key = e?.nativeEvent?.key
-                        // console.log({ key, e })
+
                         const val = target?.value
 
                         if (key !== ' ' && key !== 'Enter') {
@@ -224,19 +273,13 @@ export default function PhotoIdPage() {
                         if (val?.length) {
                             const words_list = val.split(" ").map((v) => v.trim()).filter(v => v?.length)
                             sKeywordsMap((curr) => {
+                                let next: Record<keyof typeof keywords_map, string> = {}
 
-                                let next = { ...curr }
                                 words_list.map((val) => {
                                     if (val) {
                                         next[val] = val
                                     }
                                 })
-
-
-
-
-
-
                                 return next
                             })
 
@@ -250,14 +293,23 @@ export default function PhotoIdPage() {
 
                 } input_label='Keyword' errors={errors} />
 
-                <FormInput input_props={{ ...form_object.register("img_name"), required: true, id: input_id.img_name, autoFocus: auto_focus.img_name }} input_label='Image Name' errors={errors} />
-                <FormInput input_props={{ ...form_object.register("description"), type: "textarea", id: input_id.description, autoFocus: auto_focus.description }} input_label='Description' errors={errors} />
-                <FormInput input_props={{ ...form_object.register("alt"), id: input_id.alt, autoFocus: auto_focus.alt }} input_label='Alt text' errors={errors} />
+                <FormInput input_props={{
+                    ...form_object.register("img_name"), required: true, id:
+                        input_id.img_name, autoFocus: auto_focus.img_name,
+                }} input_label='Image Name' errors={errors} />
+                <FormInput input_props={{
+                    ...form_object.register("description"), type: "textarea", id: input_id.description,
+                    autoFocus: auto_focus.description,
+                }} input_label='Description' errors={errors} />
+                <FormInput input_props={{
+                    ...form_object.register("alt"), id: input_id.alt, autoFocus: auto_focus.alt,
+
+                }} input_label='Alt text' errors={errors} />
 
                 {Object.keys(errors).map((v, i) => {
                     const err = (errors as unknown as Record<string, { message?: string }>)[v]
                     console.log(err)
-                    return (<div key={`error:${i}`} className='flex w-full items-center  border-2 border-red rounded-md'>
+                    return (<div key={`error:${i}`} className='flex w-full items-center  border-2 border-red capitalize rounded-md'>
                         <p className='text-red-900'> <span className='px-2 bg-red-200 text-black'>{v === 'img_name' ? "Image Name" : v}</span>  {err?.message} </p>
                     </div>)
                 })}
@@ -296,10 +348,12 @@ const file_on_change = (sFile: React.Dispatch<React.SetStateAction<File | undefi
                 if (nw_file) {
                     const objectUrl = URL.createObjectURL(nw_file)
                     setPreview(objectUrl)
+
                 }
 
                 return nw_file
             })
+
 
             return e
         }
@@ -310,52 +364,20 @@ const file_on_change = (sFile: React.Dispatch<React.SetStateAction<File | undefi
 
     }
 
-let i = 0
-const keywords_key_up = (sKeywordsMap: React.Dispatch<React.SetStateAction<Record<string, string>>>): React.KeyboardEventHandler<any> => (e) => {
-    const target = e?.target as unknown as { value?: string }
 
-    const key = e?.nativeEvent?.key
-    // console.log({ key, e })
-    const val = target?.value
 
-    if (val) {
+const keywords_map_delete = (sKeywordsMap: React.Dispatch<React.SetStateAction<Record<string, string>>>,
+    v: string): React.MouseEventHandler<HTMLSpanElement> =>
+    (e) => {
+        e.preventDefault()
         sKeywordsMap((curr) => {
-
-            let next = { ...curr }
-            const update = () => val.split(" ").map((v) => v.trim()).filter(v => v?.length).map((val) => {
-                if (val) {
-                    next[val] = val
-                }
+            let next: Record<string, string> = {}
+            Object.keys((curr)).filter((k) => k !== v).map((v) => {
+                next[v] = v
             })
-
-
-            if (key === ' ') {
-                update()
-            }
-            if (key === 'Enter') {
-                update()
-                target.value = ""
-            }
-
-
-
             return next
         })
     }
-
-
-}
-
-const keywords_map_delete = (sKeywordsMap: React.Dispatch<React.SetStateAction<Record<string, string>>>, v: string): React.MouseEventHandler<HTMLSpanElement> => (e) => {
-    e.preventDefault()
-    sKeywordsMap((curr) => {
-        let next: Record<string, string> = {}
-        Object.keys((curr)).filter((k) => k !== v).map((v) => {
-            next[v] = v
-        })
-        return next
-    })
-}
 
 interface FormInputProps<T extends HTMLInputElement> {
     input_label?: string

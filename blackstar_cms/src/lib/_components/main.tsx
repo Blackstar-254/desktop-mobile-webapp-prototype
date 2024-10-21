@@ -246,11 +246,23 @@ type CommonNavbarProps = {
 type DesktopNavbarSectionProps = {} & CommonNavbarProps;
 
 export function DesktopNavbarSection({ children, session }: DesktopNavbarSectionProps) {
-  const [session_data, sSessionData] = React.useState({
-    domain_name: session?.data?.org?.domain_name,
-    user_name: session?.data?.user?.name
+  const [session_data, sSessionData] = React.useState<{
+    domain_name?: string | null;
+    user_name?: string | null;
+  }>({
+    domain_name: undefined,
+    user_name: undefined
   })
 
+  React.useEffect(() => {
+    if (!session?.data?.org) {
+      return
+    }
+    sSessionData({
+      domain_name: session?.data?.org?.domain_name,
+      user_name: session?.data?.user?.name
+    })
+  }, [session])
   return (
     <header className={`${CommonCss.Header}`}>
       <nav className={`${CommonCss.Nav}`}>
