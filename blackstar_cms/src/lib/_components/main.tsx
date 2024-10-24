@@ -118,7 +118,7 @@ export default function MainSection({
     return (
       <>
         <HtmlHead />
-        <LoadingSection />
+        <LoadingSection className='min-h-[80vh] w-screen ' />
       </>
     );
   }
@@ -147,7 +147,7 @@ type DesktopMainProps = {
 
 const CommonCss = {
   MainSection: 'min-h-screen overflow-x-clip',
-  MainDiv: ' flex h-[calc(100vh-3rem)] overflow-y-auto',
+  MainDiv: ' flex h-[calc(100vh-3rem)] overflow-clip overflow-y-auto',
   Header: '',
   Nav: 'h-[3rem] text-black flex items-center h-full w-full',
   auth_button: "bg-blue-400 hover:bg-black text-white text-bold capitalize px-2 rounded-md"
@@ -225,12 +225,12 @@ export function MobileMainSection({ children, heading }: MobileMainProps) {
   );
 }
 
-export function LoadingSection({ children, }: { children?: React.ReactNode, }) {
+export function LoadingSection({ children, className }: { children?: React.ReactNode, className?: string }) {
 
 
   return (
     <>
-      <div className="w-screen min-h-[80vh] flex items-center justify-center">
+      <div className={` flex items-center justify-center ${className}`}>
         <div>Loading </div>
       </div>
     </>

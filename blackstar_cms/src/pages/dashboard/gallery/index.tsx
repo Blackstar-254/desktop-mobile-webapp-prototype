@@ -44,7 +44,7 @@ export default function DashboardGalleryIndex() {
                     <img src={p.url} alt={p.alt} className="max-h-full w-full" />
                   </GalleryCard>
                 )
-              }) : <GalleryCard><LoadingSection loading={() => images_list !== undefined} /></GalleryCard>}
+              }) : <GalleryCard><LoadingSection className="w-[200px] h-[200px]" /></GalleryCard>}
         </div>
       </div>
     </MainSection>

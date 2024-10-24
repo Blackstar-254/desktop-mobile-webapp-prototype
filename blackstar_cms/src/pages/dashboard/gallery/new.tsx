@@ -11,6 +11,7 @@ import type { FieldValues, Path, UseFormReturn } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { FaX } from "react-icons/fa6";
 import { z } from 'zod';
+import { FormInput, } from '@blackstar/lib/_components/form_components';
 
 
 export const getServerSide: GetServerSideProps = async (ctx) => {
@@ -33,8 +34,7 @@ export const getServerSide: GetServerSideProps = async (ctx) => {
         }
     }
 }
-
-const form_schema = z.object({
+const new_photo_form_schema = z.object({
     img_name: z.string().min(3, "too short"),
     key_words: z.string().optional(),
     description: z.string().min(12, "too short"),
@@ -93,7 +93,7 @@ export default function PhotoIdPage() {
         reValidateMode: 'onSubmit',
         mode: 'onSubmit',
         delayError: 200,
-        resolver: zodResolver(form_schema),
+        resolver: zodResolver(new_photo_form_schema),
     },
     )
     React.useEffect(() => {
@@ -378,70 +378,3 @@ const keywords_map_delete = (sKeywordsMap: React.Dispatch<React.SetStateAction<R
             return next
         })
     }
-
-interface FormInputProps<T extends HTMLInputElement> {
-    input_label?: string
-    input_props: React.InputHTMLAttributes<T> & React.TextareaHTMLAttributes<T>
-    div_props?: React.AllHTMLAttributes<any>
-    errors?: Record<string, { message?: string }>
-
-}
-
-function FormInput<T extends HTMLInputElement>({ input_props, input_label, div_props, errors, }: FormInputProps<T>) {
-    const [errors_message, sErrMessage] = React.useState<string>()
-    React.useEffect(() => {
-        const name = input_props?.name
-        if (!name?.length) {
-            sErrMessage(undefined)
-            return
-        }
-        const err = errors?.[name]
-        if (!err?.message?.length) {
-            sErrMessage(undefined)
-            return
-        }
-
-        sErrMessage(err.message)
-    }, [errors])
-    const input_class = `bg-gray-200 rounded-md p-2 my-2 w-full ${input_props.className}`
-    const InputType = (props: React.InputHTMLAttributes<any>) => {
-
-        switch (input_props.type) {
-
-            case 'textarea':
-                return (
-                    <textarea {...{
-                        ...(input_props as unknown as DetailedHTMLProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>),
-                        rows: 4, cols: 80,
-                    }} className={input_class} />
-
-                )
-            default:
-                return (
-                    <input {...{ ...input_props, }} className={input_class} />
-
-                )
-
-        }
-    }
-
-    if (div_props) {
-        return (
-            <>
-                <div {...{ ...div_props }} className={`w-full flex items-center ${div_props.className}`}>
-                    {input_label && <label htmlFor={input_props.name} className='capitalize w-[150px] mx-2' > {input_label} </label>}
-                    <InputType />
-                </div>
-            </>
-        )
-    }
-
-    return (
-        <>
-            <div className="w-full flex items-center">
-                {input_label && <label htmlFor={input_props.name} className='capitalize w-[150px] mx-2' > {input_label} </label>}
-                <InputType />
-            </div>
-        </>
-    )
-}

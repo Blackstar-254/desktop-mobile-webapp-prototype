@@ -73,6 +73,7 @@ export const gallery_routes = {
  * url:string,
  * uuid:string
  * size:number
+ * keywords: string[]
  * type:string
  *  label: string
  * url: string
@@ -158,7 +159,7 @@ const write_metadata = async (metadata, unique_file, metadata_filename) => {
  */
 var setup_gallery = async (client_id) => {
   const gallery_static_dir = `public/gallery/${client_id}`;
-  const { metadata, make_write, metadata_filename } =
+  const { metadata, make_write, metadata_filename, unique_file } =
     await read_metadata(client_id);
 
   const files = fs.readdirSync(gallery_static_dir, {
@@ -219,6 +220,18 @@ var setup_gallery = async (client_id) => {
   };
 };
 
+const new_photo_form_schema = z.object({
+  img_name: z.string().min(3, 'too short'),
+  key_words: z.string().optional(),
+  description: z.string().min(12, 'too short'),
+  alt: z.string().min(3, 'too short'),
+  keywords: z.array(z.string()),
+  uuid: z.string().uuid(),
+  file_name: z.string(),
+  file: z.any(),
+  file_data: z.string(),
+});
+
 /**
  * @typedef{{
  *    keywords: string[];
@@ -234,10 +247,14 @@ var setup_gallery = async (client_id) => {
  *
  * @type {(request:import('fastify/types/type-provider.js',
  * json_body:Partial<form_data>).FastifyRequestType)=>
- * Promise<void>}
+ * Promise<{success:boolean}>}
  */
 var handle_img_post = async (request, json_body) => {
-  const { body, method, url, headers } = request;
+  const { headers } = request;
+  const { success, data } = new_photo_form_schema.safeParse(json_body);
+  if (!success) {
+    return { success };
+  }
   const {
     file_data,
     img_name,
@@ -245,7 +262,7 @@ var handle_img_post = async (request, json_body) => {
     uuid,
     description,
     alt,
-  } = json_body;
+  } = data;
   const [client_id, visitor_id] = [headers['client-id'], headers['visitor-id']];
 
   const gallery_static_dir = `public/gallery/${client_id}`;
@@ -257,6 +274,8 @@ var handle_img_post = async (request, json_body) => {
     const data = Buffer.from(file_data, 'hex');
     size = data.length;
     fs.writeFileSync(file_name, data);
+  } else {
+    return { success: false };
   }
 
   const { metadata, metadata_filename, unique_file } =
@@ -275,4 +294,6 @@ var handle_img_post = async (request, json_body) => {
   };
 
   await write_metadata(metadata, unique_file, metadata_filename);
+
+  return { success: true };
 };

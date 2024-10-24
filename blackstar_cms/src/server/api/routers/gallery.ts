@@ -19,7 +19,7 @@ export type image_t = {
   label: string;
   url: string;
   alt: string;
-
+  keywords: string[];
   name: string;
   uuid: string;
   size: number;

@@ -1,9 +1,10 @@
 import {
-	createCallerFactory,
-	createTRPCRouter,
-} from "@blackstar/server/api/trpc";
-import { contactFormsRouter, dashboardHelpers } from "./routers/contact_forms";
-import { dashboardGallery } from "./routers/gallery";
+  createCallerFactory,
+  createTRPCRouter,
+} from '@blackstar/server/api/trpc';
+import { contactFormsRouter, dashboardHelpers } from './routers/contact_forms';
+import { dashboardGallery } from './routers/gallery';
+import { userProfileManagement } from './routers/social_media_integration';
 
 /**
  * This is the primary router for your server.
@@ -11,9 +12,10 @@ import { dashboardGallery } from "./routers/gallery";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-	contactForms: contactFormsRouter,
-	dashboardHelpers,
-	dashboardGallery,
+  contactForms: contactFormsRouter,
+  dashboardHelpers,
+  dashboardGallery,
+  userProfileManagement,
 });
 
 // export type definition of API
