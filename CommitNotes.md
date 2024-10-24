@@ -1,5 +1,34 @@
 # COMMIT NOTES
 
+### 2024 October 24th, 19:10 PM GMT+3
+```sh
+1. Made profile tabs work
+2. Adding forms for:
+    - user
+    - organisation
+    - contact info
+    - social media integration
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   blackstar_cms/src/lib/_components/form_components.tsx
+#	modified:   blackstar_cms/src/lib/_components/main.tsx
+#	modified:   blackstar_cms/src/pages/dashboard/gallery/index.tsx
+#	modified:   blackstar_cms/src/pages/dashboard/gallery/new.tsx
+#	modified:   blackstar_cms/src/pages/dashboard/profile/index.tsx
+#	modified:   blackstar_cms/src/server/api/root.ts
+#	modified:   blackstar_cms/src/server/api/routers/gallery.ts
+#	new file:   blackstar_cms/src/server/api/routers/social_media_integration.ts
+#	new file:   blackstar_cms/src/server/api/routers/social_media_integration_types.ts
+#	modified:   blackstar_cms/src/server/db/schema/tables.billing.ts
+#	modified:   fastify-api/src/routes/api/cms.gallery.js
+#
+```
+
 ### 2024 October 21st, 21:37 PM GMT+3
 ```sh
 1. Able to upload image to server backend
